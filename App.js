@@ -1,21 +1,30 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
+import 'react-native-gesture-handler';
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import Navigator from './routes/navigator'
+import * as firebase from 'firebase';
 import { StyleSheet, Text, View } from 'react-native';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+//initialize firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyAg-KUJ--2nDiMDJnzSt_sNYO8y_eZI5Bo",
+  authDomain: "piggybank-104d3.firebaseapp.com",
+  projectId: "piggybank-104d3",
+  storageBucket: "piggybank-104d3.appspot.com",
+};
+if(!firebase.apps.length){
+  firebase.initializeApp(firebaseConfig);
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+else{
+  firebase.app();
+}
+export default class App extends React.Component{
+  render(){
+    return (
+      <SafeAreaProvider>
+        <Navigator />
+      </SafeAreaProvider>
+    );
+  }
+};
