@@ -21,6 +21,8 @@ $npm i --save @fortawesome/fontawesome-svg-core
 $npm install --save @fortawesome/free-solid-svg-icons
 $npm install --save @fortawesome/react-fontawesome
 $npm i react-native-keyboard-avoiding-view
+$npm install galio-framework
+$npm install react-native-linear-gradient --save
 ```
 
 For next few steps, refer to https://docs.expo.io/get-started/create-a-new-app/ after ‘Starting the development server’ section…
