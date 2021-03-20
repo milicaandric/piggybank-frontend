@@ -46,7 +46,7 @@
                  onChangeText={(email) => setEmail({email})}
              />
          </View>
-         <Button color ="#53DC98" onPress={() => this.passwordReset(email.email)}>
+         <Button color ="#8c52ff" onPress={() => this.passwordReset(email.email)}>
          <Text style={styles.loginText}>Reset Password</Text>
          </Button>
      </View>
