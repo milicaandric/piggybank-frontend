@@ -49,7 +49,7 @@ export default function Login() {
       <Image style={styles.image} source={require("../assets/piggybank_4.png")} />
       <LinearGradient
         // Background Linear Gradient
-        colors={['transparent', 'rgba(0, 0, 0, 0.2)', '#b295df']}
+        colors={['transparent', 'rgba(0, 0, 0, 0.2)', '#53DC98']}
         style={styles.background}
       />
       <StatusBar style="auto" />
