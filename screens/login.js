@@ -46,7 +46,7 @@ export default function Login() {
   
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
-      <Image style={styles.image} source={require("../assets/piggybank_4.png")} />
+      <Button><Image style={styles.image} source={require("../assets/piggybank_4.png")} /></Button>
       <LinearGradient
         // Background Linear Gradient
         colors={['transparent', 'rgba(0, 0, 0, 0.2)', '#53DC98']}

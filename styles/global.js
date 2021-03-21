@@ -66,4 +66,17 @@ module.exports = StyleSheet.create({
     fontFamily: "TrebuchetMS",
     fontSize: heightPercentageToDP('3%'),
   },
+
+  signupHeader: {
+    textAlign: 'center',
+    fontFamily: "TrebuchetMS",
+    fontSize: 30
+  },
+
+  backButton: {
+    marginLeft: widthPercentageToDP('-80%'),
+    marginTop: heightPercentageToDP('-20%'),
+    maxWidth: 50,
+    maxHeight: 50,
+  }
 });
