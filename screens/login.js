@@ -41,14 +41,13 @@ export default function login() {
     navigation.navigate("Password");
   }
 
-  // loginUser wrapper class placeholder
+  // loginUser wrapper function
   // firebase auth
   function loginUser(email, password) {
     if ((email == "" || password == "") || (email == "" && password == "")) {
       alert("Please include both login and password.")
 
     }
-
   }
   
   return (
