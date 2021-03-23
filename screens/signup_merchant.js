@@ -83,7 +83,7 @@ export default function signUp() {
     <KeyboardAvoidingView style={styles.container} behavior="padding">
         <LinearGradient
         // Background Linear Gradient
-        colors={['transparent', 'rgba(0, 0, 0, 0.2)', '#53DC98']}
+        colors={['transparent', 'rgba(0, 0, 0, 0.1)', '#53DC98']}
         style={styles.background}
         />
         <StatusBar style="auto"/>
