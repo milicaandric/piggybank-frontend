@@ -30,7 +30,7 @@ import {
 
 const styles = require('../styles/global');
 
-export default function Login() {
+export default function login() {
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -43,6 +43,13 @@ export default function Login() {
 
   // loginUser wrapper class placeholder
   // firebase auth
+  function loginUser(email, password) {
+    if ((email == "" || password == "") || (email == "" && password == "")) {
+      alert("Please include both login and password.")
+
+    }
+
+  }
   
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
@@ -67,7 +74,8 @@ export default function Login() {
           onChangeText={(password) => setPassword({password})}
         />
       </View>
-      <Button style={{marginBottom: 30}} color ="#8c52ff" onPress={() => this.loginUser(email.email, password.password)}>
+      <Button style={{marginBottom: 30}} color ="#8c52ff" 
+      onPress={() => loginUser(email.email, password.password)}>
         <Text>Login</Text>
       </Button>
       <View style={{
