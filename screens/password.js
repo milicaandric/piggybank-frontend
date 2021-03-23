@@ -66,7 +66,7 @@ export default function Password() {
       <Text p style={{ textAlign: 'center', margin: 8 }}>Enter your email address below to reset your password</Text>
 
       <View>
-        <Input
+        <Input style = {{borderRadius: 30, height:50, padding: 10}}
           placeholder='Email'
           onChangeText={(email) => setEmail({ email })}
         />
