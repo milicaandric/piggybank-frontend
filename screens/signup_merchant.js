@@ -95,13 +95,13 @@ export default function signUp() {
         </View>
         <View>
         <Input style={{borderRadius: 30, height:50, padding: 10}}
-            placeholder="email"
+            placeholder="Email"
             onChangeText={(email) => setEmail({email})}
         />
         </View>
         <View>
         <Input style={{borderRadius: 30, height:50, padding: 10}}
-            placeholder="username"
+            placeholder="Username"
             onChangeText={(username) => setUsername({username})}
         />
         </View>
@@ -129,7 +129,7 @@ export default function signUp() {
         }}
         />
         <View>
-        <Text style={{textAlign: 'center', fontFamily: "TrebuchetMS", paddingTop: 20, fontSize: 20}}>Bank Information</Text>
+        <Text style={{textAlign: 'center', paddingBottom: 15, paddingTop: 20, fontSize: 20}}>Bank Information</Text>
         </View>
         <View>
         <Input style={{borderRadius: 30, height:50, padding: 10}}
