@@ -75,9 +75,6 @@ export default function signUp() {
             alert("Fill out all fields to create account");
         }
   }
-
-  // loginUser wrapper class placeholder
-  // firebase auth
   
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
