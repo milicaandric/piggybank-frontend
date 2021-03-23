@@ -76,10 +76,11 @@ export default function signUp() {
         }
   }
   
+  // user interface
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
         <LinearGradient
-        // Background Linear Gradient
+        // baackground linear gradient
         colors={['transparent', 'rgba(0, 0, 0, 0.1)', '#53DC98']}
         style={styles.background}
         />
