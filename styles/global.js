@@ -68,14 +68,16 @@ module.exports = StyleSheet.create({
   },
 
   signupHeader: {
+    marginTop: heightPercentageToDP('-11%'),
+    paddingBottom: 60,
     textAlign: 'center',
     fontFamily: "TrebuchetMS",
-    fontSize: 30
+    fontSize: 40
   },
 
   backButton: {
-    marginLeft: widthPercentageToDP('-80%'),
-    marginTop: heightPercentageToDP('-20%'),
+    marginLeft: widthPercentageToDP('-45%'),
+    marginTop: heightPercentageToDP('-11.25%'),
     maxWidth: 50,
     maxHeight: 50,
   }

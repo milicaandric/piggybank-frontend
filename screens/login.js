@@ -35,7 +35,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   function navToSignup() {
-    navigation.navigate("Signup");
+    navigation.navigate("Signup_Merchant");
   }
   function navToPassword() {
     navigation.navigate("Password");
@@ -46,7 +46,7 @@ export default function Login() {
   
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
-      <Button><Image style={styles.image} source={require("../assets/piggybank_4.png")} /></Button>
+      <Image style={styles.image} source={require("../assets/piggybank_4.png")} />
       <LinearGradient
         // Background Linear Gradient
         colors={['transparent', 'rgba(0, 0, 0, 0.2)', '#53DC98']}
@@ -79,7 +79,10 @@ export default function Login() {
       }}
       />
       <TouchableOpacity onPress={() => navToSignup()}>
-        <Text style={{height:30, marginBottom:5, marginTop:30}}>Don't have an account? Sign up!</Text>
+        <Text style={{height:30, marginBottom:5, marginTop:30}}>Sign up as Merchant!</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => navToSignup()}>
+        <Text style={{height:30, marginBottom:5, marginTop:10}}>Sign up as Customer!</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navToPassword()}>
         <Text style={{height:30, marginBottom:30, marginTop:10}}>Forgot your password?</Text>

@@ -30,7 +30,7 @@ import {
 
 const styles = require('../styles/global');
 
-export default function Login() {
+export default function signUp() {
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -40,7 +40,40 @@ export default function Login() {
   const[nameOnAccount, setNameOnAccount] = useState("");
 
   function navToLogin() {
+    console.log("clicked");
     navigation.navigate("Login");
+  }
+
+  function loginUser(email, username, password, verifyPassword, routingNumber, nameOnAccount){
+        if(email != undefined && email != "" && password != undefined && password != "" && verifyPassword != undefined && verifyPassword != "" && routingNumber != undefined 
+        && routingNumber != "" && username != undefined && username != "" && nameOnAccount != undefined && nameOnAccount != ""){
+            if(password.length >= 6){
+                if(verifyPassword == password){
+                    firebase.auth().createUserWithEmailAndPassword(email, password).then(function(){
+                        var data = {
+                            email: email,
+                            username: username,
+                            password: password,
+                            routinNumber: routingNumber,
+                            nameOnAccount: nameOnAccount
+                        }
+                    })
+                    .catch((error) =>{
+                        alert("Email is already in use or email is invalid");
+                    });
+    
+                }
+                else{
+                    alert("Passwords do not match");
+                }
+            }
+            else{
+                alert("Password must be at least 6 characters");
+            }
+        }
+        else{
+            alert("Fill out all fields to create account");
+        }
   }
 
   // loginUser wrapper class placeholder
@@ -48,14 +81,18 @@ export default function Login() {
   
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
-        <Image style={styles.backButton} source={require("../assets/backArrow.png")} />
         <LinearGradient
         // Background Linear Gradient
         colors={['transparent', 'rgba(0, 0, 0, 0.2)', '#53DC98']}
         style={styles.background}
         />
-        <StatusBar style="auto" />
-        <Text style={styles.signupHeader}>Signup as Merchant</Text>
+        <StatusBar style="auto"/>
+        <TouchableOpacity onPress={() => navToLogin()}>
+            <Image style={styles.backButton} source={require("../assets/backArrow.png")}/>
+        </TouchableOpacity>
+        <View>
+        <Text style={styles.signupHeader}>Signup</Text>
+        </View>
         <View>
         <Input style={{borderRadius: 30, height:50, padding: 10}}
             placeholder="email"
@@ -75,32 +112,40 @@ export default function Login() {
             onChangeText={(password) => setPassword({password})}
         />
         </View>
+        <View>
+        <Input style={{borderRadius: 30, height:50, padding: 10}}
+            placeholder="Verify Password"
+            secureTextEntry={true}
+            onChangeText={(verifyPassword) => setVerifyPassword({verifyPassword})}
+        />
+        </View>
         <View style={{
         marginLeft: widthPercentageToDP("12.5%"),
         width: widthPercentageToDP('75%'),
         borderBottomColor: 'black',
         borderBottomWidth: 1,
         alignSelf: 'stretch',
-        padding: 5
+        paddingBottom: 20,
         }}
         />
-        <Text style={{textAlign: 'center', fontFamily: "TrebuchetMS", fontSize: 20}}>Bank Information</Text>
+        <View>
+        <Text style={{textAlign: 'center', fontFamily: "TrebuchetMS", paddingTop: 20, fontSize: 20}}>Bank Information</Text>
+        </View>
         <View>
         <Input style={{borderRadius: 30, height:50, padding: 10}}
             placeholder="Routing Number"
-            secureTextEntry={true}
             onChangeText={(routingNumber) => setRountingNumber({routingNumber})}
         />
         </View>
         <View>
         <Input style={{borderRadius: 30, height:50, padding: 10}}
             placeholder="Name on Bank Account"
-            secureTextEntry={true}
             onChangeText={(nameOnAccount) => setNameOnAccount({nameOnAccount})}
         />
         </View>
-        <Button style={{marginBottom: 30}} color ="#8c52ff" onPress={() => this.loginUser(email.email, password.password)}>
-        <Text>Login</Text>
+        <Button style={{marginBottom: 30}} color ="#8c52ff" 
+        onPress={() => loginUser(email.email, username.username, password.password, verifyPassword.verifyPassword, routingNumber.routingNumber, nameOnAccount.nameOnAccount)}>
+        <Text>Sign up</Text>
         </Button>
     </KeyboardAvoidingView>
   );
