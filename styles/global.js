@@ -75,7 +75,7 @@ module.exports = StyleSheet.create({
 
   backButton: {
     marginLeft: widthPercentageToDP('-45%'),
-    marginTop: heightPercentageToDP('-4.25%'),
+    marginTop: 15,
     maxWidth: 40,
     maxHeight: 40,
   }
