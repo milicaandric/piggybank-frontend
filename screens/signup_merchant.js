@@ -12,6 +12,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 const firebaseConfig = {
   apiKey: "AIzaSyAg-KUJ--2nDiMDJnzSt_sNYO8y_eZI5Bo",
   authDomain: "piggybank-104d3.firebaseapp.com",
+  databaseURL: "https://piggybank-104d3-default-rtdb.firebaseio.com",
   projectId: "piggybank-104d3",
   storageBucket: "piggybank-104d3.appspot.com",
 };
@@ -37,6 +38,7 @@ export default function signUp() {
   const [username, setUsername] = useState("");
   const[verifyPassword, setVerifyPassword] = useState("");
   const[routingNumber, setRountingNumber] = useState("");
+  const[accountNumber, setAccountNumber] = useState("");
   const[nameOnAccount, setNameOnAccount] = useState("");
 
   function navToLogin() {
@@ -44,21 +46,48 @@ export default function signUp() {
     navigation.navigate("Login");
   }
 
-  function loginUser(email, username, password, verifyPassword, routingNumber, nameOnAccount){
+  function loginUser(email, username, password, verifyPassword, routingNumber, accountNumber, nameOnAccount){
         if(email != undefined && email != "" && password != undefined && password != "" && verifyPassword != undefined && verifyPassword != "" && routingNumber != undefined 
-        && routingNumber != "" && username != undefined && username != "" && nameOnAccount != undefined && nameOnAccount != ""){
+        && routingNumber != "" && username != undefined && username != "" && accountNumber != undefined && accountNumber != "" && nameOnAccount != undefined && nameOnAccount != ""){
             if(password.length >= 6){
                 if(verifyPassword == password){
-                    firebase.auth().createUserWithEmailAndPassword(email, password).then(function(){
-                        var data = {
-                            email: email,
-                            username: username,
-                            password: password,
-                            routinNumber: routingNumber,
-                            nameOnAccount: nameOnAccount
-                        }
+                    firebase.auth().createUserWithEmailAndPassword(email, password).then(function(user){
+                        user.user.getIdToken(true).then(token =>{
+                            console.log(token);
+                            var data = {
+                                email: email,
+                                username: username,
+                                password: password,
+                                bankAccount:{
+                                    nameOnAccount: nameOnAccount,
+                                    accountNumber: accountNumber,
+                                    routingNumber: routingNumber
+                                },
+                                type: "MERCHANT"
+                            };
+                            fetch("http://192.168.99.31:8080/api/v1/account/create?token="+token, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(data),
+                            })
+                            .then(response => response.json())
+                            .then(data=>{
+                                console.log(data);
+                                alert("sign up successsful");
+                                // navigation.navigate("AdminDashboard");
+                            })
+                            .catch((error)=>{
+                                console.log(error.toString());
+                            });
+                        })
+                        .catch((error) =>{
+                            console.log(error.toString());
+                        });
                     })
                     .catch((error) =>{
+                        console.log(error.toString())
                         alert("Email is already in use or email is invalid");
                     });
     
@@ -137,12 +166,18 @@ export default function signUp() {
         </View>
         <View>
         <Input style={{borderRadius: 30, height:50, padding: 10}}
-            placeholder="Name on Bank Account"
+            placeholder="Account Number"
+            onChangeText={(accountNumber) => setAccountNumber({accountNumber})}
+        />
+        </View>
+        <View>
+        <Input style={{borderRadius: 30, height:50, padding: 10}}
+            placeholder="Name on Account"
             onChangeText={(nameOnAccount) => setNameOnAccount({nameOnAccount})}
         />
         </View>
         <Button style={{marginBottom: 30}} color ="#8c52ff" 
-        onPress={() => loginUser(email.email, username.username, password.password, verifyPassword.verifyPassword, routingNumber.routingNumber, nameOnAccount.nameOnAccount)}>
+        onPress={() => loginUser(email.email, username.username, password.password, verifyPassword.verifyPassword, routingNumber.routingNumber, accountNumber.accountNumber, nameOnAccount.nameOnAccount)}>
         <Text>Sign up</Text>
         </Button>
     </KeyboardAvoidingView>
