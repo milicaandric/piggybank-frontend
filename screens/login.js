@@ -44,11 +44,22 @@ export default function login() {
   // loginUser wrapper function
   // firebase auth
   function loginUser(email, password) {
-    if ((email == "" || password == "") || (email == "" && password == "")) {
-      alert("Please include both login and password.")
-
-    }
-  }
+    firebase.auth().signInWithEmailAndPassword(email, password).then(function() {
+      fetch("http://localhost:8080/api/v1/account/general/get?username="+email) // this will be replaced
+      .then(response=>response.json())
+      .then(data=>{
+        if(data.data.type == "CUSTOMER") {
+          alert("Replace me with nav to customer screen!");
+        }
+        else if(data.data.type == "MERCHANT") {
+          alert("Replace me with nav to merchant screen!");
+        }
+      })
+    })
+    .catch((error) =>{
+      alert("Email or password incorrect.");
+    });
+}
   
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
