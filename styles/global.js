@@ -5,7 +5,8 @@ const { StyleSheet } = React;
 module.exports = StyleSheet.create({
   pageBack: {
     backgroundColor: '#93E9BE',
-    height: heightPercentageToDP('75%')
+    height: heightPercentageToDP('75%'),
+    position: 'absolute'
   },
   hold: {
     backgroundColor: '#93E9BE',
@@ -78,5 +79,48 @@ module.exports = StyleSheet.create({
     marginTop: 15,
     maxWidth: 40,
     maxHeight: 40,
+  },
+  mainCircle:{
+    height:heightPercentageToDP('20%'),
+    width: heightPercentageToDP('20%'),
+    borderRadius: heightPercentageToDP('10%'),
+    backgroundColor: '#FFF',
+    borderColor: '#53DC98',
+    borderWidth: 5,
+    marginLeft: widthPercentageToDP('50%'),
+    marginRight: widthPercentageToDP('50%'),
+    alignItems:'center'
+  },
+  circleText:{
+    marginTop:heightPercentageToDP('7%'),
+    fontSize: heightPercentageToDP('4%'),
+    textAlign:'center'
+  },
+  dashText:{
+    marginTop:heightPercentageToDP('2%'),
+    fontSize: heightPercentageToDP('6%'),
+    textAlign:'center'
+  },
+  genInput:{
+    borderRadius: 30, 
+    height:50, 
+    width: widthPercentageToDP('70%'),
+  },
+  sendButton:{
+    borderColor: '#FFF',
+    borderWidth: 3,
+    height:50,
+    width: widthPercentageToDP('35%'),
+    borderRadius: 30,
+    backgroundColor: "#53DC98",
+    alignItems:"center",
+    marginTop: 25
+  },
+  lowerHold:{
+    alignItems: 'center'
+  },
+  sendText:{
+    fontSize: 20,
+    marginTop: 8,
   }
 });

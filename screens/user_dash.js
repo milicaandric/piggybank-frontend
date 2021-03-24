@@ -38,9 +38,31 @@ export default function User_Dash() {
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
         <View style={styles.pageBack}>
-
+            <View style={styles.mainCircle}>
+                <Text style={styles.circleText}>
+                    $23.78
+                </Text>
+            </View>
+            <Text style={styles.dashText}>
+                Current Balance
+            </Text>
+            <View style={styles.lowerHold}>
+                <View>
+                    <Input style={styles.genInput}
+                        placeholder="Recipient"
+                    />
+                    <Input style={styles.genInput}
+                        placeholder="Amount"
+                    />
+                </View>
+                <TouchableOpacity style={styles.sendButton}>
+                    <Text style={styles.sendText}>
+                        Send
+                    </Text>
+                </TouchableOpacity>
+            </View>
         </View>
-      
+        
     </KeyboardAvoidingView>
   );
 }
