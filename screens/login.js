@@ -42,30 +42,46 @@ export default function login() {
   }
 
   // loginUser wrapper function
-  // firebase auth
   function loginUser(email, password) {
-    firebase.auth().signInWithEmailAndPassword(email, password).then(function() {
-      fetch("http://localhost:8080/api/v1/account/general/get?username="+email) // this will be replaced
+    firebase.auth().signInWithEmailAndPassword(email, password).then(function(user) {
+      user.getIdToken(true).then(token => {
+      console.log(token); 
+      //   var data = {
+      //   email: email,
+      //   password: password,
+      //   type: "MERCHANT" || "CUSTOMER"
+      //  };
+      fetch("http://192.168.1.95:8080/api/v1/account/log-in?token="+token //{
+      //  method: 'POST',
+      //   headers: {
+      //    'Content-Type': 'application/json'
+      // },
+      // body: JSON.stringify(data),
+      // }
+      )
       .then(response=>response.json())
       .then(data=>{
         if(data.data.type == "CUSTOMER") {
+          console.log("success customer");
           alert("Replace me with nav to customer screen!");
         }
         else if(data.data.type == "MERCHANT") {
+          console.log("success merchant");
           alert("Replace me with nav to merchant screen!");
         }
       })
     })
+    })
     .catch((error) =>{
       alert("Email or password incorrect.");
     });
-}
+  }
   
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
       <Image style={styles.image} source={require("../assets/piggybank_4.png")} />
       <LinearGradient
-        // Background Linear Gradient
+        // background Linear Gradient
         colors={['transparent', 'rgba(0, 0, 0, 0.1)', '#53DC98']}
         style={styles.background}
       />
