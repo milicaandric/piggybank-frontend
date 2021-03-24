@@ -30,26 +30,59 @@ import {
 
 const styles = require('../styles/global');
 
-export default function Login() {
+export default function login() {
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   function navToSignup() {
-    navigation.navigate("Signup");
+    navigation.navigate("Signup_Merchant");
   }
   function navToPassword() {
     navigation.navigate("Password");
   }
 
-  // loginUser wrapper class placeholder
-  // firebase auth
+  // loginUser wrapper function
+  function loginUser(email, password) {
+    firebase.auth().signInWithEmailAndPassword(email, password).then(function(user) {
+      user.getIdToken(true).then(token => {
+      console.log(token); 
+      //   var data = {
+      //   email: email,
+      //   password: password,
+      //   type: "MERCHANT" || "CUSTOMER"
+      //  };
+      fetch("http://192.168.1.95:8080/api/v1/account/log-in?token="+token //{
+      //  method: 'POST',
+      //   headers: {
+      //    'Content-Type': 'application/json'
+      // },
+      // body: JSON.stringify(data),
+      // }
+      )
+      .then(response=>response.json())
+      .then(data=>{
+        if(data.data.type == "CUSTOMER") {
+          console.log("success customer");
+          alert("Replace me with nav to customer screen!");
+        }
+        else if(data.data.type == "MERCHANT") {
+          console.log("success merchant");
+          alert("Replace me with nav to merchant screen!");
+        }
+      })
+    })
+    })
+    .catch((error) =>{
+      alert("Email or password incorrect.");
+    });
+  }
   
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
-      <Button><Image style={styles.image} source={require("../assets/piggybank_4.png")} /></Button>
+      <Image style={styles.image} source={require("../assets/piggybank_4.png")} />
       <LinearGradient
-        // Background Linear Gradient
-        colors={['transparent', 'rgba(0, 0, 0, 0.2)', '#53DC98']}
+        // background Linear Gradient
+        colors={['transparent', 'rgba(0, 0, 0, 0.1)', '#53DC98']}
         style={styles.background}
       />
       <StatusBar style="auto" />
@@ -67,7 +100,8 @@ export default function Login() {
           onChangeText={(password) => setPassword({password})}
         />
       </View>
-      <Button style={{marginBottom: 30}} color ="#8c52ff" onPress={() => this.loginUser(email.email, password.password)}>
+      <Button style={{marginBottom: 30}} color ="#8c52ff" 
+      onPress={() => loginUser(email.email, password.password)}>
         <Text>Login</Text>
       </Button>
       <View style={{
@@ -79,7 +113,10 @@ export default function Login() {
       }}
       />
       <TouchableOpacity onPress={() => navToSignup()}>
-        <Text style={{height:30, marginBottom:5, marginTop:30}}>Don't have an account? Sign up!</Text>
+        <Text style={{height:30, marginBottom:5, marginTop:30}}>Sign up as Merchant!</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => navToSignup()}>
+        <Text style={{height:30, marginBottom:5, marginTop:10}}>Sign up as Customer!</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navToPassword()}>
         <Text style={{height:30, marginBottom:30, marginTop:10}}>Forgot your password?</Text>

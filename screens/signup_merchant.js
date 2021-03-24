@@ -12,6 +12,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 const firebaseConfig = {
   apiKey: "AIzaSyAg-KUJ--2nDiMDJnzSt_sNYO8y_eZI5Bo",
   authDomain: "piggybank-104d3.firebaseapp.com",
+  databaseURL: "https://piggybank-104d3-default-rtdb.firebaseio.com",
   projectId: "piggybank-104d3",
   storageBucket: "piggybank-104d3.appspot.com",
 };
@@ -30,41 +31,104 @@ import {
 
 const styles = require('../styles/global');
 
-export default function Login() {
+export default function signUp() {
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const[verifyPassword, setVerifyPassword] = useState("");
   const[routingNumber, setRountingNumber] = useState("");
+  const[accountNumber, setAccountNumber] = useState("");
   const[nameOnAccount, setNameOnAccount] = useState("");
 
   function navToLogin() {
+    console.log("clicked");
     navigation.navigate("Login");
   }
 
-  // loginUser wrapper class placeholder
-  // firebase auth
+  function loginUser(email, username, password, verifyPassword, routingNumber, accountNumber, nameOnAccount){
+        if(email != undefined && email != "" && password != undefined && password != "" && verifyPassword != undefined && verifyPassword != "" && routingNumber != undefined 
+        && routingNumber != "" && username != undefined && username != "" && accountNumber != undefined && accountNumber != "" && nameOnAccount != undefined && nameOnAccount != ""){
+            if(password.length >= 6){
+                if(verifyPassword == password){
+                    firebase.auth().createUserWithEmailAndPassword(email, password).then(function(user){
+                        user.user.getIdToken(true).then(token =>{
+                            console.log(token);
+                            var data = {
+                                email: email,
+                                username: username,
+                                password: password,
+                                bankAccount:{
+                                    nameOnAccount: nameOnAccount,
+                                    accountNumber: accountNumber,
+                                    routingNumber: routingNumber
+                                },
+                                type: "MERCHANT"
+                            };
+                            fetch("http://192.168.99.31:8080/api/v1/account/create?token="+token, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(data),
+                            })
+                            .then(response => response.json())
+                            .then(data=>{
+                                console.log(data);
+                                alert("sign up successsful");
+                                // navigation.navigate("AdminDashboard");
+                            })
+                            .catch((error)=>{
+                                console.log(error.toString());
+                            });
+                        })
+                        .catch((error) =>{
+                            console.log(error.toString());
+                        });
+                    })
+                    .catch((error) =>{
+                        console.log(error.toString())
+                        alert("Email is already in use or email is invalid");
+                    });
+    
+                }
+                else{
+                    alert("Passwords do not match");
+                }
+            }
+            else{
+                alert("Password must be at least 6 characters");
+            }
+        }
+        else{
+            alert("Fill out all fields to create account");
+        }
+  }
   
+  // user interface
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
-        <Image style={styles.backButton} source={require("../assets/backArrow.png")} />
         <LinearGradient
-        // Background Linear Gradient
-        colors={['transparent', 'rgba(0, 0, 0, 0.2)', '#53DC98']}
+        // baackground linear gradient
+        colors={['transparent', 'rgba(0, 0, 0, 0.1)', '#53DC98']}
         style={styles.background}
         />
-        <StatusBar style="auto" />
-        <Text style={styles.signupHeader}>Signup as Merchant</Text>
+        <StatusBar style="auto"/>
+        <TouchableOpacity onPress={() => navToLogin()}>
+            <Image style={styles.backButton} source={require("../assets/backArrow.png")}/>
+        </TouchableOpacity>
+        <View>
+        <Text style={styles.signupHeader}>Signup</Text>
+        </View>
         <View>
         <Input style={{borderRadius: 30, height:50, padding: 10}}
-            placeholder="email"
+            placeholder="Email"
             onChangeText={(email) => setEmail({email})}
         />
         </View>
         <View>
         <Input style={{borderRadius: 30, height:50, padding: 10}}
-            placeholder="username"
+            placeholder="Username"
             onChangeText={(username) => setUsername({username})}
         />
         </View>
@@ -75,32 +139,46 @@ export default function Login() {
             onChangeText={(password) => setPassword({password})}
         />
         </View>
+        <View>
+        <Input style={{borderRadius: 30, height:50, padding: 10}}
+            placeholder="Verify Password"
+            secureTextEntry={true}
+            onChangeText={(verifyPassword) => setVerifyPassword({verifyPassword})}
+        />
+        </View>
         <View style={{
         marginLeft: widthPercentageToDP("12.5%"),
         width: widthPercentageToDP('75%'),
         borderBottomColor: 'black',
         borderBottomWidth: 1,
         alignSelf: 'stretch',
-        padding: 5
+        paddingBottom: 20,
         }}
         />
-        <Text style={{textAlign: 'center', fontFamily: "TrebuchetMS", fontSize: 20}}>Bank Information</Text>
+        <View>
+        <Text style={{textAlign: 'center', paddingBottom: 15, paddingTop: 20, fontSize: 20}}>Bank Information</Text>
+        </View>
         <View>
         <Input style={{borderRadius: 30, height:50, padding: 10}}
             placeholder="Routing Number"
-            secureTextEntry={true}
             onChangeText={(routingNumber) => setRountingNumber({routingNumber})}
         />
         </View>
         <View>
         <Input style={{borderRadius: 30, height:50, padding: 10}}
-            placeholder="Name on Bank Account"
-            secureTextEntry={true}
+            placeholder="Account Number"
+            onChangeText={(accountNumber) => setAccountNumber({accountNumber})}
+        />
+        </View>
+        <View>
+        <Input style={{borderRadius: 30, height:50, padding: 10}}
+            placeholder="Name on Account"
             onChangeText={(nameOnAccount) => setNameOnAccount({nameOnAccount})}
         />
         </View>
-        <Button style={{marginBottom: 30}} color ="#8c52ff" onPress={() => this.loginUser(email.email, password.password)}>
-        <Text>Login</Text>
+        <Button style={{marginBottom: 30}} color ="#8c52ff" 
+        onPress={() => loginUser(email.email, username.username, password.password, verifyPassword.verifyPassword, routingNumber.routingNumber, accountNumber.accountNumber, nameOnAccount.nameOnAccount)}>
+        <Text>Sign up</Text>
         </Button>
     </KeyboardAvoidingView>
   );
