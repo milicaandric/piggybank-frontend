@@ -31,6 +31,11 @@ module.exports = StyleSheet.create({
     maxHeight: heightPercentageToDP('39%'),
     maxWidth: widthPercentageToDP('70%'),
   },
+  passImage: {
+    marginBottom: 20,
+    maxHeight: heightPercentageToDP('28%'),
+    maxWidth: widthPercentageToDP('59%'),
+  },
   loginBtn: {
     width: "50%",
     borderRadius: 25,

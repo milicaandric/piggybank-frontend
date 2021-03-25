@@ -46,6 +46,11 @@ export default function signUp() {
     navigation.navigate("Login");
   }
 
+  /*
+  Sign up merchant with firebase using the entered data
+  Merchants are required to have a bank account linked to their account
+  so an error message is shown and an account is not created unless all fields are filled
+  */
   function loginUser(email, username, password, verifyPassword, routingNumber, accountNumber, nameOnAccount){
         if(email != undefined && email != "" && password != undefined && password != "" && verifyPassword != undefined && verifyPassword != "" && routingNumber != undefined 
         && routingNumber != "" && username != undefined && username != "" && accountNumber != undefined && accountNumber != "" && nameOnAccount != undefined && nameOnAccount != ""){
@@ -65,6 +70,7 @@ export default function signUp() {
                                 },
                                 type: "MERCHANT"
                             };
+                            //api call to create account with var data 
                             fetch("http://192.168.99.31:8080/api/v1/account/create?token="+token, {
                                 method: 'POST',
                                 headers: {
