@@ -27,6 +27,7 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView
 } from "react-native";
+import { NavigationActions } from 'react-navigation';
 
 const styles = require('../styles/global');
 
@@ -56,10 +57,10 @@ export default function login() {
       .then(response=>response.json())
           .then(data=>{
             if(data.data.type == "MERCHANT"){
-              console.log("merchant success");
+              navigation.navigate("Merchant_Dash");
             }
             else if(data.data.type == "CUSTOMER"){
-              console.log("customer success");
+              NavigationActions.navigate("User_Dash")
             }
             else{
               //navigation.navigate("CustomerMenu");
