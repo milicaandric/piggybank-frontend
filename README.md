@@ -15,6 +15,7 @@ $cd piggybank-frontend
 ```
 $npm install firebase
 $npm install react-navigation
+$npm install react-navigation/drawer
 $npm install react-native-safe-area-view
 $npm install react-native-elements
 $npm i --save @fortawesome/fontawesome-svg-core
