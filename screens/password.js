@@ -9,6 +9,8 @@ import { useNavigation } from '@react-navigation/native';
 import * as firebase from 'firebase';
 import { Button, Block, Text, Input, theme } from 'galio-framework';
 import { StatusBar } from "expo-status-bar";
+import { LinearGradient } from 'expo-linear-gradient';
+import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAg-KUJ--2nDiMDJnzSt_sNYO8y_eZI5Bo",
@@ -58,12 +60,19 @@ export default function Password() {
   // user interface
   return (
     <View style={styles.container}>
-      <StatusBar style="auto" />
-      <TouchableOpacity onPress={() => navToLogin()}>
-        <Image style={styles.backButton} source={require("../assets/backArrow.png")}/>
-      </TouchableOpacity>
-      <Text style={styles.signupHeader}>Forgot your password?</Text>
-      <Text p style={{ textAlign: 'center', margin: 8 }}>Enter your email address below to reset your password</Text>
+       {/* <LinearGradient
+        // Background Linear Gradient
+        colors={['transparent', 'rgba(0, 0, 0, 0.2)', '#53DC98']}
+        style={styles.background}
+      /> */}
+      <StatusBar style="auto"/>
+        <TouchableOpacity onPress={() => navToLogin()}>
+            <Image style={styles.backButton} source={require("../assets/backArrow.png")}/>
+        </TouchableOpacity>
+      <Text style={{marginTop: heightPercentageToDP('-15%'), paddingBottom: 40, textAlign: 'center', fontSize: 40}}>Forgot your password?</Text>
+      <Image style={styles.passImage} source={require("../assets/forgotpass.png")} />
+
+      <Text p style={{ textAlign: 'center', margin: 20}}>Enter your email address below to reset your password</Text>
 
       <View>
         <Input style = {{borderRadius: 30, height:50, padding: 10}}
