@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { StatusBar } from "expo-status-bar";
 import 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
-import * as firebase from 'firebase';
-import { widthPercentageToDP } from "react-native-responsive-screen";
+import * as firebase from 'firebase';   
 import { Button, Text, Input} from 'galio-framework';
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -20,6 +19,7 @@ if (!firebase.apps.length) {
 else {
   firebase.app();
 }
+
 import {
   View,
   Image,
@@ -29,23 +29,20 @@ import {
 
 const styles = require('../styles/global');
 
-export default function signUpMerchant() {
+export default function signUpCustomer() {
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const[verifyPassword, setVerifyPassword] = useState("");
-  const[routingNumber, setRountingNumber] = useState("");
-  const[accountNumber, setAccountNumber] = useState("");
-  const[nameOnAccount, setNameOnAccount] = useState("");
 
   function navToLogin() {
     navigation.navigate("Login");
   }
 
-  function loginUser(email, username, password, verifyPassword, routingNumber, accountNumber, nameOnAccount){
-        if(email != undefined && email != "" && password != undefined && password != "" && verifyPassword != undefined && verifyPassword != "" && routingNumber != undefined 
-        && routingNumber != "" && username != undefined && username != "" && accountNumber != undefined && accountNumber != "" && nameOnAccount != undefined && nameOnAccount != ""){
+  function loginUser(email, username, password, verifyPassword){
+        if(email != undefined && email != "" && password != undefined && password != "" && verifyPassword != undefined && verifyPassword != "" 
+        && username != undefined && username != ""){
             if(password.length >= 6){
                 if(verifyPassword == password){
                     firebase.auth().createUserWithEmailAndPassword(email, password).then(function(user){
@@ -54,12 +51,7 @@ export default function signUpMerchant() {
                                 email: email,
                                 username: username,
                                 password: password,
-                                bankAccount:{
-                                    nameOnAccount: nameOnAccount,
-                                    accountNumber: accountNumber,
-                                    routingNumber: routingNumber
-                                },
-                                type: "MERCHANT"
+                                type: "CUSTOMER"
                             };
                             fetch("http://192.168.99.31:8080/api/v1/account/create?token="+token, {
                                 method: 'POST',
@@ -72,7 +64,7 @@ export default function signUpMerchant() {
                                 if(response.ok == true){
                                     var session_cookie = response.headers.map['set-cookie'];
                                     console.log(session_cookie);
-                                    navigation.navigate("Merchant_Dash");
+                                    navigation.navigate("User_Dash");
                                 }
                                 else{
                                     throw Error("Authentication for creating customer was unsuccessful");
@@ -121,64 +113,34 @@ export default function signUpMerchant() {
         <View>
         <Text style={styles.signupHeader}>Signup</Text>
         </View>
-        <View>
+        <View style={{paddingBottom: 25}}>
         <Input style={{borderRadius: 30, height:50, padding: 10}}
             placeholder="Email"
             onChangeText={(email) => setEmail({email})}
         />
         </View>
-        <View>
+        <View style={{paddingBottom: 25}}>
         <Input style={{borderRadius: 30, height:50, padding: 10}}
             placeholder="Username"
             onChangeText={(username) => setUsername({username})}
         />
         </View>
-        <View>
+        <View style={{paddingBottom: 25}}>
         <Input style={{borderRadius: 30, height:50, padding: 10}}
             placeholder="Password"
             secureTextEntry={true}
             onChangeText={(password) => setPassword({password})}
         />
         </View>
-        <View>
+        <View style={{paddingBottom: 25}}>
         <Input style={{borderRadius: 30, height:50, padding: 10}}
             placeholder="Verify Password"
             secureTextEntry={true}
             onChangeText={(verifyPassword) => setVerifyPassword({verifyPassword})}
         />
         </View>
-        <View style={{
-        marginLeft: widthPercentageToDP("12.5%"),
-        width: widthPercentageToDP('75%'),
-        borderBottomColor: 'black',
-        borderBottomWidth: 1,
-        alignSelf: 'stretch',
-        paddingBottom: 20,
-        }}
-        />
-        <View>
-        <Text style={{textAlign: 'center', paddingBottom: 15, paddingTop: 20, fontSize: 20}}>Bank Information</Text>
-        </View>
-        <View>
-        <Input style={{borderRadius: 30, height:50, padding: 10}}
-            placeholder="Routing Number"
-            onChangeText={(routingNumber) => setRountingNumber({routingNumber})}
-        />
-        </View>
-        <View>
-        <Input style={{borderRadius: 30, height:50, padding: 10}}
-            placeholder="Account Number"
-            onChangeText={(accountNumber) => setAccountNumber({accountNumber})}
-        />
-        </View>
-        <View>
-        <Input style={{borderRadius: 30, height:50, padding: 10}}
-            placeholder="Name on Account"
-            onChangeText={(nameOnAccount) => setNameOnAccount({nameOnAccount})}
-        />
-        </View>
         <Button style={{marginBottom: 30}} color ="#8c52ff" 
-        onPress={() => loginUser(email.email, username.username, password.password, verifyPassword.verifyPassword, routingNumber.routingNumber, accountNumber.accountNumber, nameOnAccount.nameOnAccount)}>
+        onPress={() => loginUser(email.email, username.username, password.password, verifyPassword.verifyPassword)}>
         <Text>Sign up</Text>
         </Button>
     </KeyboardAvoidingView>

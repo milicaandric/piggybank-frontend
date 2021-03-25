@@ -3,10 +3,8 @@ import { StatusBar } from "expo-status-bar";
 import 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import * as firebase from 'firebase';
-import { StyleSheet, Dimensions, ScrollView } from 'react-native';
-import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
-import { Button, Block, Text, Input, theme } from 'galio-framework';
-import materialTheme from '../constants/Theme';
+import { widthPercentageToDP } from "react-native-responsive-screen";
+import { Button, Text, Input} from 'galio-framework';
 import { LinearGradient } from 'expo-linear-gradient';
 
 const firebaseConfig = {
@@ -27,7 +25,6 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView
 } from "react-native";
-import { NavigationActions } from 'react-navigation';
 
 const styles = require('../styles/global');
 
@@ -35,8 +32,11 @@ export default function login() {
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  function navToSignup() {
+  function navToSignupMerchant() {
     navigation.navigate("Signup_Merchant");
+  }
+  function navToSignupCustomer() {
+    navigation.navigate("Signup_Customer");
   }
   function navToPassword() {
     navigation.navigate("Password");
@@ -46,31 +46,40 @@ export default function login() {
   function loginUserWithToken(email, password) {
     firebase.auth().signInWithEmailAndPassword(email, password).then(function(user) {
       user.user.getIdToken(true).then(token => {
-      console.log(token);
-      fetch("http://192.168.1.95:8080/api/v1/account/log-in?token="+token, {
-        method: 'POST',
-       // headers: {
-         //   'Content-Type': 'application/json'
-        //},
-        body: JSON.stringify(data),
-    })
-      .then(response=>response.json())
+        fetch("http://192.168.99.31:8080/api/v1/account/log-in?token="+token+"&email="+email+"&password="+password, {
+          method: 'POST'
+        })
+        .then(response=>{
+          var session_cookie = response.headers.map['set-cookie'];
+          fetch("http://192.168.99.31:8080/api/v1/account/get?email="+email,{
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Cookie': session_cookie
+            },
+          })
+          .then(response=>response.json())
           .then(data=>{
-            if(data.data.type == "MERCHANT"){
+            if(data.type == "MERCHANT"){
               navigation.navigate("Merchant_Dash");
             }
-            else if(data.data.type == "CUSTOMER"){
-              NavigationActions.navigate("User_Dash")
-            }
-            else{
-              //navigation.navigate("CustomerMenu");
+            else if(data.type == "CUSTOMER"){
+              navigation.navigate("User_Dash");
             }
           })
-        })
-        .catch((error) =>{
-          alert("Email or password incorrect");
+          .catch((error)=>{
+            alert("Authentication Failed");
+            console.log(error.toString());
+          });
+        }).catch((error)=>{
+          console.log(error.toString());
         });
-  })
+      });
+    })
+    .catch((error) =>{
+      console.log(error.toString());
+      alert("Email or password incorrect");
+    });
   }
   
   return (
@@ -108,10 +117,10 @@ export default function login() {
         alignSelf: 'stretch',
       }}
       />
-      <TouchableOpacity onPress={() => navToSignup()}>
+      <TouchableOpacity onPress={() => navToSignupMerchant()}>
         <Text style={{height:30, marginBottom:5, marginTop:30}}>Sign up as Merchant!</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navToSignup()}>
+      <TouchableOpacity onPress={() => navToSignupCustomer()}>
         <Text style={{height:30, marginBottom:5, marginTop:10}}>Sign up as Customer!</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navToPassword()}>
