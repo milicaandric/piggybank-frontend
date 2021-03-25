@@ -5,6 +5,7 @@ import Login from '../screens/login';
 //import Signup from '../screens/signup';
 import Password from '../screens/password';
 import Signup_Merchant from '../screens/signup_merchant';
+import Signup_Customer from '../screens/signup_customer';
 import User_Dash from '../screens/user_dash';
 import Merchant_Dash from '../screens/merchant_dash';
 import { AppRegistry } from 'react-native';
@@ -20,6 +21,7 @@ export default function Navigator(){
         <AppStack.Screen name="User_Dash" component={User_Dash}/>
         <AppStack.Screen name="Merchant_Dash" component={Merchant_Dash}/>
         <AppStack.Screen name='Signup_Merchant' component={Signup_Merchant}/>
+        <AppStack.Screen name='Signup_Customer' component={Signup_Customer}/>
         <AppStack.Screen name="Password" component={Password}/>
         
       </AppStack.Navigator>

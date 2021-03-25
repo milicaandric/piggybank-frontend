@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { StatusBar } from "expo-status-bar";
 import 'react-native-gesture-handler';
-import { useNavigation } from '@react-navigation/native';
 import * as firebase from 'firebase';   
 import { Button, Text, Input} from 'galio-framework';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -29,8 +28,7 @@ import {
 
 const styles = require('../styles/global');
 
-export default function signUpCustomer() {
-  const navigation = useNavigation();
+export default function signUpCustomer({navigation}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
@@ -62,9 +60,10 @@ export default function signUpCustomer() {
                             })
                             .then((response)=>{
                                 if(response.ok == true){
-                                    var session_cookie = response.headers.map['set-cookie'];
-                                    console.log(session_cookie);
-                                    navigation.navigate("User_Dash");
+                                    var session = response.headers.map['set-cookie'];
+                                    navigation.navigate("User_Dash", {
+                                        session_cookie: session
+                                    });
                                 }
                                 else{
                                     throw Error("Authentication for creating customer was unsuccessful");

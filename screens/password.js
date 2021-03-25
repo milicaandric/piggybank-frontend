@@ -7,9 +7,8 @@
  import React, { useState } from 'react';
  import { useNavigation } from '@react-navigation/native';
  import * as firebase from 'firebase';
- import { Button, Block, Text, Input, theme } from 'galio-framework';
+ import { Button, Text, Input} from 'galio-framework';
  import { StatusBar } from "expo-status-bar";
- import { LinearGradient } from 'expo-linear-gradient';
  import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
  
  const firebaseConfig = {
@@ -32,12 +31,10 @@
  
  const styles = require('../styles/global');
  
- export default function Password() {
-   const navigation = useNavigation();
+ export default function Password({navigation}) {
    const [email, setEmail] = useState("");
  
    function navToLogin() {
-     console.log("clicked");
      navigation.navigate("Login");
    }
  

@@ -120,8 +120,11 @@ function CustomDrawerContent() {
 }
 
 const Drawer = createDrawerNavigator();
-export default function User_Dash() {
-  const navigation = useNavigation();
+export default function User_Dash({route, navigation}) {
+    const {session_cookie} = route.params;
+    console.log(session_cookie);
+
+  //const navigation = useNavigation();
   // loginUser wrapper class placeholder
   // firebase auth
   

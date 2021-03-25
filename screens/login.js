@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { StatusBar } from "expo-status-bar";
 import 'react-native-gesture-handler';
-import { useNavigation } from '@react-navigation/native';
 import * as firebase from 'firebase';
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import { Button, Text, Input} from 'galio-framework';
@@ -28,8 +27,7 @@ import {
 
 const styles = require('../styles/global');
 
-export default function login() {
-  const navigation = useNavigation();
+export default function login({navigation}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   function navToSignupMerchant() {
