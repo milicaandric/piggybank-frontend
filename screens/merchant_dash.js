@@ -8,6 +8,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
 import { DrawerNavigator } from 'react-navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import SideMenu from 'react-native-side-menu-updated'
 
 const firebaseConfig = {
   apiKey: "AIzaSyAg-KUJ--2nDiMDJnzSt_sNYO8y_eZI5Bo",
@@ -36,14 +37,10 @@ function MainScreen() {
     return (
         <KeyboardAvoidingView style={styles.container} behavior="padding">
             <View style={styles.pageBack}>
-                <View style={styles.mainCircle}>
-                    <Text style={styles.circleText}>
-                        $23.78
-                    </Text>
-                </View>
                 <Text style={styles.dashText}>
-                    Current Balance
+                    Merchant Account
                 </Text>
+                <View style={{marginBottom: 20}}/>
                 <View style={styles.lowerHold}>
                     <View>
                         <Input style={styles.genInput}
@@ -58,13 +55,7 @@ function MainScreen() {
                             Send
                         </Text>
                     </TouchableOpacity>
-                    <View style={styles.lineBreak}/>
-                    <TouchableOpacity style={styles.sendButton}>
-                        <Text style={styles.sendText}>
-                            Transactions
-                        </Text>
-                    </TouchableOpacity>
-                    <View style={styles.bottomRight}>
+                    <View style={styles.bottomRightMerchant}>
                         <FontAwesomeIcon icon="cog" size={32}/>
                     </View>
                 </View>
@@ -72,7 +63,7 @@ function MainScreen() {
         </KeyboardAvoidingView>
     );
 }
-  
+
 function MenuScreen({ navigation }) {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -88,11 +79,9 @@ function MenuScreen({ navigation }) {
 
 const Drawer = createDrawerNavigator();
 export default function User_Dash() {
-  const navigation = useNavigation();
   // loginUser wrapper class placeholder
   // firebase auth
-  
   return (
-      <MainScreen/>
+    <MainScreen />
   );
 }

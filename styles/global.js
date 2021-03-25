@@ -127,10 +127,32 @@ module.exports = StyleSheet.create({
     marginTop: 10,
     borderTopWidth: 1, 
     borderTopColor: "#000",
-    width: widthPercentageToDP('70%'),
+    width: "70%",
   },
   bottomRight:{
     marginLeft: widthPercentageToDP('80%'),
     marginTop: heightPercentageToDP('9%')
+  },
+  sideBack:{
+    backgroundColor: "#166e46",
+    width: "100%",
+    height: "100%",
+    alignItems: 'center'
+  },
+  bottomRightMerchant:{
+    marginLeft: widthPercentageToDP('80%'),
+    marginTop: heightPercentageToDP('30%')
+  },
+  sideMenuFields:{
+    backgroundColor: "#FFF",
+    borderRadius: 25,
+    width: "80%",
+    height: 50,
+    marginTop: heightPercentageToDP('4%'),
+    alignItems: 'center'
+  },
+  sideMenuText:{
+    fontSize: 20,
+    marginTop: 10
   }
 });

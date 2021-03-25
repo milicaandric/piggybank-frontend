@@ -8,6 +8,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
 import { DrawerNavigator } from 'react-navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import SideMenu from 'react-native-side-menu-updated'
 
 const firebaseConfig = {
   apiKey: "AIzaSyAg-KUJ--2nDiMDJnzSt_sNYO8y_eZI5Bo",
@@ -73,18 +74,40 @@ function MainScreen() {
     );
 }
   
-function MenuScreen({ navigation }) {
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <View style={styles.mainCircle}>
-          <Text style={styles.circleText}>
-              $23.78
-          </Text>
-      </View>
-      <Button onPress={() => navigation.goBack()} title="Go back home" />
-    </View>
-  );
+function Menu(){
+    return(
+        <View style={styles.sideBack}>
+            <View style={{marginTop: 25}}/>
+            <View style={styles.mainCircle}>
+                <Text style={styles.circleText}>
+                    Profile Pic
+                </Text>
+            </View>
+            <View style={styles.sideMenuFields}>
+                <Text style={styles.sideMenuText}>
+                    Username
+                </Text>
+            </View>
+            <View style={styles.sideMenuFields}>
+                <Text style={styles.sideMenuText}>
+                    $23.78
+                </Text>
+            </View>
+            <TouchableOpacity style={styles.sendButton}>
+                <Text style={styles.sendText}>
+                    Transfer
+                </Text>
+            </TouchableOpacity>
+            <View style={styles.lineBreak}/>
+            <TouchableOpacity style={styles.sendButton}>
+                <Text style={styles.sendText}>
+                    Transactions
+                </Text>
+            </TouchableOpacity>
+        </View>
+    );
 }
+
 function CustomDrawerContent() {
   return (
     <DrawerContentScrollView>
@@ -103,6 +126,8 @@ export default function User_Dash() {
   // firebase auth
   
   return (
-      <MainScreen/>
+    <SideMenu menu={<Menu/>}>
+        <MainScreen/>
+    </SideMenu>
   );
 }
