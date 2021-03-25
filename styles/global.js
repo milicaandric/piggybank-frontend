@@ -110,11 +110,11 @@ module.exports = StyleSheet.create({
     borderColor: '#FFF',
     borderWidth: 3,
     height:50,
-    width: widthPercentageToDP('35%'),
+    width: widthPercentageToDP('50%'),
     borderRadius: 30,
     backgroundColor: "#53DC98",
     alignItems:"center",
-    marginTop: 25
+    marginTop: 20,
   },
   lowerHold:{
     alignItems: 'center'
@@ -122,5 +122,15 @@ module.exports = StyleSheet.create({
   sendText:{
     fontSize: 20,
     marginTop: 8,
+  },
+  lineBreak: {
+    marginTop: 10,
+    borderTopWidth: 1, 
+    borderTopColor: "#000",
+    width: widthPercentageToDP('70%'),
+  },
+  bottomRight:{
+    marginLeft: widthPercentageToDP('80%'),
+    marginTop: heightPercentageToDP('9%')
   }
 });

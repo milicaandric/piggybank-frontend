@@ -5,7 +5,12 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 import Navigator from './routes/navigator'
 import * as firebase from 'firebase';
 import { StyleSheet, Text, View } from 'react-native';
+import { AppRegistry, Dimensions } from 'react-native';
+import { DrawerNavigator } from 'react-navigation';
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faCog} from '@fortawesome/free-solid-svg-icons'
 
+library.add(faCog);
 //initialize firebase
 const firebaseConfig = {
   apiKey: "AIzaSyAg-KUJ--2nDiMDJnzSt_sNYO8y_eZI5Bo",
@@ -19,6 +24,7 @@ if(!firebase.apps.length){
 else{
   firebase.app();
 }
+
 export default class App extends React.Component{
   render(){
     return (
