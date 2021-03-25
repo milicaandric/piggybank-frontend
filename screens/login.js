@@ -42,39 +42,34 @@ export default function login() {
   }
 
   // loginUser wrapper function
-  function loginUser(email, password) {
+  function loginUserWithToken(email, password) {
     firebase.auth().signInWithEmailAndPassword(email, password).then(function(user) {
-      user.getIdToken(true).then(token => {
-      console.log(token); 
-      //   var data = {
-      //   email: email,
-      //   password: password,
-      //   type: "MERCHANT" || "CUSTOMER"
-      //  };
-      fetch("http://192.168.1.95:8080/api/v1/account/log-in?token="+token //{
-      //  method: 'POST',
-      //   headers: {
-      //    'Content-Type': 'application/json'
-      // },
-      // body: JSON.stringify(data),
-      // }
-      )
+      user.user.getIdToken(true).then(token => {
+      console.log(token);
+      fetch("http://192.168.1.95:8080/api/v1/account/log-in?token="+token, {
+        method: 'POST',
+       // headers: {
+         //   'Content-Type': 'application/json'
+        //},
+        body: JSON.stringify(data),
+    })
       .then(response=>response.json())
-      .then(data=>{
-        if(data.data.type == "CUSTOMER") {
-          console.log("success customer");
-          alert("Replace me with nav to customer screen!");
-        }
-        else if(data.data.type == "MERCHANT") {
-          console.log("success merchant");
-          alert("Replace me with nav to merchant screen!");
-        }
-      })
-    })
-    })
-    .catch((error) =>{
-      alert("Email or password incorrect.");
-    });
+          .then(data=>{
+            if(data.data.type == "MERCHANT"){
+              console.log("merchant success");
+            }
+            else if(data.data.type == "CUSTOMER"){
+              console.log("customer success");
+            }
+            else{
+              //navigation.navigate("CustomerMenu");
+            }
+          })
+        })
+        .catch((error) =>{
+          alert("Email or password incorrect");
+        });
+  })
   }
   
   return (
@@ -101,7 +96,7 @@ export default function login() {
         />
       </View>
       <Button style={{marginBottom: 30}} color ="#8c52ff" 
-      onPress={() => loginUser(email.email, password.password)}>
+      onPress={() => loginUserWithToken(email.email, password.password)}>
         <Text>Login</Text>
       </Button>
       <View style={{
