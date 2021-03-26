@@ -2,7 +2,7 @@
  * CS 506
  * PiggyBank team: Callan Patel, Brian O'Loughlin, Calvin Armstrong, Jacob Biewer, Milica Andric, Quentin Ford
  * Lecture 001
- * file: password.js. This screen is entered when the user presses "forgot password" on the login page.
+ * file: password.js. This screen is entered when the user presses the "forgot password" option on the login page.
  */
  import React, { useState } from 'react';
  import * as firebase from 'firebase';
@@ -38,13 +38,15 @@
      navigation.navigate("Login");
    }
  
-   // function entered upon user clicking button 
+   // this function is called when the user presses the "reset password" button
+   // function for sending password reset email
+   // @param email
    function passwordReset(email) {
      if (email == undefined || email == "") {
        alert("Please enter your email to reset password.");
      }
      else {
-       // tries the firebase function to reset password -- an email with a link to update password is sent
+       // firebase function to reset password -- an email with a link to update password is sent
        firebase.auth().sendPasswordResetEmail(email).then(function () {
          alert("Check email and follow the link to reset password.");
          navigation.navigate("Login");
@@ -58,11 +60,6 @@
    return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
      <View style={styles.container}>
-        {/* <LinearGradient
-         // Background Linear Gradient
-         colors={['transparent', 'rgba(0, 0, 0, 0.2)', '#53DC98']}
-         style={styles.background}
-       /> */}
        <StatusBar style="auto"/>
          <TouchableOpacity onPress={() => navToLogin()}>
              <Image style={styles.backButtonPass} source={require("../assets/backArrow.png")}/>
