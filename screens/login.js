@@ -82,7 +82,7 @@ export default function login({navigation}) {
   
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
-      <Image style={styles.image} source={require("../assets/piggybank_4.png")} />
+      <Image style={styles.image} source={require("../assets/piggybank.png")} />
       <LinearGradient
         // background Linear Gradient
         colors={['transparent', 'rgba(0, 0, 0, 0.1)', '#53DC98']}
@@ -103,7 +103,7 @@ export default function login({navigation}) {
           onChangeText={(password) => setPassword({password})}
         />
       </View>
-      <Button style={{marginBottom: 30}} color ="#8c52ff" 
+      <Button style={{marginBottom: 30}} color ="#23cc8c" 
       onPress={() => loginUserWithToken(email.email, password.password)}>
         <Text>Login</Text>
       </Button>
