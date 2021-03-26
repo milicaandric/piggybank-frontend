@@ -31,6 +31,7 @@ import {
   Image,
   TouchableOpacity,
   KeyboardAvoidingView,
+  ScrollView
 } from "react-native";
 
 const styles = require('../styles/global');
@@ -150,6 +151,7 @@ export default function signUpCustomer({navigation}) {
         <View>
         <Text style={styles.signupHeader}>Signup</Text>
         </View>
+        <ScrollView>
         <View style={{paddingBottom: 25}}>
         <Input style={{borderRadius: 30, height:50, padding: 10}}
             placeholder="Email"
@@ -176,6 +178,7 @@ export default function signUpCustomer({navigation}) {
             onChangeText={(verifyPassword) => setVerifyPassword({verifyPassword})}
         />
         </View>
+        </ScrollView>
         <Button style={{marginBottom: 30}} color ="#23cc8c" 
         onPress={() => signupCustomerAccount(email.email, username.username, password.password, verifyPassword.verifyPassword)}>
         <Text>Sign up</Text>

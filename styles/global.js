@@ -73,7 +73,6 @@ module.exports = StyleSheet.create({
   },
 
   signupHeader: {
-    marginTop: heightPercentageToDP('-5%'),
     paddingBottom: 40,
     textAlign: 'center',
     fontSize: 40
@@ -81,7 +80,7 @@ module.exports = StyleSheet.create({
 
   backButton: {
     marginLeft: widthPercentageToDP('-45%'),
-    marginTop: 15,
+    marginTop: widthPercentageToDP('10%'),
     maxWidth: 40,
     maxHeight: 40,
   },
