@@ -63,10 +63,10 @@
        /> */}
        <StatusBar style="auto"/>
          <TouchableOpacity onPress={() => navToLogin()}>
-             <Image style={styles.backButton} source={require("../assets/backArrow.png")}/>
+             <Image style={styles.backButtonPass} source={require("../assets/backArrow.png")}/>
          </TouchableOpacity>
        <Text style={{marginTop: heightPercentageToDP('-15%'), paddingBottom: 40, textAlign: 'center', fontSize: 40}}>Forgot your password?</Text>
-       <Image style={styles.passImage} source={require("../assets/forgotpass.png")} />
+       <Image style={styles.passImage} source={require("../assets/forgotpass_2.png")} />
  
        <Text p style={{ textAlign: 'center', margin: 20}}>Enter your email address below to reset your password</Text>
  
@@ -76,7 +76,7 @@
            onChangeText={(email) => setEmail({ email })}
          />
        </View>
-       <Button color="#8c52ff"
+       <Button color="#23cc8c"
          onPress={() => passwordReset(email.email)}>
          <Text style={styles.loginText}>Reset Password</Text>
        </Button>
