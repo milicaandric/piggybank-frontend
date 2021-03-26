@@ -1,3 +1,11 @@
+/**
+ * CS 506
+ * PiggyBank team: Callan Patel, Brian O'Loughlin, Calvin Armstrong, Jacob Biewer, Milica Andric, Quentin Ford
+ * Lecture 001
+ * file: signup_merchant.js. This screen is for signing up a new merchant. Fields to enter are email,
+ * username, password, verify password, account number, account routing number, and name on account.
+ * Username is checked for existing username before creating account.
+ */
 import React, { useState } from 'react';
 import { StatusBar } from "expo-status-bar";
 import 'react-native-gesture-handler';
@@ -37,23 +45,32 @@ export default function signUpMerchant({navigation}) {
   const[accountNumber, setAccountNumber] = useState("");
   const[nameOnAccount, setNameOnAccount] = useState("");
 
+  //function called when the user presses the backarrow. Takes user back to login
   function navToLogin() {
     navigation.navigate("Login");
   }
 
+  //this function is called when the user presses "signup"
+  //@param email, username, password, verifyPassword, routingNumber, accountNumber, nameOnAccount
   function signupMerchantAccount(email, username, password, verifyPassword, routingNumber, accountNumber, nameOnAccount){
+        //first checks if the user filled out every field
         if(email != undefined && email != "" && password != undefined && password != "" && verifyPassword != undefined && verifyPassword != "" && routingNumber != undefined 
         && routingNumber != "" && username != undefined && username != "" && accountNumber != undefined && accountNumber != "" && nameOnAccount != undefined && nameOnAccount != ""){
+            //checks if the password is at least 6 characters
             if(password.length >= 6){
+                //checks if the password is verified
                 if(verifyPassword == password){
-                    firebase.auth().createUserWithEmailAndPassword(email, password).then(function(user){
-                        user.user.getIdToken(true).then(token =>{
-                            fetch("http://192.168.99.31:8080/api/v1/account/usernameExists?username="+username)
-                            .then((res)=>res.json())
-                            .then((dataUsernameExists)=>{
-                                if(dataUsernameExists == true){
-                                    throw Error("Username already exists");
-                                }
+                    fetch("http://192.168.99.31:8080/api/v1/account/usernameExists?username="+username)
+                    .then((res)=>res.json())
+                    .then((dataUsernameExists)=>{
+                        if(dataUsernameExists == true){
+                            //throws error. username is already taken
+                            throw Error("Username already exists");
+                        }
+                        //username isn't taken, creates user in firebase auth
+                        firebase.auth().createUserWithEmailAndPassword(email, password).then(function(user){
+                            //gets the IdToken which is used for sessionID generation in backend
+                            user.user.getIdToken(true).then(token =>{
                                 var data = {
                                     email: email,
                                     username: username,
@@ -65,6 +82,7 @@ export default function signUpMerchant({navigation}) {
                                     },
                                     type: "MERCHANT"
                                 };
+                                //creates user in firestore with backend request with token
                                 fetch("http://192.168.99.31:8080/api/v1/account/create?token="+token, {
                                     method: 'POST',
                                     headers: {
@@ -73,11 +91,16 @@ export default function signUpMerchant({navigation}) {
                                     body: JSON.stringify(data),
                                 })
                                 .then((response)=>{
+                                    //checks if the request was successful
                                     if(response.ok == true){
-                                        var session_cookie = response.headers.map['set-cookie'];
-                                        console.log(session_cookie);
-                                        navigation.navigate("Merchant_Dash");
+                                        //gets sessionID cookie and sends it via navigation to user_dash screen, and 
+                                        //navigates to that screen
+                                        var session = response.headers.map['set-cookie'];
+                                        navigation.navigate("Merchant_Dash", {
+                                            session_cookie: session
+                                        });
                                     }
+                                    //authentication failed to create user
                                     else{
                                         throw Error("Authentication for creating customer was unsuccessful");
                                     }
@@ -87,29 +110,34 @@ export default function signUpMerchant({navigation}) {
                                     console.log(error.toString());
                                 });
                             })
-                            .catch((error)=>{
-                                alert("Username already exists");
+                            //failed to acquire IdToken
+                            .catch((error) =>{
                                 console.log(error.toString());
                             });
                         })
+                        //email was invalid, or the email already exists
                         .catch((error) =>{
-                            console.log(error.toString());
+                            console.log(error.toString())
+                            alert("Email is already in use or email is invalid");
                         });
                     })
-                    .catch((error) =>{
-                        console.log(error.toString())
-                        alert("Email is already in use or email is invalid");
+                    //username exists already
+                    .catch((error)=>{
+                        alert("Username already exists");
+                        console.log(error);
                     });
-    
                 }
+                //verify password didn't match
                 else{
                     alert("Passwords do not match");
                 }
             }
+            //password wasn't at least 6 characters
             else{
                 alert("Password must be at least 6 characters");
             }
         }
+        //not all fields were filled out
         else{
             alert("Fill out all fields to create account");
         }
