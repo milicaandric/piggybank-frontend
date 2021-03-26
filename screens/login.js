@@ -42,42 +42,47 @@ export default function login({navigation}) {
 
   // loginUser wrapper function
   function loginUserWithToken(email, password) {
-    firebase.auth().signInWithEmailAndPassword(email, password).then(function(user) {
-      user.user.getIdToken(true).then(token => {
-        fetch("http://192.168.99.31:8080/api/v1/account/log-in?token="+token+"&email="+email+"&password="+password, {
-          method: 'POST'
-        })
-        .then(response=>{
-          var session_cookie = response.headers.map['set-cookie'];
-          fetch("http://192.168.99.31:8080/api/v1/account/get?email="+email,{
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'Cookie': session_cookie
-            },
+    if(email != "" && email != undefined && password != "" && email != undefined){
+      firebase.auth().signInWithEmailAndPassword(email, password).then(function(user) {
+        user.user.getIdToken(true).then(token => {
+          fetch("http://192.168.99.31:8080/api/v1/account/log-in?token="+token+"&email="+email+"&password="+password, {
+            method: 'POST'
           })
-          .then(response=>response.json())
-          .then(data=>{
-            if(data.type == "MERCHANT"){
-              navigation.navigate("Merchant_Dash");
-            }
-            else if(data.type == "CUSTOMER"){
-              navigation.navigate("User_Dash");
-            }
-          })
-          .catch((error)=>{
-            alert("Authentication Failed");
+          .then(response=>{
+            var session_cookie = response.headers.map['set-cookie'];
+            fetch("http://192.168.99.31:8080/api/v1/account/get?email="+email,{
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                'Cookie': session_cookie
+              },
+            })
+            .then(response=>response.json())
+            .then(data=>{
+              if(data.type == "MERCHANT"){
+                navigation.navigate("Merchant_Dash");
+              }
+              else if(data.type == "CUSTOMER"){
+                navigation.navigate("User_Dash");
+              }
+            })
+            .catch((error)=>{
+              alert("Authentication Failed");
+              console.log(error.toString());
+            });
+          }).catch((error)=>{
             console.log(error.toString());
           });
-        }).catch((error)=>{
-          console.log(error.toString());
         });
+      })
+      .catch((error) =>{
+        console.log(error.toString());
+        alert("Email or password incorrect");
       });
-    })
-    .catch((error) =>{
-      console.log(error.toString());
-      alert("Email or password incorrect");
-    });
+    }
+    else{
+      alert("Please enter email and password to login");
+    }
   }
   
   return (

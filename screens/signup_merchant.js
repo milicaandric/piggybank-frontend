@@ -41,7 +41,7 @@ export default function signUpMerchant({navigation}) {
     navigation.navigate("Login");
   }
 
-  function loginUser(email, username, password, verifyPassword, routingNumber, accountNumber, nameOnAccount){
+  function signupMerchantAccount(email, username, password, verifyPassword, routingNumber, accountNumber, nameOnAccount){
         if(email != undefined && email != "" && password != undefined && password != "" && verifyPassword != undefined && verifyPassword != "" && routingNumber != undefined 
         && routingNumber != "" && username != undefined && username != "" && accountNumber != undefined && accountNumber != "" && nameOnAccount != undefined && nameOnAccount != ""){
             if(password.length >= 6){
@@ -186,8 +186,8 @@ export default function signUpMerchant({navigation}) {
             onChangeText={(nameOnAccount) => setNameOnAccount({nameOnAccount})}
         />
         </View>
-        <Button style={{marginBottom: 30}} color ="#8c52ff" 
-        onPress={() => loginUser(email.email, username.username, password.password, verifyPassword.verifyPassword, routingNumber.routingNumber, accountNumber.accountNumber, nameOnAccount.nameOnAccount)}>
+        <Button style={{marginBottom: 30}} color ="#23cc8c" 
+        onPress={() => signupMerchantAccount(email.email, username.username, password.password, verifyPassword.verifyPassword, routingNumber.routingNumber, accountNumber.accountNumber, nameOnAccount.nameOnAccount)}>
         <Text>Sign up</Text>
         </Button>
     </KeyboardAvoidingView>

@@ -38,7 +38,7 @@ export default function signUpCustomer({navigation}) {
     navigation.navigate("Login");
   }
 
-  function loginUser(email, username, password, verifyPassword){
+  function signupCustomerAccount(email, username, password, verifyPassword){
         if(email != undefined && email != "" && password != undefined && password != "" && verifyPassword != undefined && verifyPassword != "" 
         && username != undefined && username != ""){
             if(password.length >= 6){
@@ -149,8 +149,8 @@ export default function signUpCustomer({navigation}) {
             onChangeText={(verifyPassword) => setVerifyPassword({verifyPassword})}
         />
         </View>
-        <Button style={{marginBottom: 30}} color ="#8c52ff" 
-        onPress={() => loginUser(email.email, username.username, password.password, verifyPassword.verifyPassword)}>
+        <Button style={{marginBottom: 30}} color ="#23cc8c" 
+        onPress={() => signupCustomerAccount(email.email, username.username, password.password, verifyPassword.verifyPassword)}>
         <Text>Sign up</Text>
         </Button>
     </KeyboardAvoidingView>
