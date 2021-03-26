@@ -117,7 +117,6 @@ export default function signUpCustomer({navigation}) {
                 //username exists already
                 .catch((error)=>{
                     alert("Username already exists");
-                    console.log(error);
                 });
             }
             //verify password didn't match

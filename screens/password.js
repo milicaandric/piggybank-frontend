@@ -26,6 +26,7 @@
    Image,
    View,
    TouchableOpacity,
+   KeyboardAvoidingView
  } from "react-native";
  
  const styles = require('../styles/global');
@@ -55,6 +56,7 @@
  
    // user interface
    return (
+    <KeyboardAvoidingView style={styles.container} behavior="padding">
      <View style={styles.container}>
         {/* <LinearGradient
          // Background Linear Gradient
@@ -65,10 +67,13 @@
          <TouchableOpacity onPress={() => navToLogin()}>
              <Image style={styles.backButtonPass} source={require("../assets/backArrow.png")}/>
          </TouchableOpacity>
+      <View>
        <Text style={{marginTop: heightPercentageToDP('-15%'), paddingBottom: 40, textAlign: 'center', fontSize: 40}}>Forgot your password?</Text>
+      </View>
        <Image style={styles.passImage} source={require("../assets/forgotpass_2.png")} />
- 
+       <View>
        <Text p style={{ textAlign: 'center', margin: 20}}>Enter your email address below to reset your password</Text>
+       </View>
  
        <View>
          <Input style = {{borderRadius: 30, height:50, padding: 10}}
@@ -81,5 +86,6 @@
          <Text style={styles.loginText}>Reset Password</Text>
        </Button>
      </View>
+     </KeyboardAvoidingView>
    );
  }
