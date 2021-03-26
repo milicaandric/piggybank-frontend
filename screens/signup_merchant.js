@@ -48,36 +48,47 @@ export default function signUpMerchant({navigation}) {
                 if(verifyPassword == password){
                     firebase.auth().createUserWithEmailAndPassword(email, password).then(function(user){
                         user.user.getIdToken(true).then(token =>{
-                            var data = {
-                                email: email,
-                                username: username,
-                                password: password,
-                                bankAccount:{
-                                    nameOnAccount: nameOnAccount,
-                                    accountNumber: accountNumber,
-                                    routingNumber: routingNumber
-                                },
-                                type: "MERCHANT"
-                            };
-                            fetch("http://192.168.99.31:8080/api/v1/account/create?token="+token, {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify(data),
-                            })
-                            .then((response)=>{
-                                if(response.ok == true){
-                                    var session_cookie = response.headers.map['set-cookie'];
-                                    console.log(session_cookie);
-                                    navigation.navigate("Merchant_Dash");
+                            fetch("http://192.168.99.31:8080/api/v1/account/usernameExists?username="+username)
+                            .then((res)=>res.json())
+                            .then((dataUsernameExists)=>{
+                                if(dataUsernameExists == true){
+                                    throw Error("Username already exists");
                                 }
-                                else{
-                                    throw Error("Authentication for creating customer was unsuccessful");
-                                }
+                                var data = {
+                                    email: email,
+                                    username: username,
+                                    password: password,
+                                    bankAccount:{
+                                        nameOnAccount: nameOnAccount,
+                                        accountNumber: accountNumber,
+                                        routingNumber: routingNumber
+                                    },
+                                    type: "MERCHANT"
+                                };
+                                fetch("http://192.168.99.31:8080/api/v1/account/create?token="+token, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify(data),
+                                })
+                                .then((response)=>{
+                                    if(response.ok == true){
+                                        var session_cookie = response.headers.map['set-cookie'];
+                                        console.log(session_cookie);
+                                        navigation.navigate("Merchant_Dash");
+                                    }
+                                    else{
+                                        throw Error("Authentication for creating customer was unsuccessful");
+                                    }
+                                })
+                                .catch((error)=>{
+                                    alert("Authentication for creating customer was unsuccessful");
+                                    console.log(error.toString());
+                                });
                             })
                             .catch((error)=>{
-                                alert("Authentication for creating customer was unsuccessful");
+                                alert("Username already exists");
                                 console.log(error.toString());
                             });
                         })

@@ -45,33 +45,44 @@ export default function signUpCustomer({navigation}) {
                 if(verifyPassword == password){
                     firebase.auth().createUserWithEmailAndPassword(email, password).then(function(user){
                         user.user.getIdToken(true).then(token =>{
-                            var data = {
-                                email: email,
-                                username: username,
-                                password: password,
-                                type: "CUSTOMER"
-                            };
-                            fetch("http://192.168.99.31:8080/api/v1/account/create?token="+token, {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify(data),
-                            })
-                            .then((response)=>{
-                                if(response.ok == true){
-                                    var session = response.headers.map['set-cookie'];
-                                    navigation.navigate("User_Dash", {
-                                        session_cookie: session
-                                    });
+                            fetch("http://192.168.99.31:8080/api/v1/account/usernameExists?username="+username)
+                            .then((res)=>res.json())
+                            .then((dataUsernameExists)=>{
+                                if(dataUsernameExists == true){
+                                    throw Error("Username already exists");
                                 }
-                                else{
-                                    throw Error("Authentication for creating customer was unsuccessful");
-                                }
+                                var data = {
+                                    email: email,
+                                    username: username,
+                                    password: password,
+                                    type: "CUSTOMER"
+                                };
+                                fetch("http://192.168.99.31:8080/api/v1/account/create?token="+token, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify(data),
+                                })
+                                .then((response)=>{
+                                    if(response.ok == true){
+                                        var session = response.headers.map['set-cookie'];
+                                        navigation.navigate("User_Dash", {
+                                            session_cookie: session
+                                        });
+                                    }
+                                    else{
+                                        throw Error("Authentication for creating customer was unsuccessful");
+                                    }
+                                })
+                                .catch((error)=>{
+                                    alert("Authentication for creating customer was unsuccessful");
+                                    console.log(error.toString());
+                                });
                             })
                             .catch((error)=>{
-                                alert("Authentication for creating customer was unsuccessful");
-                                console.log(error.toString());
+                                alert("Username already exists");
+                                console.log(error);
                             });
                         })
                         .catch((error) =>{

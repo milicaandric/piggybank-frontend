@@ -5,11 +5,10 @@
  * file: password.js. This screen is entered when the user presses "forgot password" on the login page.
  */
  import React, { useState } from 'react';
- import { useNavigation } from '@react-navigation/native';
  import * as firebase from 'firebase';
  import { Button, Text, Input} from 'galio-framework';
  import { StatusBar } from "expo-status-bar";
- import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
+ import { heightPercentageToDP } from "react-native-responsive-screen";
  
  const firebaseConfig = {
    apiKey: "AIzaSyAg-KUJ--2nDiMDJnzSt_sNYO8y_eZI5Bo",
