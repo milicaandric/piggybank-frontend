@@ -85,6 +85,13 @@ module.exports = StyleSheet.create({
     maxWidth: 40,
     maxHeight: 40,
   },
+  backButtonPass: {
+    marginLeft: widthPercentageToDP('-45%'),
+    marginTop: heightPercentageToDP('-5%'),
+    marginBottom: heightPercentageToDP('20%'),
+    maxWidth: 40,
+    maxHeight: 40,
+  },
   mainCircle:{
     height:heightPercentageToDP('20%'),
     width: heightPercentageToDP('20%'),
