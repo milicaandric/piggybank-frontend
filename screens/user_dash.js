@@ -1,12 +1,15 @@
+/**
+ * CS 506
+ * PiggyBank team: Callan Patel, Brian O'Loughlin, Calvin Armstrong, Jacob Biewer, Milica Andric, Quentin Ford
+ * Lecture 001
+ * file: user_dash.js. This screen allows the user to view their balance, send money to others, and navigate to
+ * settings, transactions, and transfer to bank
+ */
 import React, { useState, Component } from 'react';
 import 'react-native-gesture-handler';
-import { useNavigation } from '@react-navigation/native';
 import * as firebase from 'firebase';
-import { Button, Block, Text, Input, theme } from 'galio-framework';
+import { Text, Input} from 'galio-framework';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
-import { NavigationContainer } from '@react-navigation/native';
-import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
-import { DrawerNavigator } from 'react-navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import SideMenu from 'react-native-side-menu-updated'
 

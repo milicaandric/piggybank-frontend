@@ -1,3 +1,9 @@
+/**
+ * CS 506
+ * PiggyBank team: Callan Patel, Brian O'Loughlin, Calvin Armstrong, Jacob Biewer, Milica Andric, Quentin Ford
+ * Lecture 001
+ * file: merchant_dash.js. This screen allows a merchant to send change from a transaction to users.
+ */
 import React, { useState, Component } from 'react';
 import 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';

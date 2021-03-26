@@ -30,7 +30,7 @@ import {
   View,
   Image,
   TouchableOpacity,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
 } from "react-native";
 
 const styles = require('../styles/global');

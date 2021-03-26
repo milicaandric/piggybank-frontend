@@ -31,7 +31,8 @@ import {
   View,
   Image,
   TouchableOpacity,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  ScrollView
 } from "react-native";
 
 const styles = require('../styles/global');
@@ -157,62 +158,64 @@ export default function signUpMerchant({navigation}) {
         <View>
         <Text style={styles.signupHeader}>Signup</Text>
         </View>
-        <View>
-        <Input style={{borderRadius: 30, height:50, padding: 10}}
-            placeholder="Email"
-            onChangeText={(email) => setEmail({email})}
-        />
-        </View>
-        <View>
-        <Input style={{borderRadius: 30, height:50, padding: 10}}
-            placeholder="Username"
-            onChangeText={(username) => setUsername({username})}
-        />
-        </View>
-        <View>
-        <Input style={{borderRadius: 30, height:50, padding: 10}}
-            placeholder="Password"
-            secureTextEntry={true}
-            onChangeText={(password) => setPassword({password})}
-        />
-        </View>
-        <View>
-        <Input style={{borderRadius: 30, height:50, padding: 10}}
-            placeholder="Verify Password"
-            secureTextEntry={true}
-            onChangeText={(verifyPassword) => setVerifyPassword({verifyPassword})}
-        />
-        </View>
-        <View style={{
-        marginLeft: widthPercentageToDP("12.5%"),
-        width: widthPercentageToDP('75%'),
-        borderBottomColor: 'black',
-        borderBottomWidth: 1,
-        alignSelf: 'stretch',
-        paddingBottom: 20,
-        }}
-        />
-        <View>
-        <Text style={{textAlign: 'center', paddingBottom: 15, paddingTop: 20, fontSize: 20}}>Bank Information</Text>
-        </View>
-        <View>
-        <Input style={{borderRadius: 30, height:50, padding: 10}}
-            placeholder="Routing Number"
-            onChangeText={(routingNumber) => setRountingNumber({routingNumber})}
-        />
-        </View>
-        <View>
-        <Input style={{borderRadius: 30, height:50, padding: 10}}
-            placeholder="Account Number"
-            onChangeText={(accountNumber) => setAccountNumber({accountNumber})}
-        />
-        </View>
-        <View>
-        <Input style={{borderRadius: 30, height:50, padding: 10}}
-            placeholder="Name on Account"
-            onChangeText={(nameOnAccount) => setNameOnAccount({nameOnAccount})}
-        />
-        </View>
+        <ScrollView>
+            <View>
+                <Input style={styles.signupField}
+                    placeholder="Email"
+                    onChangeText={(email) => setEmail({email})}
+                />
+            </View>
+            <View>
+                <Input style={styles.signupField}
+                    placeholder="Username"
+                    onChangeText={(username) => setUsername({username})}
+                />
+            </View>
+            <View>
+                <Input style={styles.signupField}
+                    placeholder="Password"
+                    secureTextEntry={true}
+                    onChangeText={(password) => setPassword({password})}
+                />
+            </View>
+            <View>
+                <Input style={styles.signupField}
+                    placeholder="Verify Password"
+                    secureTextEntry={true}
+                    onChangeText={(verifyPassword) => setVerifyPassword({verifyPassword})}
+                />
+            </View>
+            <View style={{
+            marginLeft: widthPercentageToDP("0%"),
+            width: "100%",
+            borderBottomColor: 'black',
+            borderBottomWidth: 1,
+            alignSelf: 'stretch',
+            paddingBottom: 20,
+            }}
+            />
+            <View>
+                <Text style={{textAlign: 'center', paddingBottom: 15, paddingTop: 20, fontSize: 20}}>Bank Information</Text>
+            </View>
+            <View>
+                <Input style={styles.signupField}
+                    placeholder="Routing Number"
+                    onChangeText={(routingNumber) => setRountingNumber({routingNumber})}
+                />
+            </View>
+            <View>
+                <Input style={styles.signupField}
+                    placeholder="Account Number"
+                    onChangeText={(accountNumber) => setAccountNumber({accountNumber})}
+                />
+            </View>
+            <View>
+                <Input style={styles.signupField}
+                    placeholder="Name on Account"
+                    onChangeText={(nameOnAccount) => setNameOnAccount({nameOnAccount})}
+                />
+            </View>
+        </ScrollView>
         <Button style={{marginBottom: 30}} color ="#23cc8c" 
         onPress={() => signupMerchantAccount(email.email, username.username, password.password, verifyPassword.verifyPassword, routingNumber.routingNumber, accountNumber.accountNumber, nameOnAccount.nameOnAccount)}>
         <Text>Sign up</Text>

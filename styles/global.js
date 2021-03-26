@@ -166,5 +166,12 @@ module.exports = StyleSheet.create({
   sideMenuText:{
     fontSize: 20,
     marginTop: 10
+  },
+  signupField:{
+    borderRadius: 30, 
+    height:50, 
+    padding: 10, 
+    width: widthPercentageToDP("70%"), 
+    marginLeft: widthPercentageToDP("2.5%")
   }
 });
