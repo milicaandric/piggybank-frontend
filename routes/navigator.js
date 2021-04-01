@@ -19,13 +19,14 @@ export default function Navigator(){
     return (
     <NavigationContainer>
       <AppStack.Navigator screenOptions={{ headerShown: false}} >
+      <AppStack.Screen name="Add_Bank" component={Add_Bank}/>
+
         <AppStack.Screen name="Login" component={Login}/>
         <AppStack.Screen name="User_Dash" component={User_Dash}/>
         <AppStack.Screen name="Merchant_Dash" component={Merchant_Dash}/>
         <AppStack.Screen name='Signup_Merchant' component={Signup_Merchant}/>
         <AppStack.Screen name='Signup_Customer' component={Signup_Customer}/>
         <AppStack.Screen name="Password" component={Password}/>
-        <AppStack.Screen name="Add_Bank" component={Add_Bank}/>
         <AppStack.Screen name="Remove_Bank" component={Remove_Bank}/>
 
       </AppStack.Navigator>
