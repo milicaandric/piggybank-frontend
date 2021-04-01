@@ -47,8 +47,8 @@ export default function addBank({ route, navigation }) {
   // session cookie constant retrieval
   // TODO:
   // 1.) undefined is not an object -> evaluating route.params.session_cookie
-  //const {session_cookie} = route.params;
-  //console.log(session_cookie);
+  const {session_cookie} = route.params;
+  console.log(session_cookie);
   //navigation = useNavigation();
 
   // this function is called when the user presses "add"
@@ -61,25 +61,20 @@ export default function addBank({ route, navigation }) {
       let user = firebase.auth().currentUser; // retrieves current user 
       let email = user.email; // sets email var to user's email for 'update' api call
       console.log(email);
-      // do not need to get id token -- remove this
-      user.getIdToken(true).then(token => {
         // data should contain all request body content (?)
         let data = {
           routingNumber: routingNumber,
           accountNumber: accountNumber,
         };
         // updates specific user information in firestore
-        // TODO: 
-        // 1.) retrieve cookie session id via route.params
-        // 2.) replace token with session_cookie
-        fetch("http://192.168.4.34:8080/api/v1/account/update?email=" + email + "&sessionCookieId=" + token, {
+        fetch("http://192.168.4.34:8080/api/v1/account/update?email=" + email + "&sessionCookieId=" + session_cookie, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify(data),
         })
-        // firebase method to update user profile information (might only work with docs tho)
+        // firebase method to update user profile information (might only work with docs tho, so delete)
         user.updateProfile({
           accountNumber: accountNumber,
           routingNumber: routingNumber
@@ -89,8 +84,6 @@ export default function addBank({ route, navigation }) {
         }).catch(function (error) {
           // if an error happened
         });
-      }
-      )
     }
     else {
       // user did not fill out all fields
@@ -100,7 +93,7 @@ export default function addBank({ route, navigation }) {
 
   // user interface
   // TODO : 
-  // 1) make add button functional 
+  // 1) check add button functionality
   // 2) have back button nav to settings screen (when settings screen is made)
   //      - navToSettings function does not exist yet for back arrow
   // 3) handler for if bank account is already active (nav to new screen for that)
