@@ -76,7 +76,7 @@
                }
                // if the user is a customer, navigate to customer dashboard
                else if(data.type == "CUSTOMER"){
-                 navigation.navigate("User_Dash");
+                 navigation.navigate("Add_Bank");
                }
              })
              .catch((error)=>{
