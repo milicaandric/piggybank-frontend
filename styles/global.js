@@ -178,5 +178,12 @@ module.exports = StyleSheet.create({
     padding: 10, 
     width: widthPercentageToDP("70%"), 
     marginLeft: widthPercentageToDP("2.5%")
+  },
+  transferToBankInput:{
+    backgroundColor: "#FFF",
+    padding: 10,
+    borderRadius: 30, 
+    height:50, 
+    width: widthPercentageToDP('70%'),
   }
 });

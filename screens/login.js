@@ -78,7 +78,7 @@
                }
                // if the user is a customer, navigate to customer dashboard
                else if(data.type == "CUSTOMER"){
-                 navigation.navigate("Remove_Bank", {
+                 navigation.navigate("Transfer_To_Bank", {
                   session_cookie: session_cookie
               });
                }

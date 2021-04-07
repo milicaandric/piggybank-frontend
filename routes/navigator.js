@@ -8,6 +8,7 @@ import Signup_Customer from '../screens/signup_customer';
 import User_Dash from '../screens/user_dash';
 import Merchant_Dash from '../screens/merchant_dash';
 import Swap_Bank from '../screens/swap_bank';
+import Transfer_To_Bank from '../screens/transfer_to_bank';
 import Add_Bank from '../screens/add_bank';
 import Remove_Bank from '../screens/remove_bank';
 
@@ -29,6 +30,7 @@ export default function Navigator(){
         <AppStack.Screen name="Remove_Bank" component={Remove_Bank}/>
         <AppStack.Screen name="Swap_Bank" component={Swap_Bank}/>
         <AppStack.Screen name="Add_Bank" component={Add_Bank}/>
+        <AppStack.Screen name="Transfer_To_Bank" component={Transfer_To_Bank}/>
       </AppStack.Navigator>
     </NavigationContainer>
     );
