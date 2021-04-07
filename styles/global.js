@@ -84,6 +84,12 @@ module.exports = StyleSheet.create({
     maxWidth: 40,
     maxHeight: 40,
   },
+  backButtonRemoveBank: {
+    marginLeft: widthPercentageToDP('-45%'),
+    marginTop: widthPercentageToDP('-50%'),
+    maxWidth: 40,
+    maxHeight: 40,
+  },
   backButtonPass: {
     marginLeft: widthPercentageToDP('-45%'),
     marginTop: heightPercentageToDP('-5%'),

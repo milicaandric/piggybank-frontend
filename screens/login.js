@@ -72,7 +72,7 @@
              .then(data=>{
                // if the user is a merchant, navigate to merchant dashboard
                if(data.type == "MERCHANT"){
-                navigation.navigate("Swap_Bank", {
+                navigation.navigate("Remove_Bank", {
                   session_cookie: session_cookie
                 });
                }
@@ -111,7 +111,7 @@
        <Image style={styles.image} source={require("../assets/piggybank.png")} />
        <LinearGradient
          // background linear gradient
-         colors={['transparent', 'rgba(0, 0, 0, 0.1)', '#53DC98']}
+         colors={['transparent', 'rgba(0, 0, 0, 0.1)', '#93E9BE']}
          style={styles.background}
        />
        <StatusBar style="auto" />

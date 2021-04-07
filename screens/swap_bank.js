@@ -4,15 +4,13 @@
  * Lecture 001
  * file: swap_bank: Allows merchant account to swap a bank account out
  */
-import React, { useState, Component } from 'react';
+import React, { useState } from 'react';
 import 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import * as firebase from 'firebase';
-import { Button, Block, Text, Input, theme } from 'galio-framework';
+import { Button, Text, Input} from 'galio-framework';
 import { StatusBar } from "expo-status-bar";
-import { createDrawerNavigator, DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import SideMenu from 'react-native-side-menu-updated'
+import { createDrawerNavigator} from '@react-navigation/drawer';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAg-KUJ--2nDiMDJnzSt_sNYO8y_eZI5Bo",
@@ -47,7 +45,13 @@ export default function SwapBank({ route, navigation }) {
 
   const { session_cookie } = route.params;
 
-  function addBankAccount(routingNumber, accountNumber, nameOnAccount) {
+  function navToMenu(){
+    navigation.navigate("Merchant_Dash", {
+      session_cookie: session_cookie
+    });
+  }
+
+  function swapBankAccount(routingNumber, accountNumber, nameOnAccount) {
     // first check that user has filled out all neccessary fields
     if (routingNumber != undefined && routingNumber != "" && accountNumber != undefined && accountNumber != "" && nameOnAccount != undefined && nameOnAccount != "") {
       let user = firebase.auth().currentUser; // retrieves current user 
@@ -86,15 +90,10 @@ export default function SwapBank({ route, navigation }) {
   }
 
   // user interface
-  // TODO : 
-  // 1) check add button functionality
-  // 2) have back button nav to settings screen (when settings screen is made)
-  //      - navToSettings function does not exist yet for back arrow
-  // 3) handler for if bank account is already active (nav to new screen for that)
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
       <StatusBar style="auto" />
-      <TouchableOpacity onPress={() => navToSettings()}>
+      <TouchableOpacity onPress={() => navToMenu()}>
         <Image style={styles.backButton} source={require("../assets/backArrow.png")} />
       </TouchableOpacity>
       <View>
@@ -121,7 +120,7 @@ export default function SwapBank({ route, navigation }) {
         </View>
       </ScrollView>
       <Button style={{ marginBottom: 200 }} color="#23cc8c"
-        onPress={() => addBankAccount(routingNumber.routingNumber, accountNumber.accountNumber, nameOnAccount.nameOnAccount)}>
+        onPress={() => swapBankAccount(routingNumber.routingNumber, accountNumber.accountNumber, nameOnAccount.nameOnAccount)}>
         <Text>Add</Text>
       </Button>
     </KeyboardAvoidingView>
