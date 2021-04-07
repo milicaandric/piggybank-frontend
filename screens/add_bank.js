@@ -43,58 +43,68 @@ const Drawer = createDrawerNavigator();
 export default function addBank({ route, navigation }) {
   const [routingNumber, setRountingNumber] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
+  const [nameOnAccount, setNameOnAccount] = useState("");
 
-  // TODO:
-  // 1.) undefined is not an object -> evaluating route.params.session_cookie
-  // 2.) testing
   const { session_cookie } = route.params;
-  console.log(session_cookie);
-
-  // this function is called when the user presses "add"
-  // @param routingNumber, accountNumber
-  // TODO:
-  // 1.) retrieve cookie session id via route.params -- cannot recognize params 
-  // 2.) testing
-  function addBankAccount(routingNumber, accountNumber) {
+  
+  function addBankAccount(routingNumber, accountNumber, nameOnAccount) {
     // first check that user has filled out all neccessary fields
-    if (routingNumber != undefined && routingNumber != "" && accountNumber != undefined && accountNumber != "") {
+    if (routingNumber != undefined && routingNumber != "" && accountNumber != undefined && accountNumber != "" && nameOnAccount != undefined && nameOnAccount != "") {
       let user = firebase.auth().currentUser; // retrieves current user 
       let email = user.email; // sets email var to user's email
-      user.getIdToken(true).then(token => {
-        let data = {
-          //username: null,
-          //password: null,
-          //email: email,
-          routingNumber: routingNumber,
+      let data = {
+        bankAccount:{
+          nameOnAccount: nameOnAccount,
           accountNumber: accountNumber,
-          //type: "CUSTOMER"
-        };
-        // returns account object associated with email
-        fetch("http://192.168.4.34:8080/api/v1/account/get?email=" + email, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Cookie': session_cookie
-          },
-        })
-          .then(response => {
-            var account = response.headers.map['account'];
-            //console.log(account);
-            fetch("http://192.168.4.34:8080/api/v1/account/update?token=" + token, {
-              method: 'PUT',
-              headers: {
-                'Content-Type': 'application/json',
-                'Cookie': session_cookie // used to identify user session
-              },
-              body: JSON.stringify(data),
-            })
-              .then(response => response.json())
+          routingNumber: routingNumber
+        },
+      };
+      fetch("http://192.168.99.173:8080/api/v1/bank/update?email="+email, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Cookie': session_cookie
+        },
+        body: JSON.stringify(data),
+      }).then(response=>{
+        if(response.ok == true){
+          fetch("http://192.168.99.173:8080/api/v1/account/get?email="+email,{
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Cookie': session_cookie // used to identify user session
+            },
           })
-      }
-      )
+          .then(response=>response.json())
+          .then(data=>{
+            // if the user is a merchant, navigate to merchant dashboard
+            if(data.type == "MERCHANT"){
+             navigation.navigate("Merchant_Dash", {
+               session_cookie: session_cookie
+             });
+            }
+            // if the user is a customer, navigate to customer dashboard
+            else if(data.type == "CUSTOMER"){
+              navigation.navigate("User_Dash", {
+               session_cookie: session_cookie
+           });
+            }
+          })
+          .catch((error)=>{
+            // authentication failed to login user
+            alert("Authentication Failed");
+            console.log(error.toString());
+          });
+        }
+        else{
+          throw Error("Authentication for adding the bank account is invalid");
+        }
+      })
+      .catch((error)=>{
+        console.log(error.toString());
+      });
     }
     else {
-      // user did not fill out all fields
       alert("Please fill out all fields.");
     }
   }
@@ -123,14 +133,19 @@ export default function addBank({ route, navigation }) {
         </View>
         <View style={{ paddingBottom: 25 }}>
           <Input style={{ borderRadius: 30, height: 50, padding: 10 }}
-            placeholder="Name on Account"
-            secureTextEntry={true}
+            placeholder="Bank Account Number"
             onChangeText={(accountNumber) => setAccountNumber({ accountNumber })}
+          />
+        </View>
+        <View style={{ paddingBottom: 25 }}>
+          <Input style={{ borderRadius: 30, height: 50, padding: 10 }}
+            placeholder="Name on account"
+            onChangeText={(nameOnAccount) => setNameOnAccount({ nameOnAccount })}
           />
         </View>
       </ScrollView>
       <Button style={{ marginBottom: 200 }} color="#23cc8c"
-        onPress={() => addBankAccount(routingNumber.routingNumber, accountNumber.accountNumber)}>
+        onPress={() => addBankAccount(routingNumber.routingNumber, accountNumber.accountNumber, nameOnAccount.nameOnAccount)}>
         <Text>Add</Text>
       </Button>
     </KeyboardAvoidingView>

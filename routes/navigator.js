@@ -27,7 +27,6 @@ export default function Navigator(){
         <AppStack.Screen name="Password" component={Password}/>
         <AppStack.Screen name="Remove_Bank" component={Remove_Bank}/>
         <AppStack.Screen name="Add_Bank" component={Add_Bank}/>
-
       </AppStack.Navigator>
     </NavigationContainer>
     );
