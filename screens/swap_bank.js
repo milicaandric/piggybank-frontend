@@ -2,7 +2,7 @@
  * CS 506
  * PiggyBank team: Callan Patel, Brian O'Loughlin, Calvin Armstrong, Jacob Biewer, Milica Andric, Quentin Ford
  * Lecture 001
- * file: add_bank.js. This screen allows a customer to add a bank to their account.
+ * file: swap_bank: Allows merchant account to swap a bank account out
  */
 import React, { useState, Component } from 'react';
 import 'react-native-gesture-handler';
@@ -40,13 +40,13 @@ const Drawer = createDrawerNavigator();
 
 // TODO: 
 // 1.) eventually add nav to new screen upon successful addiiton of bank
-export default function addBank({ route, navigation }) {
+export default function SwapBank({ route, navigation }) {
   const [routingNumber, setRountingNumber] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
   const [nameOnAccount, setNameOnAccount] = useState("");
 
   const { session_cookie } = route.params;
-  
+
   function addBankAccount(routingNumber, accountNumber, nameOnAccount) {
     // first check that user has filled out all neccessary fields
     if (routingNumber != undefined && routingNumber != "" && accountNumber != undefined && accountNumber != "" && nameOnAccount != undefined && nameOnAccount != "") {
@@ -68,32 +68,8 @@ export default function addBank({ route, navigation }) {
         body: JSON.stringify(data),
       }).then(response=>{
         if(response.ok == true){
-          fetch("http://192.168.99.173:8080/api/v1/account/get?email="+email,{
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'Cookie': session_cookie // used to identify user session
-            },
-          })
-          .then(response=>response.json())
-          .then(data=>{
-            // if the user is a merchant, navigate to merchant dashboard
-            if(data.type == "MERCHANT"){
-             navigation.navigate("Merchant_Dash", {
-               session_cookie: session_cookie
-             });
-            }
-            // if the user is a customer, navigate to customer dashboard
-            else if(data.type == "CUSTOMER"){
-              navigation.navigate("User_Dash", {
-               session_cookie: session_cookie
-           });
-            }
-          })
-          .catch((error)=>{
-            // authentication failed to login user
-            alert("Authentication Failed");
-            console.log(error.toString());
+          navigation.navigate("Merchant_Dash", {
+            session_cookie: session_cookie
           });
         }
         else{
@@ -122,7 +98,7 @@ export default function addBank({ route, navigation }) {
         <Image style={styles.backButton} source={require("../assets/backArrow.png")} />
       </TouchableOpacity>
       <View>
-        <Text style={styles.signupHeader}>Add Bank</Text>
+        <Text style={styles.signupHeader}>Swap Bank</Text>
       </View>
       <ScrollView>
         <View style={{ paddingBottom: 25 }}>

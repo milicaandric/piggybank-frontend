@@ -7,7 +7,7 @@ import Signup_Merchant from '../screens/signup_merchant';
 import Signup_Customer from '../screens/signup_customer';
 import User_Dash from '../screens/user_dash';
 import Merchant_Dash from '../screens/merchant_dash';
-import Add_Bank from '../screens/add_bank';
+import Swap_Bank from '../screens/swap_bank';
 import Remove_Bank from '../screens/remove_bank';
 
 import { AppRegistry } from 'react-native';
@@ -26,7 +26,7 @@ export default function Navigator(){
         <AppStack.Screen name='Signup_Customer' component={Signup_Customer}/>
         <AppStack.Screen name="Password" component={Password}/>
         <AppStack.Screen name="Remove_Bank" component={Remove_Bank}/>
-        <AppStack.Screen name="Add_Bank" component={Add_Bank}/>
+        <AppStack.Screen name="Swap_Bank" component={Swap_Bank}/>
       </AppStack.Navigator>
     </NavigationContainer>
     );
