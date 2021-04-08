@@ -5,12 +5,18 @@
  * file: signup_customer.js. This screen is for signing up a new customer. Fields to enter are email,
  * username, password, verify password. Username is checked for existing username before creating account.
  */
-import React, { useState } from 'react';
-import { StatusBar } from "expo-status-bar";
+import React, { useState, useEffect, Component } from 'react';
 import 'react-native-gesture-handler';
-import * as firebase from 'firebase';   
-import { Button, Text, Input} from 'galio-framework';
-import { LinearGradient } from 'expo-linear-gradient';
+import { useNavigation } from '@react-navigation/native';
+import * as firebase from 'firebase';
+import { Button, Block, Text, Input, theme } from 'galio-framework';
+import { createDrawerNavigator, DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
+import { NavigationContainer } from '@react-navigation/native';
+import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
+import { DrawerNavigator } from 'react-navigation';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import SideMenu from 'react-native-side-menu-updated'
+import SafeAreaView from 'react-native-safe-area-view';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAg-KUJ--2nDiMDJnzSt_sNYO8y_eZI5Bo",
@@ -30,6 +36,7 @@ import {
   View,
   Image,
   TouchableOpacity,
+  TextInput,
   KeyboardAvoidingView,
   ScrollView
 } from "react-native";
@@ -46,12 +53,12 @@ export default function updatePassword({route, navigation}) {
     const [confirm, setConfirm] = useState("");
 
      function navToAccount() {
-         navigation.navigate("UpdateAccount");
+         navigation.navigate("updateAccount");
      }
 
 
     useEffect(() => {
-        fetch("http://192.168.99.173:8080/api/v1/account/get?email="+emailVar,{
+        fetch("http://172.22.30.61:8080/api/v1/account/get?email="+emailVar,{
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -78,7 +85,7 @@ export default function updatePassword({route, navigation}) {
     else if (dataSent.password == confirm) {
         currentUser.updatePassword(password).then(function(){
             //make sure this fetch is the right way to call it
-            fetch("http://localhost:8080/api/v1/account/customer/update?username="+emailVar, {
+            fetch("http://172.22.30.61:8080/api/v1/account/customer/update?username="+emailVar, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -88,7 +95,9 @@ export default function updatePassword({route, navigation}) {
             .then(response => response.json())
             .then(data=>{
                 alert("Password successfully updated!");
-                navToAccount();
+                navigate.navigate("updateAccount", {
+                    session_cookie: session_cookie
+                });
             })
             .catch((error) =>{
                 console.log("Error: ", error);
@@ -103,14 +112,6 @@ export default function updatePassword({route, navigation}) {
 
    return(
       <KeyboardAvoidingView style={styles.pageBack} behavior="padding">
-        <View style={styles.header}>
-            <TouchableOpacity onPress={() => navToAccount()}>
-                <View style={styles.accountSpacing}>
-                    <FontAwesomeIcon icon="arrow-left" style={styles.icon}/>
-                </View>
-            </TouchableOpacity>
-            <Text style={styles.headerText}>Account</Text>
-        </View>
         <SafeAreaView style={styles.hold}>
             <Text style={styles.accountText}>Email</Text>
             <View style={styles.greyFields}>
@@ -121,12 +122,13 @@ export default function updatePassword({route, navigation}) {
                     onChangeText={(email) => setEmail({email})}
                 />
             </View>
-            <Text style={styles.accountText}>Confirm Email</Text>
+            <Text style={styles.accountText}>Password</Text>
             <View style={styles.greyFields}>
                 <TextInput
                     style={styles.baseText}
                     placeholder= "Enter new password"
                     placeholderTextColor="#003f5c"
+                    secureTextEntry={true}
                     onChangeText={(password) => setPassword({password})}
                 />
             </View>
@@ -135,6 +137,7 @@ export default function updatePassword({route, navigation}) {
                     style={styles.baseText}
                     placeholder= "Re-enter new password"
                     placeholderTextColor="#003f5c"
+                    secureTextEntry={true}
                     onChangeText={(confirm) => setConfirm({confirm})}
                 />
             </View>
@@ -143,7 +146,7 @@ export default function updatePassword({route, navigation}) {
                     Update Password
                 </Text>
             </Button>
-        </SafeAreaView> 
+            </SafeAreaView>
     </KeyboardAvoidingView>
     );
 
