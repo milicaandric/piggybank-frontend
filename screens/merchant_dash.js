@@ -39,55 +39,39 @@ import {
 
 const styles = require('../styles/global');
 
-function MainScreen() {
-    return (
-        <KeyboardAvoidingView style={styles.container} behavior="padding">
-            <View style={styles.pageBack}>
-                <Text style={styles.dashText}>
-                    Merchant Account
-                </Text>
-                <View style={{marginBottom: 20}}/>
-                <View style={styles.lowerHold}>
-                    <View>
-                        <Input style={styles.genInput}
-                            placeholder="Recipient"
-                        />
-                        <Input style={styles.genInput}
-                            placeholder="Amount"
-                        />
-                    </View>
-                    <TouchableOpacity style={styles.sendButton}>
-                        <Text style={styles.sendText}>
-                            Send
-                        </Text>
-                    </TouchableOpacity>
-                    <View style={styles.bottomRightMerchant}>
-                        <FontAwesomeIcon icon="cog" size={32}/>
-                    </View>
+export default function Merchant_dash({route, navigation}) {
+  const {session_cookie} = route.params;
+  function navToSettings(){
+    props.navigation.navigate("Settings_Merchant", {
+      session_cookie: session_cookie
+    });
+  }
+  return (
+    <KeyboardAvoidingView style={styles.container} behavior="padding">
+        <View style={styles.pageBack}>
+            <Text style={styles.dashText}>
+                Merchant Account
+            </Text>
+            <View style={{marginBottom: 20}}/>
+            <View style={styles.lowerHold}>
+                <View>
+                    <Input style={styles.genInput}
+                        placeholder="Recipient"
+                    />
+                    <Input style={styles.genInput}
+                        placeholder="Amount"
+                    />
                 </View>
+                <TouchableOpacity style={styles.sendButton}>
+                    <Text style={styles.sendText}>
+                        Send
+                    </Text>
+                </TouchableOpacity>
+                  <View style={styles.bottomRightMerchant} onPress={() => {navToSettings(props)}}>
+                      <FontAwesomeIcon icon="cog" size={32}/>
+                  </View>
             </View>
-        </KeyboardAvoidingView>
-    );
-}
-
-function MenuScreen({ navigation }) {
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <View style={styles.mainCircle}>
-          <Text style={styles.circleText}>
-              $23.78
-          </Text>
-      </View>
-      <Button onPress={() => navigation.goBack()} title="Go back home" />
-    </View>
-  );
-}
-
-const Drawer = createDrawerNavigator();
-export default function User_Dash() {
-  // loginUser wrapper class placeholder
-  // firebase auth
-  return (
-    <MainScreen />
+        </View>
+    </KeyboardAvoidingView>
   );
 }
