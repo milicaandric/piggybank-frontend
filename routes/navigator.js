@@ -11,6 +11,9 @@ import Swap_Bank from '../screens/swap_bank';
 import Transfer_To_Bank from '../screens/transfer_to_bank';
 import Add_Bank from '../screens/add_bank';
 import Remove_Bank from '../screens/remove_bank';
+import updateAccount from '../screens/updateAccount';
+import updateEmail from '../screens/updateEmail';
+import updatePassword from '../screens/updatePassword';
 
 import { AppRegistry } from 'react-native';
 import {name as appName} from '../app.json';
@@ -31,6 +34,9 @@ export default function Navigator(){
         <AppStack.Screen name="Swap_Bank" component={Swap_Bank}/>
         <AppStack.Screen name="Add_Bank" component={Add_Bank}/>
         <AppStack.Screen name="Transfer_To_Bank" component={Transfer_To_Bank}/>
+        <AppStack.Screen name="updateAccount" component={updateAccount}/>
+        <AppStack.Screen name="updateEmail" component={updateEmail}/>
+        <AppStack.Screen name="updatePassword" component={updatePassword}/>
       </AppStack.Navigator>
     </NavigationContainer>
     );
