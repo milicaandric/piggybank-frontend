@@ -2,8 +2,9 @@
  * CS 506
  * PiggyBank team: Callan Patel, Brian O'Loughlin, Calvin Armstrong, Jacob Biewer, Milica Andric, Quentin Ford
  * Lecture 001
- * file: signup_customer.js. This screen is for signing up a new customer. Fields to enter are email,
- * username, password, verify password. Username is checked for existing username before creating account.
+ * file: update_privacy.js. This screen is for changing the password for an account. Fields to enter are email,
+ * password, verify password. Email is checked to ensure entered email is the current user, and passwords are checked
+ * to make sure they match.
  */
 import React, { useState, useEffect, Component } from 'react';
 import 'react-native-gesture-handler';
@@ -94,9 +95,15 @@ export default function updatePassword({route, navigation}) {
             .then(response => response.json())
             .then(data=>{
                 alert("Password successfully updated!");
+                if (data.type == "CUSTOMER") {
                 navigate.navigate("Settings_Customer", {
                     session_cookie: session_cookie
                 });
+                } else if (data.type == "MERCHANT") {
+                    navigate.navigate("Settings_Merchant", {
+                        session_cookie: session_cookie
+                    });
+                }
             })
             .catch((error) =>{
                 console.log("Error: ", error);
