@@ -9,10 +9,6 @@ import 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import * as firebase from 'firebase';
 import { Button, Block, Text, Input, theme } from 'galio-framework';
-import { createDrawerNavigator, DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
-import { NavigationContainer } from '@react-navigation/native';
-import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
-import { DrawerNavigator } from 'react-navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import SideMenu from 'react-native-side-menu-updated'
 
@@ -91,6 +87,7 @@ function MenuScreen({ navigation }) {
 export default function Merchant_dash(route, navigation) {
   // loginUser wrapper class placeholder
   // firebase auth
+  console.log(route);
   const {session_cookie} = route.params;
   return (
     <MainScreen cookie={session_cookie} navigation={navigation}/>
