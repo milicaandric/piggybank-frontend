@@ -65,6 +65,28 @@
    function navToEditAccount(){
 
    }
+
+   function navToLogout(){
+    console.log(session_cookie);
+    fetch("http://192.168.99.173:8080/api/v1/account/log-out",{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Cookie': session_cookie // used to identify user session
+    },
+    })
+    .then(response=>{
+        if(response.ok == true){
+            navigation.navigate("Login");
+        }
+        else{
+            alert("logout failed")
+        }
+    })
+    .catch((error) =>{
+        console.log(error.toString());
+    });
+   }
  
    
    // user interface
@@ -114,6 +136,16 @@
             />
             <TouchableOpacity style={styles.settingsContentButtons} onPress={() => navToAbout()}>
                 <Text style={styles.settingsContentButtonsText}>About</Text>
+            </TouchableOpacity>
+            <View style={{
+                marginLeft: -20,
+                borderBottomColor: 'black',
+                borderBottomWidth: 1,
+                alignSelf: 'stretch',
+            }}
+            />
+            <TouchableOpacity style={styles.settingsContentButtons} onPress={() => navToLogout()}>
+                <Text style={styles.settingsContentButtonsText}>Logout</Text>
             </TouchableOpacity>
             <View style={{
                 marginLeft: -20,

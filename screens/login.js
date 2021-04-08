@@ -78,7 +78,7 @@
                }
                // if the user is a customer, navigate to customer dashboard
                else if(data.type == "CUSTOMER"){
-                 navigation.navigate("Settings_Merchant", {
+                 navigation.navigate("Settings_Customer", {
                   session_cookie: session_cookie
               });
                }
@@ -86,7 +86,6 @@
              .catch((error)=>{
                // authentication failed to login user
                alert("Authentication Failed");
-               console.log(error.toString());
              });
            }).catch((error)=>{
              console.log(error.toString());
