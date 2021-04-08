@@ -39,7 +39,12 @@ import {
 
 const styles = require('../styles/global');
 
-function MainScreen() {
+function MainScreen(props) {
+    function navToSettings(){
+      props.navigation.navigate("Settings_Merchant", {
+        session_cookie: props.cookie
+      });
+    }
     return (
         <KeyboardAvoidingView style={styles.container} behavior="padding">
             <View style={styles.pageBack}>
@@ -61,9 +66,9 @@ function MainScreen() {
                             Send
                         </Text>
                     </TouchableOpacity>
-                    <View style={styles.bottomRightMerchant}>
-                        <FontAwesomeIcon icon="cog" size={32}/>
-                    </View>
+                      <View style={styles.bottomRightMerchant} onPress={() => {navToSettings(props)}}>
+                          <FontAwesomeIcon icon="cog" size={32}/>
+                      </View>
                 </View>
             </View>
         </KeyboardAvoidingView>
@@ -83,11 +88,11 @@ function MenuScreen({ navigation }) {
   );
 }
 
-const Drawer = createDrawerNavigator();
-export default function User_Dash() {
+export default function Merchant_dash(route, navigation) {
   // loginUser wrapper class placeholder
   // firebase auth
+  const {session_cookie} = route.params;
   return (
-    <MainScreen />
+    <MainScreen cookie={session_cookie} navigation={navigation}/>
   );
 }
