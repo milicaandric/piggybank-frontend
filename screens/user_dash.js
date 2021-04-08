@@ -61,7 +61,7 @@ export class Outer extends Component{
       selectedItem: item,
     });
     
-    navToSettings(){
+    navToSettings(props){
       props.navigation.navigate("Settings_Customer", {
           session_cookie: this.props.cookie
       });
@@ -104,10 +104,10 @@ export class Outer extends Component{
                                     Transactions
                                 </Text>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => {this.navToSettings()}}>
-                            <View style={styles.bottomRight}>
-                                <FontAwesomeIcon icon="cog" size={32}/>
-                            </View>
+                            <TouchableOpacity onPress={() => {this.navToSettings(this.props)}}>
+                                <View style={styles.bottomRight}>
+                                    <FontAwesomeIcon icon="cog" size={32}/>
+                                </View>
                             </TouchableOpacity>
                         </View>
                     </View>
