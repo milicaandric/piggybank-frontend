@@ -51,7 +51,7 @@ export default function updateEmail({route, navigation}) {
 
 
     useEffect(() => {
-        fetch("http://192.168.99.173:8080/api/v1/account/get?email="+emailVar,{
+        fetch("http://192.168.1.3:8080/api/v1/account/get?email="+emailVar,{
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

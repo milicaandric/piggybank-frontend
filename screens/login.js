@@ -78,7 +78,7 @@
                }
                // if the user is a customer, navigate to customer dashboard
                else if(data.type == "CUSTOMER"){
-                 navigation.navigate("User_Dash", {
+                 navigation.navigate("Merchant_Dash", {
                   session_cookie: session_cookie
               });
                }

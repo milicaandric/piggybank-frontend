@@ -43,7 +43,7 @@
  
    //function called when the user presses the backarrow. Takes user back to login
    function navToMenu() {
-        navigation.navigate("User_Dash", {
+        navigation.navigate("Merchant_Dash", {
             session_cookie: session_cookie
         });
    }
@@ -70,7 +70,7 @@
 
    function navToLogout(){
     console.log(session_cookie);
-    fetch("http://192.168.99.173:8080/api/v1/account/log-out",{
+    fetch("http://192.168.1.3:8080/api/v1/account/log-out",{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
