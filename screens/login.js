@@ -52,6 +52,7 @@
    // @param email, password
    function loginUserWithToken(email, password) {
      if(email != "" && email != undefined && password != "" && email != undefined){
+       email = email.toLowerCase();
        firebase.auth().signInWithEmailAndPassword(email, password).then(function(user) {
          user.user.getIdToken(true).then(token => {
            // gets the IdToken which is used for sessionID generation in backend
@@ -78,7 +79,7 @@
                }
                // if the user is a customer, navigate to customer dashboard
                else if(data.type == "CUSTOMER"){
-                 navigation.navigate("Merchant_Dash", {
+                 navigation.navigate("User_Dash", {
                   session_cookie: session_cookie
               });
                }

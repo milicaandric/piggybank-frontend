@@ -18,6 +18,7 @@ import { DrawerNavigator } from 'react-navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import SideMenu from 'react-native-side-menu-updated'
 import SafeAreaView from 'react-native-safe-area-view';
+import { StatusBar } from "expo-status-bar";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAg-KUJ--2nDiMDJnzSt_sNYO8y_eZI5Bo",
@@ -54,8 +55,7 @@ export default function updatePassword({route, navigation}) {
     const [confirm, setConfirm] = useState("");
 
     /*
-    Known bug here parsing account file type
-    Working on how to fix this
+    
     */
     function navToMenu() {
         fetch("http://172.22.30.61:8080/api/v1/account/get?email="+emailVar,{
@@ -66,7 +66,7 @@ export default function updatePassword({route, navigation}) {
             },
         })
         .then(response=>response.json())
-        .then(data=>{ //problem here it cannot parse the data because it is an account type
+        .then(data=>{ 
             if (data.type == "CUSTOMER") {
                 navigation.navigate("Settings_Customer", {
                 session_cookie: session_cookie
@@ -106,26 +106,30 @@ export default function updatePassword({route, navigation}) {
         alert("Please fill in all text fields");
     }
     else if (dataSent.password == confirm) {
-        //Need to retain other aspects of the account
-        fetch("http://172.22.30.61:8080/api/v1/account/get?email="+emailVar,{
-               method: 'GET',
-               headers: {
-                 'Content-Type': 'application/json',
-                 'Cookie': session_cookie // used to identify user session
-               },
-             })
-             .then(response=>response.json())
-             .then(data=>{ //these values will be set to null if we do not retain them here, I think, could just be parsing problem tho
-                
-                //These values ARE UNDEFINED RIGHT NOW BECAUSE OF ACCOUNT PARSING
-                 dataSent.type = data.type;
-                 dataSent.balance = data.balance;
-                 dataSent.username = data.username;
-             })
-             .catch((error) => console.log("Error: ", error));
-        currentUser.updatePassword(password).then(function(){
+        currentUser.updatePassword(password); //might want to add the PUT to the firestore before we log out
+        fetch("http://172.22.30.61:8080/api/v1/account/log-out",{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Cookie': session_cookie // used to identify user session
+            },
+        })
+        .then(response=>{
+            if(response.ok == true){
+                alert("Success: Log in with new passsword")
+                navigation.navigate("Login");
+            }
+            else{
+                alert("logout failed")
+            }
+        })
+        .catch((error) =>{
+            console.log(error.toString());
+        });
+        //navToMenu();
+        /*.then(function(){
             //make sure this fetch is the right way to call it
-            fetch("http://172.22.30.61:8080/api/v1/account/customer/update?username="+emailVar, {
+            fetch("http://172.22.30.61:8080/api/v1/account/customer/update?username=Pwork", {//+name, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -142,83 +146,48 @@ export default function updatePassword({route, navigation}) {
             });
         }).catch(function(error){
             alert("password must be at least 6 characters");
-        });    
+        });    */
     } 
     else 
         alert("Passwords do not match");
     }
 
-   return(
-    <View style={styles.settings}>
-        <TouchableOpacity onPress={() => navToMenu()}>
-            <Image style={styles.backButtonSettings} source={require("../assets/backArrow.png")} />
-        </TouchableOpacity>
-        <Text style={styles.settingsHeader}>Update Privacy</Text>
-        <View style={styles.allSettingsContentButtons}>
-            <View style={{
-                marginLeft: -20,
-                borderBottomColor: 'black',
-                borderBottomWidth: 1,
-                alignSelf: 'stretch',
-            }}
-            />
-            <Text style={styles.circleText}>Email</Text>
-            <View style={styles.greyFields}>
-                <TextInput
-                    style={styles.baseText}
-                    placeholder= "Enter email"
-                    placeholderTextColor="#003f5c"
-                    onChangeText={(email) => setEmail({email})}
-                />
+    return (
+        <KeyboardAvoidingView style={styles.container} behavior="padding">
+          <StatusBar style="auto" />
+          <TouchableOpacity onPress={() => navToMenu()}>
+            <Image style={styles.backButton} source={require("../assets/backArrow.png")} />
+          </TouchableOpacity>
+          <View>
+            <Text style={styles.signupHeader}>Change Password</Text>
+          </View>
+          <ScrollView>
+            <View style={{ paddingBottom: 25 }}>
+              <Input style={{ borderRadius: 30, height: 50, padding: 10 }}
+                placeholder="Email"
+                onChangeText={(email) => setEmail({ email })}
+              />
             </View>
-            <View style={{
-                marginLeft: -20,
-                borderBottomColor: 'black',
-                borderBottomWidth: 1,
-                alignSelf: 'stretch',
-            }}
-            />
-            <Text style={styles.circleText}>Password</Text>
-            <View style={styles.greyFields}>
-                <TextInput
-                    style={styles.baseText}
-                    placeholder= "Enter new password"
-                    placeholderTextColor="#003f5c"
-                    secureTextEntry={true}
-                    onChangeText={(password) => setPassword({password})}
-                />
+            <View style={{ paddingBottom: 25 }}>
+              <Input style={{ borderRadius: 30, height: 50, padding: 10 }}
+                placeholder="New Password"
+                secureTextEntry={true}
+                onChangeText={(password) => setPassword({ password })}
+              />
             </View>
-            <View style={{
-                marginLeft: -20,
-                borderBottomColor: 'black',
-                borderBottomWidth: 1,
-                alignSelf: 'stretch',
-            }}
-            />
-            <Text style={styles.circleText}>Confirm Password</Text>
-            <View style={styles.greyFields}>
-                <TextInput
-                    style={styles.baseText}
-                    placeholder= "Re-enter new password"
-                    placeholderTextColor="#003f5c"
-                    secureTextEntry={true}
-                    onChangeText={(confirm) => setConfirm({confirm})}
-                />
+            <View style={{ paddingBottom: 25 }}>
+              <Input style={{ borderRadius: 30, height: 50, padding: 10 }}
+                placeholder="Confirm New Password"
+                secureTextEntry={true}
+                onChangeText={(confirm) => setConfirm({ confirm })}
+              />
             </View>
-            <View style={{
-                marginLeft: -20,
-                borderBottomColor: 'black',
-                borderBottomWidth: 1,
-                alignSelf: 'stretch',
-            }}
-            />
-            <Button color="#23cc8c" onPress={() => update(email.email, password.password, confirm.confirm)}>
-                <Text>
-                    Update Password
-                </Text>
-            </Button>
-        </View>
-        </View>
+          </ScrollView>
+          <Button style={{marginBottom: 30}} color ="#23cc8c" 
+            onPress={() => update(email.email, password.password, confirm.confirm)}>
+            <Text>Change Password</Text>
+          </Button>
+        </KeyboardAvoidingView>
     );
 
 }
