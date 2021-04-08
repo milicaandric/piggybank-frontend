@@ -39,7 +39,7 @@ import {
   TouchableOpacity,
   TextInput,
   KeyboardAvoidingView,
-  ScrollView
+  ScrollView, Alert
 } from "react-native";
 
 const styles = require('../styles/global');
@@ -53,6 +53,16 @@ export default function updatePassword({route, navigation}) {
     const [password, setPassword] = useState("");
     const [confirm, setConfirm] = useState("");
 
+    /*
+    Known that currently goes back to customer setting regardless if customer or merchant
+    Working on how to fix this
+    */
+    function navToMenu() {
+            navigation.navigate("Settings_Customer", {
+                session_cookie: session_cookie
+            });
+        
+    }
 
     useEffect(() => {
         fetch("http://172.22.30.61:8080/api/v1/account/get?email="+emailVar,{
@@ -62,7 +72,7 @@ export default function updatePassword({route, navigation}) {
           'Cookie': session_cookie // used to identify user session
         },
        })
-       .then(response=>response.json()) 
+       .then(response=>response.json()) //possibly set dataType in here for navigation purposes
    });
 
    function update(email, password, confirm) {
@@ -79,9 +89,10 @@ export default function updatePassword({route, navigation}) {
     if (dataSent.email == undefined || dataSent.password == undefined || confirm == undefined) {
         alert("Please fill in all text fields");
     }
-    else if (dataSent.email != emailVar) {
-        alert("Please confirm email address is associated with this account");
-    }
+   // else if (dataSent.email != emailVar) {
+        //alert("Please confirm email address is associated with this account");
+   //     alert(emailVar);
+   // }
     else if (dataSent.password == confirm) {
         currentUser.updatePassword(password).then(function(){
             //make sure this fetch is the right way to call it
@@ -94,17 +105,21 @@ export default function updatePassword({route, navigation}) {
             })
             .then(response => response.json())
             .then(data=>{
+                //THINK I NEED TO GET HERE SO I CAN GET DATA TYPE
                 alert("Password successfully updated!");
-                if (data.type == "CUSTOMER") {
-                navigate.navigate("Settings_Customer", {
-                    session_cookie: session_cookie
-                });
-                } else if (data.type == "MERCHANT") {
-                    navigate.navigate("Settings_Merchant", {
+                navToMenu();
+                /*  if (data.type == "CUSTOMER") {
+                    navigation.navigate("Settings_Customer", {
                         session_cookie: session_cookie
                     });
+                } else if (data.type == "MERCHANT") {
+                    navigation.navigate("Settings_Merchant", {
+                        session_cookie: session_cookie
+                    });
+                } else {
+                    alert("no type");
                 }
-            })
+            */})
             .catch((error) =>{
                 console.log("Error: ", error);
             });
@@ -117,9 +132,20 @@ export default function updatePassword({route, navigation}) {
     }
 
    return(
-      <KeyboardAvoidingView style={styles.pageBack} behavior="padding">
-        <SafeAreaView style={styles.hold}>
-            <Text style={styles.accountText}>Email</Text>
+    <View style={styles.settings}>
+        <TouchableOpacity onPress={() => navToMenu()}>
+            <Image style={styles.backButtonSettings} source={require("../assets/backArrow.png")} />
+        </TouchableOpacity>
+        <Text style={styles.settingsHeader}>Update Privacy</Text>
+        <View style={styles.allSettingsContentButtons}>
+            <View style={{
+                marginLeft: -20,
+                borderBottomColor: 'black',
+                borderBottomWidth: 1,
+                alignSelf: 'stretch',
+            }}
+            />
+            <Text style={styles.circleText}>Email</Text>
             <View style={styles.greyFields}>
                 <TextInput
                     style={styles.baseText}
@@ -128,7 +154,14 @@ export default function updatePassword({route, navigation}) {
                     onChangeText={(email) => setEmail({email})}
                 />
             </View>
-            <Text style={styles.accountText}>Password</Text>
+            <View style={{
+                marginLeft: -20,
+                borderBottomColor: 'black',
+                borderBottomWidth: 1,
+                alignSelf: 'stretch',
+            }}
+            />
+            <Text style={styles.circleText}>Password</Text>
             <View style={styles.greyFields}>
                 <TextInput
                     style={styles.baseText}
@@ -138,6 +171,14 @@ export default function updatePassword({route, navigation}) {
                     onChangeText={(password) => setPassword({password})}
                 />
             </View>
+            <View style={{
+                marginLeft: -20,
+                borderBottomColor: 'black',
+                borderBottomWidth: 1,
+                alignSelf: 'stretch',
+            }}
+            />
+            <Text style={styles.circleText}>Confirm Password</Text>
             <View style={styles.greyFields}>
                 <TextInput
                     style={styles.baseText}
@@ -147,13 +188,20 @@ export default function updatePassword({route, navigation}) {
                     onChangeText={(confirm) => setConfirm({confirm})}
                 />
             </View>
+            <View style={{
+                marginLeft: -20,
+                borderBottomColor: 'black',
+                borderBottomWidth: 1,
+                alignSelf: 'stretch',
+            }}
+            />
             <Button color="#23cc8c" onPress={() => update(email.email, password.password, confirm.confirm)}>
                 <Text>
                     Update Password
                 </Text>
             </Button>
-            </SafeAreaView>
-    </KeyboardAvoidingView>
+        </View>
+        </View>
     );
 
 }
