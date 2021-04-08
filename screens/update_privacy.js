@@ -54,14 +54,30 @@ export default function updatePassword({route, navigation}) {
     const [confirm, setConfirm] = useState("");
 
     /*
-    Known that currently goes back to customer setting regardless if customer or merchant
+    Known bug here parsing account file type
     Working on how to fix this
     */
     function navToMenu() {
-            navigation.navigate("Settings_Customer", {
+        fetch("http://172.22.30.61:8080/api/v1/account/get?email="+emailVar,{
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Cookie': session_cookie // used to identify user session
+            },
+        })
+        .then(response=>response.json())
+        .then(data=>{ //problem here it cannot parse the data because it is an account type
+            if (data.type == "CUSTOMER") {
+                navigation.navigate("Settings_Customer", {
                 session_cookie: session_cookie
-            });
-        
+                });
+            } else if (data.type == "MERCHANT") {
+                navigation.navigate("Settings_Merchant", {
+                session_cookie: session_cookie
+                });
+            }
+        })
+        .catch((error) => console.log(error));
     }
 
     useEffect(() => {
@@ -72,7 +88,7 @@ export default function updatePassword({route, navigation}) {
           'Cookie': session_cookie // used to identify user session
         },
        })
-       .then(response=>response.json()) //possibly set dataType in here for navigation purposes
+       .then(response=>response.json()) 
    });
 
    function update(email, password, confirm) {
@@ -89,11 +105,24 @@ export default function updatePassword({route, navigation}) {
     if (dataSent.email == undefined || dataSent.password == undefined || confirm == undefined) {
         alert("Please fill in all text fields");
     }
-   // else if (dataSent.email != emailVar) {
-        //alert("Please confirm email address is associated with this account");
-   //     alert(emailVar);
-   // }
     else if (dataSent.password == confirm) {
+        //Need to retain other aspects of the account
+        fetch("http://172.22.30.61:8080/api/v1/account/get?email="+emailVar,{
+               method: 'GET',
+               headers: {
+                 'Content-Type': 'application/json',
+                 'Cookie': session_cookie // used to identify user session
+               },
+             })
+             .then(response=>response.json())
+             .then(data=>{ //these values will be set to null if we do not retain them here, I think, could just be parsing problem tho
+                
+                //These values ARE UNDEFINED RIGHT NOW BECAUSE OF ACCOUNT PARSING
+                 dataSent.type = data.type;
+                 dataSent.balance = data.balance;
+                 dataSent.username = data.username;
+             })
+             .catch((error) => console.log("Error: ", error));
         currentUser.updatePassword(password).then(function(){
             //make sure this fetch is the right way to call it
             fetch("http://172.22.30.61:8080/api/v1/account/customer/update?username="+emailVar, {
@@ -105,21 +134,9 @@ export default function updatePassword({route, navigation}) {
             })
             .then(response => response.json())
             .then(data=>{
-                //THINK I NEED TO GET HERE SO I CAN GET DATA TYPE
                 alert("Password successfully updated!");
                 navToMenu();
-                /*  if (data.type == "CUSTOMER") {
-                    navigation.navigate("Settings_Customer", {
-                        session_cookie: session_cookie
-                    });
-                } else if (data.type == "MERCHANT") {
-                    navigation.navigate("Settings_Merchant", {
-                        session_cookie: session_cookie
-                    });
-                } else {
-                    alert("no type");
-                }
-            */})
+            })
             .catch((error) =>{
                 console.log("Error: ", error);
             });

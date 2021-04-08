@@ -54,14 +54,38 @@ export default function updatePassword({route, navigation}) {
     const [confirm, setConfirm] = useState("");
 
     /*
-    Known that currently goes back to customer setting regardless if customer or merchant
     Working on how to fix this
     */
     function navToMenu() {
-            navigation.navigate("Settings_Customer", {
-                session_cookie: session_cookie
-            });
-        
+            fetch("http://172.22.30.61:8080/api/v1/account/get?email="+emailVar,{
+               method: 'GET',
+               headers: {
+                 'Content-Type': 'application/json',
+                 'Cookie': session_cookie // used to identify user session
+               },
+             })
+             .then(response=>response.json())
+             .then(data=>{
+               // if the user is a merchant, navigate to merchant settings
+               if(data.type == "MERCHANT"){
+                navigation.navigate("Settings_Merchant", {
+                  session_cookie: session_cookie
+                });
+               }
+               // if the user is a customer, navigate to customer settings
+               else if(data.type == "CUSTOMER"){
+                 navigation.navigate("Settings_Customer", {
+                    session_cookie: session_cookie
+                    });
+                }
+             })
+             .catch((error)=>{
+               // authentication failed to get data type user
+               alert("Error: Account type not found. Customer default");
+               navigation.navigate("Settings_Customer", {
+                    session_cookie: session_cookie
+                    });
+             });
     }
 
     useEffect(() => {
@@ -75,7 +99,7 @@ export default function updatePassword({route, navigation}) {
        .then(response=>response.json()) //possibly set dataType in here for navigation purposes
    });
 
-   function update(email, password, confirm) {
+   function update(email, password, confirm) { //NEED TO CONFIRM THAT PASSWORD IS CORRECT BEFORE CHANGING EMAIL
     var dataSent = {
     };
     //builds the body for the API call to update
@@ -90,6 +114,7 @@ export default function updatePassword({route, navigation}) {
         alert("Please fill in all text fields");
     }
     else if (dataSent.email == confirm) {
+        dataSent.type = "CUSTOMER";
         currentUser.updateEmail(email).then(function(){ //need to confirm password is correct
             //make sure this fetch is the right way to call it
             fetch("http://172.22.30.61:8080/api/v1/account/customer/update?username="+emailVar, {
@@ -120,7 +145,7 @@ export default function updatePassword({route, navigation}) {
                 console.log("Error: ", error);
             });
         }).catch(function(error){
-            alert("invalid email");
+            alert("Invalid email");
         });    
     } 
     else 
