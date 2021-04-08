@@ -185,5 +185,11 @@ module.exports = StyleSheet.create({
     borderRadius: 30, 
     height:50, 
     width: widthPercentageToDP('70%'),
+  },
+  backButtonTransferToBank:{
+    marginLeft: widthPercentageToDP('-45%'),
+    marginTop: widthPercentageToDP('-98%'),
+    maxWidth: 40,
+    maxHeight: 40,
   }
 });
