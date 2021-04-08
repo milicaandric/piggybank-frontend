@@ -56,13 +56,13 @@
        firebase.auth().signInWithEmailAndPassword(email, password).then(function(user) {
          user.user.getIdToken(true).then(token => {
            // gets the IdToken which is used for sessionID generation in backend
-           fetch("http://192.168.1.3:8080/api/v1/account/log-in?token="+token+"&email="+email+"&password="+password, {
+           fetch("http://192.168.99.173:8080/api/v1/account/log-in?token="+token+"&email="+email+"&password="+password, {
              method: 'POST'
            })
            .then(response=>{
              var session_cookie = response.headers.map['set-cookie'];
              // gets the user email for login
-             fetch("http://192.168.1.3:8080/api/v1/account/get?email="+email,{
+             fetch("http://192.168.99.173:8080/api/v1/account/get?email="+email,{
                method: 'GET',
                headers: {
                  'Content-Type': 'application/json',

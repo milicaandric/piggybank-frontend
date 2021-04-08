@@ -42,8 +42,8 @@
    let email = user.email; // sets email var to user's email for 'update' api call
  
    //function called when the user presses the backarrow. Takes user back to login
-   function navToMenu() {
-        navigation.navigate("User_Dash", {
+   function navToSettings() {
+        navigation.navigate("Settings_Customer", {
             session_cookie: session_cookie
         });
    }
@@ -53,7 +53,7 @@
    }
 
    function navToAddBank(){
-        fetch("http://192.168.1.3:8080/api/v1/bank/get?email="+email,{
+        fetch("http://192.168.99.173:8080/api/v1/bank/get?email="+email,{
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -73,7 +73,7 @@
     }
 
    function navToRemoveBank(){
-        fetch("http://192.168.1.3:8080/api/v1/bank/get?email="+email,{
+        fetch("http://192.168.99.173:8080/api/v1/bank/get?email="+email,{
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -128,7 +128,7 @@
    // user interface
    return (
      <View style={styles.settings}>
-        <TouchableOpacity onPress={() => navToMenu()}>
+        <TouchableOpacity onPress={() => navToSettings()}>
             <Image style={styles.backButtonSettings} source={require("../assets/backArrow.png")} />
         </TouchableOpacity>
         <Text style={styles.settingsHeader}>Settings</Text>

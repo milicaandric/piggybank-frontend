@@ -56,7 +56,7 @@ export default function removeBank({ route, navigation }) {
     let email = user.email; // sets email var to user's email for 'update' api call
     console.log(email);
       // updates specific user information in firestore
-      fetch("http://192.168.1.3:8080/api/v1/bank/remove?email=" + email + "&sessionCookieId=" + session_cookie, {
+      fetch("http://192.168.99.173:8080/api/v1/bank/remove?email=" + email + "&sessionCookieId=" + session_cookie, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

@@ -72,10 +72,10 @@ export default function transferToBank({ route, navigation }) {
             let data = {
                     transactorEmail: email,
                     recipientEmail: null,
-                    amount: Number(amount),
+                    amount: Number(amount) * 100.00,
                     type: 'BANK'
             };
-            fetch("http:/192.168.1.3:8080/api/v1/bank/get?email=",{
+            fetch("http:/192.168.99.173:8080/api/v1/transaction/bank",{
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -97,7 +97,7 @@ export default function transferToBank({ route, navigation }) {
     }
 
      useEffect(() => {
-         fetch("http://192.168.1.3:8080/api/v1/account/get?email="+email,{
+         fetch("http://192.168.99.173:8080/api/v1/account/get?email="+email,{
          method: 'GET',
          headers: {
            'Content-Type': 'application/json',
@@ -106,7 +106,7 @@ export default function transferToBank({ route, navigation }) {
         })
         .then(response=>response.json())
         .then(data=>{
-            setBalance(data.balance);
+            setBalance(data.balance / 100.00);
         });
     }, []);
     return(
@@ -118,7 +118,7 @@ export default function transferToBank({ route, navigation }) {
                 <View style={styles.mainCircle}>
                     <Text style={styles.circleText}>
                         {
-                            (balance == undefined)?balance:(balance - amount.amount <= 0)?("$0.00"): ((isNaN(balance - amount.amount))? "$"+String(balance): "$"+String(balance-amount.amount))
+                            (balance == undefined)?balance: (balance == 0)?"$0.00":(balance - amount.amount <= 0)?("$0.00"): ((isNaN(balance - amount.amount))? "$"+String(balance): "$"+String(balance-amount.amount))
                         }
                     </Text>
                 </View>
