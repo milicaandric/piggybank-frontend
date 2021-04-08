@@ -119,7 +119,7 @@ export default function SwapBank({ route, navigation }) {
           />
         </View>
       </ScrollView>
-      <Button style={{ marginBottom: 200 }} color="#23cc8c"
+      <Button style={{ marginBottom: 30 }} color="#23cc8c"
         onPress={() => swapBankAccount(routingNumber.routingNumber, accountNumber.accountNumber, nameOnAccount.nameOnAccount)}>
         <Text>Add</Text>
       </Button>
