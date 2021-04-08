@@ -93,7 +93,9 @@
    }
 
    function navToPrivacy(){
-
+    navigation.navigate("Update_Privacy", {
+        session_cookie: session_cookie
+    });
    }
 
    function navToEditAccount(){
