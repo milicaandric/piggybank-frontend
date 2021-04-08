@@ -45,8 +45,8 @@ export default function SwapBank({ route, navigation }) {
 
   const { session_cookie } = route.params;
 
-  function navToMenu(){
-    navigation.navigate("Merchant_Dash", {
+  function navToSettings(){
+    navigation.navigate("Settings_Merchant", {
       session_cookie: session_cookie
     });
   }
@@ -72,7 +72,7 @@ export default function SwapBank({ route, navigation }) {
         body: JSON.stringify(data),
       }).then(response=>{
         if(response.ok == true){
-          navigation.navigate("Merchant_Dash", {
+          navigation.navigate("Settings_Merchant", {
             session_cookie: session_cookie
           });
         }
@@ -93,7 +93,7 @@ export default function SwapBank({ route, navigation }) {
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
       <StatusBar style="auto" />
-      <TouchableOpacity onPress={() => navToMenu()}>
+      <TouchableOpacity onPress={() => navToSettings()}>
         <Image style={styles.backButton} source={require("../assets/backArrow.png")} />
       </TouchableOpacity>
       <View>

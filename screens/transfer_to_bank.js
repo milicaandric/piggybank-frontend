@@ -52,8 +52,8 @@ export default function transferToBank({ route, navigation }) {
         var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         var charactersLength = characters.length;
         for ( var i = 0; i < length; i++ ) {
-          result.push(characters.charAt(Math.floor(Math.random() * 
-     charactersLength)));
+            result.push(characters.charAt(Math.floor(Math.random() * 
+            charactersLength)));
        }
        return result.join('');
     }
@@ -70,28 +70,29 @@ export default function transferToBank({ route, navigation }) {
         }
         if(Number(amount) > 0 && (balance - Number(amount)) >= 0){
             let data = {
-                Transaction:{
-                    id: makeid(10),
                     transactorEmail: email,
                     recipientEmail: null,
                     amount: Number(amount),
-                    transactionType: 'BANK'
-                }
+                    type: 'BANK'
             };
-            fetch("http://192.168.99.173:8080/api/v1/transaction/bank",{
+            fetch("http://192.168.99.173:8080/api/v1/bank/get?email=",{
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Cookie': session_cookie // used to identify user session
-                },
-                })
-                .then(response=>response.json())
-                .then(data=>{
-                    console.log(data);
-                })
-                .catch((error) =>{
-                    console.log(error.toString());
-                });
+            },
+            body: JSON.stringify(data)
+            })
+            .then(response=>{
+                if(response.ok == true){
+                    navigation.navigate("User_Dash", {
+                        session_cookie: session_cookie
+                    });
+                }
+            })
+            .catch((error) =>{
+                console.log(error.toString());
+            });
         }
     }
 

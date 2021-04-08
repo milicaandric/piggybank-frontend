@@ -14,6 +14,8 @@ import Remove_Bank from '../screens/remove_bank';
 import updateAccount from '../screens/updateAccount';
 import updateEmail from '../screens/updateEmail';
 import updatePassword from '../screens/updatePassword';
+import Settings_Customer from '../screens/settings_customer';
+import Settings_Merchant from '../screens/settings_merchant';
 
 import { AppRegistry } from 'react-native';
 import {name as appName} from '../app.json';
@@ -37,6 +39,8 @@ export default function Navigator(){
         <AppStack.Screen name="updateAccount" component={updateAccount}/>
         <AppStack.Screen name="updateEmail" component={updateEmail}/>
         <AppStack.Screen name="updatePassword" component={updatePassword}/>
+        <AppStack.Screen name="Settings_Customer" component={Settings_Customer}/>
+        <AppStack.Screen name="Settings_Merchant" component={Settings_Merchant}/>
       </AppStack.Navigator>
     </NavigationContainer>
     );

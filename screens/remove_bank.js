@@ -44,8 +44,8 @@ export default function removeBank({ route, navigation }) {
   const {session_cookie} = route.params;
   console.log(session_cookie);
   
-  function navToMenu(){
-    navigation.navigate("User_Menu", {
+  function navToSettings(){
+    navigation.navigate("Settings_Customer", {
       session_cookie: session_cookie
     });
   }
@@ -65,7 +65,7 @@ export default function removeBank({ route, navigation }) {
       })
       .then(response => {
         if(response.ok == true){
-          navigation.navigate("User_Dash", {
+          navigation.navigate("Settings_Customer", {
             session_cookie: session_cookie
           });
         }
@@ -81,7 +81,7 @@ export default function removeBank({ route, navigation }) {
     return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
       <StatusBar style="auto" />
-      <TouchableOpacity onPress={() => navToMenu()}>
+      <TouchableOpacity onPress={() => navToSettings()}>
         <Image style={styles.backButtonRemoveBank} source={require("../assets/backArrow.png")} />
       </TouchableOpacity>
       <View>

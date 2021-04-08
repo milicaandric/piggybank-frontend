@@ -42,8 +42,8 @@
  
    const { session_cookie } = route.params;
 
-   function navToMenu(){
-    navigation.navigate("User_Dash", {
+   function navToSettings(){
+    navigation.navigate("Settings_Customer", {
         session_cookie: session_cookie
       });
    }
@@ -69,7 +69,7 @@
          body: JSON.stringify(data),
        }).then(response=>{
          if(response.ok == true){
-           navigation.navigate("User_Dash", {
+           navigation.navigate("Settings_Customer", {
              session_cookie: session_cookie
            });
          }
@@ -88,7 +88,7 @@
     return (
         <KeyboardAvoidingView style={styles.container} behavior="padding">
           <StatusBar style="auto" />
-          <TouchableOpacity onPress={() => navToMenu()}>
+          <TouchableOpacity onPress={() => navToSettings()}>
             <Image style={styles.backButton} source={require("../assets/backArrow.png")} />
           </TouchableOpacity>
           <View>

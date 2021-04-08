@@ -78,7 +78,7 @@
                }
                // if the user is a customer, navigate to customer dashboard
                else if(data.type == "CUSTOMER"){
-                 navigation.navigate("Transfer_To_Bank", {
+                 navigation.navigate("Settings_Merchant", {
                   session_cookie: session_cookie
               });
                }
