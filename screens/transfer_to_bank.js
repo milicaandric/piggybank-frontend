@@ -55,7 +55,7 @@ export default function transferToBank({ route, navigation }) {
      let email = user.email; // sets email var to user's email for 'update' api call
 
      useEffect(() => {
-         fetch("http://192.168.99.173:8080/api/v1/account/get?email="+email,{
+         fetch("http://1192.168.1.3:8080/api/v1/account/get?email="+email,{
          method: 'GET',
          headers: {
            'Content-Type': 'application/json',
