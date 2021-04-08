@@ -8,9 +8,10 @@ import { StyleSheet, Text, View } from 'react-native';
 import { AppRegistry, Dimensions } from 'react-native';
 import { DrawerNavigator } from 'react-navigation';
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faCog} from '@fortawesome/free-solid-svg-icons'
+import { faCog, faBars} from '@fortawesome/free-solid-svg-icons'
 
 library.add(faCog);
+library.add(faBars);
 //initialize firebase
 const firebaseConfig = {
   apiKey: "AIzaSyAg-KUJ--2nDiMDJnzSt_sNYO8y_eZI5Bo",

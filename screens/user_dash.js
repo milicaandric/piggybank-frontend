@@ -1,4 +1,4 @@
-import React, { useState, Component } from 'react';
+import React, { useState, useEffect, Component } from 'react';
 import 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import * as firebase from 'firebase';
@@ -33,48 +33,152 @@ import {
 
 const styles = require('../styles/global');
 
-function MainScreen() {
-    return (
-        <KeyboardAvoidingView style={styles.container} behavior="padding">
-            <View style={styles.pageBack}>
-                <View style={styles.mainCircle}>
-                    <Text style={styles.circleText}>
-                        $23.78
-                    </Text>
-                </View>
-                <Text style={styles.dashText}>
-                    Current Balance
-                </Text>
-                <View style={styles.lowerHold}>
-                    <View>
-                        <Input style={styles.genInput}
-                            placeholder="Recipient"
-                        />
-                        <Input style={styles.genInput}
-                            placeholder="Amount"
-                        />
-                    </View>
-                    <TouchableOpacity style={styles.sendButton}>
-                        <Text style={styles.sendText}>
-                            Send
+export class Outer extends Component{
+    
+    constructor(props) {
+      super(props);
+    
+      this.toggle = this.toggle.bind(this);
+    
+      this.state = {
+        isOpen: false,
+        selectedItem: 'About',
+      };
+    }
+    
+    toggle() {
+      this.setState({
+        isOpen: !this.state.isOpen,
+      });
+    }
+    
+    updateMenuState(isOpen) {
+      this.setState({ isOpen });
+    }
+    onMenuItemSelected = item =>
+    this.setState({
+      isOpen: false,
+      selectedItem: item,
+    });
+    
+    navToSettings(){
+      props.navigation.navigate("Settings_Customer", {
+          session_cookie: this.props.cookie
+      });
+    }
+
+    render(){
+        const menu = <Menu onItemSelected={this.onMenuItemSelected} cookie={this.props.cookie} navigation={this.props.navigation}/>
+        return(
+            <SideMenu menu={menu}
+            isOpen={this.state.isOpen}
+            onChange={(isOpen) => this.updateMenuState(isOpen)}>
+                <KeyboardAvoidingView style={styles.container}>
+                    <View style={styles.pageBack}>
+                        <TouchableOpacity style={styles.topLeft} onPress={() => {this.toggle()}}>
+                                <FontAwesomeIcon icon="bars" size={32}/>
+                        </TouchableOpacity>
+                        <View style={styles.mainCircle}>
+                            <Balance cookie={this.props.cookie}/>
+                        </View>
+                        <Text style={styles.dashText}>
+                            Current Balance
                         </Text>
-                    </TouchableOpacity>
-                    <View style={styles.lineBreak}/>
-                    <TouchableOpacity style={styles.sendButton}>
-                        <Text style={styles.sendText}>
-                            Transactions
-                        </Text>
-                    </TouchableOpacity>
-                    <View style={styles.bottomRight}>
-                        <FontAwesomeIcon icon="cog" size={32}/>
+                        <View style={styles.lowerHold}>
+                            <View>
+                                <Input style={styles.genInput}
+                                    placeholder="Recipient"
+                                />
+                                <Input style={styles.genInput}
+                                    placeholder="Amount"
+                                />
+                            </View>
+                            <TouchableOpacity style={styles.sendButton}>
+                                <Text style={styles.sendText}>
+                                    Send
+                                </Text>
+                            </TouchableOpacity>
+                            <View style={styles.lineBreak}/>
+                            <TouchableOpacity style={styles.sendButton} onPress={() => {this.toggle()}}>
+                                <Text style={styles.sendText}>
+                                    Transactions
+                                </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => {this.navToSettings()}}>
+                            <View style={styles.bottomRight}>
+                                <FontAwesomeIcon icon="cog" size={32}/>
+                            </View>
+                            </TouchableOpacity>
+                        </View>
                     </View>
-                </View>
-            </View>
-        </KeyboardAvoidingView>
-    );
+                </KeyboardAvoidingView>
+            </SideMenu>
+        );
+    }
 }
   
-function Menu(){
+function Balance(props){
+    const [balance, setBalance] = useState();
+    const [amount, setAmount] = useState(0);
+    let user = firebase.auth().currentUser;
+    let email = user.email;
+    
+    useEffect(() => {
+        fetch("http://192.168.1.3:8080/api/v1/account/get?email="+email,{
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Cookie': props.cookie // used to identify user session
+        },
+       })
+       .then(response=>response.json())
+       .then(data=>{
+           setBalance(data.balance);
+       });
+    }, []);
+    return(
+        <Text style={styles.circleText}>
+          {
+            (balance == undefined)?balance:(balance - amount.amount <= 0)?("$0.00"): ((isNaN(balance - amount.amount))? "$"+String(balance/100.0): "$"+String((balance-amount.amount)/100.0))
+          }
+        </Text>
+    );
+}
+
+function Balance2(props){
+    const [balance, setBalance] = useState();
+    const [amount, setAmount] = useState(0);
+    let user = firebase.auth().currentUser;
+    let email = user.email;
+    
+    useEffect(() => {
+        fetch("http://192.168.1.3:8080/api/v1/account/get?email="+email,{
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Cookie': props.cookie // used to identify user session
+        },
+       })
+       .then(response=>response.json())
+       .then(data=>{
+           setBalance(data.balance);
+       });
+    }, []);
+    return(
+        <Text style={styles.sideMenuText}>
+          {
+            (balance == undefined)?balance:(balance - amount.amount <= 0)?("$0.00"): ((isNaN(balance - amount.amount))? "$"+String(balance/100.0): "$"+String((balance-amount.amount)/100.0))
+          }
+        </Text>
+    );
+}
+
+function Menu(props){
+    function navToTransfer(){
+      props.navigation.navigate("Transfer_To_Bank", {
+        session_cookie: props.cookie
+      });
+    }
     return(
         <View style={styles.sideBack}>
             <View style={{marginTop: 25}}/>
@@ -89,11 +193,9 @@ function Menu(){
                 </Text>
             </View>
             <View style={styles.sideMenuFields}>
-                <Text style={styles.sideMenuText}>
-                    $23.78
-                </Text>
+                <Balance2 cookie={props.cookie}/>
             </View>
-            <TouchableOpacity style={styles.sendButton}>
+            <TouchableOpacity style={styles.sendButton} onPress={()=>{navToTransfer()}}>
                 <Text style={styles.sendText}>
                     Transfer
                 </Text>
@@ -108,29 +210,15 @@ function Menu(){
     );
 }
 
-function CustomDrawerContent() {
-  return (
-    <DrawerContentScrollView>
-      <DrawerItem style={{backgroundColor:"FFF"}}
-        label="Help"
-        onPress={() => Linking.openURL('https://mywebsite.com/help')}
-      />
-    </DrawerContentScrollView>
-  );
-}
-
 const Drawer = createDrawerNavigator();
 export default function User_Dash({route, navigation}) {
-    const {session_cookie} = route.params;
-    console.log(session_cookie);
+  const {session_cookie} = route.params;
 
   //const navigation = useNavigation();
   // loginUser wrapper class placeholder
   // firebase auth
   
   return (
-    <SideMenu menu={<Menu/>}>
-        <MainScreen/>
-    </SideMenu>
+    <Outer cookie={session_cookie} navigation = {navigation}/>
   );
 }
