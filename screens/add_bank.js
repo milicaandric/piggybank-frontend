@@ -51,14 +51,14 @@
    function addBankAccount(routingNumber, accountNumber, nameOnAccount) {
      // first check that user has filled out all neccessary fields
      if (routingNumber != undefined && routingNumber != "" && accountNumber != undefined && accountNumber != "" && nameOnAccount != undefined && nameOnAccount != "") {
+       routingNumber = Number(routingNumber);
+       accountNumber = Number(accountNumber);
        let user = firebase.auth().currentUser; // retrieves current user 
        let email = user.email; // sets email var to user's email
        let data = {
-         bankAccount:{
-           nameOnAccount: nameOnAccount,
-           accountNumber: accountNumber,
-           routingNumber: routingNumber
-         },
+        nameOnAccount: nameOnAccount,
+        accountNumber: accountNumber,
+        routingNumber: routingNumber
        };
        fetch("http://192.168.99.173:8080/api/v1/bank/update?email="+email, {
          method: 'PUT',
