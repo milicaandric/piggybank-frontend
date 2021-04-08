@@ -18,6 +18,7 @@ import { DrawerNavigator } from 'react-navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import SideMenu from 'react-native-side-menu-updated'
 import SafeAreaView from 'react-native-safe-area-view';
+import { StatusBar } from "expo-status-bar";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAg-KUJ--2nDiMDJnzSt_sNYO8y_eZI5Bo",
@@ -151,77 +152,42 @@ export default function updatePassword({route, navigation}) {
         alert("Passwords do not match");
     }
 
-   return(
-    <View style={styles.settings}>
-        <TouchableOpacity onPress={() => navToMenu()}>
-            <Image style={styles.backButtonSettings} source={require("../assets/backArrow.png")} />
-        </TouchableOpacity>
-        <Text style={styles.settingsHeader}>Update Privacy</Text>
-        <View style={styles.allSettingsContentButtons}>
-            <View style={{
-                marginLeft: -20,
-                borderBottomColor: 'black',
-                borderBottomWidth: 1,
-                alignSelf: 'stretch',
-            }}
-            />
-            <Text style={styles.circleText}>Email</Text>
-            <View style={styles.greyFields}>
-                <TextInput
-                    style={styles.baseText}
-                    placeholder= "Enter email"
-                    placeholderTextColor="#003f5c"
-                    onChangeText={(email) => setEmail({email})}
-                />
+    return (
+        <KeyboardAvoidingView style={styles.container} behavior="padding">
+          <StatusBar style="auto" />
+          <TouchableOpacity onPress={() => navToMenu()}>
+            <Image style={styles.backButton} source={require("../assets/backArrow.png")} />
+          </TouchableOpacity>
+          <View>
+            <Text style={styles.signupHeader}>Change Password</Text>
+          </View>
+          <ScrollView>
+            <View style={{ paddingBottom: 25 }}>
+              <Input style={{ borderRadius: 30, height: 50, padding: 10 }}
+                placeholder="Email"
+                onChangeText={(email) => setEmail({ email })}
+              />
             </View>
-            <View style={{
-                marginLeft: -20,
-                borderBottomColor: 'black',
-                borderBottomWidth: 1,
-                alignSelf: 'stretch',
-            }}
-            />
-            <Text style={styles.circleText}>Password</Text>
-            <View style={styles.greyFields}>
-                <TextInput
-                    style={styles.baseText}
-                    placeholder= "Enter new password"
-                    placeholderTextColor="#003f5c"
-                    secureTextEntry={true}
-                    onChangeText={(password) => setPassword({password})}
-                />
+            <View style={{ paddingBottom: 25 }}>
+              <Input style={{ borderRadius: 30, height: 50, padding: 10 }}
+                placeholder="New Password"
+                secureTextEntry={true}
+                onChangeText={(password) => setPassword({ password })}
+              />
             </View>
-            <View style={{
-                marginLeft: -20,
-                borderBottomColor: 'black',
-                borderBottomWidth: 1,
-                alignSelf: 'stretch',
-            }}
-            />
-            <Text style={styles.circleText}>Confirm Password</Text>
-            <View style={styles.greyFields}>
-                <TextInput
-                    style={styles.baseText}
-                    placeholder= "Re-enter new password"
-                    placeholderTextColor="#003f5c"
-                    secureTextEntry={true}
-                    onChangeText={(confirm) => setConfirm({confirm})}
-                />
+            <View style={{ paddingBottom: 25 }}>
+              <Input style={{ borderRadius: 30, height: 50, padding: 10 }}
+                placeholder="Confirm New Password"
+                secureTextEntry={true}
+                onChangeText={(confirm) => setConfirm({ confirm })}
+              />
             </View>
-            <View style={{
-                marginLeft: -20,
-                borderBottomColor: 'black',
-                borderBottomWidth: 1,
-                alignSelf: 'stretch',
-            }}
-            />
-            <Button color="#23cc8c" onPress={() => update(email.email, password.password, confirm.confirm)}>
-                <Text>
-                    Update Password
-                </Text>
-            </Button>
-        </View>
-        </View>
+          </ScrollView>
+          <Button style={{marginBottom: 30}} color ="#23cc8c" 
+            onPress={() => update(email.email, password.password, confirm.confirm)}>
+            <Text>Change Password</Text>
+          </Button>
+        </KeyboardAvoidingView>
     );
 
 }
