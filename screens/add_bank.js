@@ -42,8 +42,8 @@
  
    const { session_cookie } = route.params;
 
-   function navToMenu(){
-    navigation.navigate("User_Dash", {
+   function navToSettings(){
+    navigation.navigate("Settings_Customer", {
         session_cookie: session_cookie
       });
    }
@@ -51,14 +51,14 @@
    function addBankAccount(routingNumber, accountNumber, nameOnAccount) {
      // first check that user has filled out all neccessary fields
      if (routingNumber != undefined && routingNumber != "" && accountNumber != undefined && accountNumber != "" && nameOnAccount != undefined && nameOnAccount != "") {
+       routingNumber = Number(routingNumber);
+       accountNumber = Number(accountNumber);
        let user = firebase.auth().currentUser; // retrieves current user 
        let email = user.email; // sets email var to user's email
        let data = {
-         bankAccount:{
-           nameOnAccount: nameOnAccount,
-           accountNumber: accountNumber,
-           routingNumber: routingNumber
-         },
+        nameOnAccount: nameOnAccount,
+        accountNumber: accountNumber,
+        routingNumber: routingNumber
        };
        fetch("http://192.168.1.3:8080/api/v1/bank/update?email="+email, {
          method: 'PUT',
@@ -69,7 +69,7 @@
          body: JSON.stringify(data),
        }).then(response=>{
          if(response.ok == true){
-           navigation.navigate("User_Dash", {
+           navigation.navigate("Settings_Customer", {
              session_cookie: session_cookie
            });
          }
@@ -88,7 +88,7 @@
     return (
         <KeyboardAvoidingView style={styles.container} behavior="padding">
           <StatusBar style="auto" />
-          <TouchableOpacity onPress={() => navToMenu()}>
+          <TouchableOpacity onPress={() => navToSettings()}>
             <Image style={styles.backButton} source={require("../assets/backArrow.png")} />
           </TouchableOpacity>
           <View>

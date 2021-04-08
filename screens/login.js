@@ -86,7 +86,6 @@
              .catch((error)=>{
                // authentication failed to login user
                alert("Authentication Failed");
-               console.log(error.toString());
              });
            }).catch((error)=>{
              console.log(error.toString());

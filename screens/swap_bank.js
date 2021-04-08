@@ -6,7 +6,6 @@
  */
 import React, { useState } from 'react';
 import 'react-native-gesture-handler';
-import { useNavigation } from '@react-navigation/native';
 import * as firebase from 'firebase';
 import { Button, Text, Input} from 'galio-framework';
 import { StatusBar } from "expo-status-bar";
@@ -45,8 +44,8 @@ export default function SwapBank({ route, navigation }) {
 
   const { session_cookie } = route.params;
 
-  function navToMenu(){
-    navigation.navigate("Merchant_Dash", {
+  function navToSettings(){
+    navigation.navigate("Settings_Merchant", {
       session_cookie: session_cookie
     });
   }
@@ -54,14 +53,14 @@ export default function SwapBank({ route, navigation }) {
   function swapBankAccount(routingNumber, accountNumber, nameOnAccount) {
     // first check that user has filled out all neccessary fields
     if (routingNumber != undefined && routingNumber != "" && accountNumber != undefined && accountNumber != "" && nameOnAccount != undefined && nameOnAccount != "") {
+      routingNumber = Number(routingNumber);
+      accountNumber = Number(accountNumber);
       let user = firebase.auth().currentUser; // retrieves current user 
       let email = user.email; // sets email var to user's email
       let data = {
-        bankAccount:{
-          nameOnAccount: nameOnAccount,
-          accountNumber: accountNumber,
-          routingNumber: routingNumber
-        },
+        nameOnAccount: nameOnAccount,
+        accountNumber: accountNumber,
+        routingNumber: routingNumber
       };
       fetch("http:/192.168.1.3:8080/api/v1/bank/update?email="+email, {
         method: 'PUT',
@@ -72,7 +71,7 @@ export default function SwapBank({ route, navigation }) {
         body: JSON.stringify(data),
       }).then(response=>{
         if(response.ok == true){
-          navigation.navigate("Merchant_Dash", {
+          navigation.navigate("Settings_Merchant", {
             session_cookie: session_cookie
           });
         }
@@ -93,7 +92,7 @@ export default function SwapBank({ route, navigation }) {
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
       <StatusBar style="auto" />
-      <TouchableOpacity onPress={() => navToMenu()}>
+      <TouchableOpacity onPress={() => navToSettings()}>
         <Image style={styles.backButton} source={require("../assets/backArrow.png")} />
       </TouchableOpacity>
       <View>
@@ -119,7 +118,7 @@ export default function SwapBank({ route, navigation }) {
           />
         </View>
       </ScrollView>
-      <Button style={{ marginBottom: 200 }} color="#23cc8c"
+      <Button style={{ marginBottom: 30 }} color="#23cc8c"
         onPress={() => swapBankAccount(routingNumber.routingNumber, accountNumber.accountNumber, nameOnAccount.nameOnAccount)}>
         <Text>Add</Text>
       </Button>

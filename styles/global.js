@@ -191,5 +191,40 @@ module.exports = StyleSheet.create({
     borderRadius: 30, 
     height:50, 
     width: widthPercentageToDP('70%'),
-  }
+  },
+  backButtonTransferToBank:{
+    marginLeft: widthPercentageToDP('-45%'),
+    marginTop: widthPercentageToDP('-98%'),
+    maxWidth: 40,
+    maxHeight: 40,
+  },
+  backButtonSettings:{
+    marginLeft: 20,
+    marginTop: 45,
+    maxWidth: 40,
+    maxHeight: 40,
+  },
+  settingsHeader: {
+    marginTop: -450,
+    textAlign: 'center',
+    fontSize: 40
+  },
+  settingsInner:{
+    backgroundColor: '#FFF'
+  },
+  settingsContentButtonsText:{
+    fontSize: 25
+  },
+  settingsContentButtons:{
+    paddingBottom: 20,
+    paddingTop: 20
+  },
+  allSettingsContentButtons:{
+    marginLeft: 20,
+    paddingTop: 20
+  },
+  settings: {
+    backgroundColor: "#93E9BE",
+    flex: 1
+  },
 });

@@ -1,4 +1,4 @@
-import React, { useState, Component } from 'react';
+import React, { useState, useEffect, Component } from 'react';
 import 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import * as firebase from 'firebase';
@@ -60,10 +60,15 @@ export class Outer extends Component{
       isOpen: false,
       selectedItem: item,
     });
-
     
+    navToSettings(){
+      props.navigation.navigate("Settings_Customer", {
+          session_cookie: this.props.cookie
+      });
+    }
+
     render(){
-        const menu = <Menu onItemSelected={this.onMenuItemSelected} />;
+        const menu = <Menu onItemSelected={this.onMenuItemSelected} cookie={this.props.cookie} navigation={this.props.navigation}/>
         return(
             <SideMenu menu={menu}
             isOpen={this.state.isOpen}
@@ -74,9 +79,7 @@ export class Outer extends Component{
                                 <FontAwesomeIcon icon="bars" size={32}/>
                         </TouchableOpacity>
                         <View style={styles.mainCircle}>
-                            <Text style={styles.circleText}>
-                                $23.78
-                            </Text>
+                            <Balance cookie={this.props.cookie}/>
                         </View>
                         <Text style={styles.dashText}>
                             Current Balance
@@ -101,7 +104,7 @@ export class Outer extends Component{
                                     Transactions
                                 </Text>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => {this.toggle()}}>
+                            <TouchableOpacity onPress={() => {this.navToSettings()}}>
                             <View style={styles.bottomRight}>
                                 <FontAwesomeIcon icon="cog" size={32}/>
                             </View>
@@ -114,7 +117,68 @@ export class Outer extends Component{
     }
 }
   
-function Menu(){
+function Balance(props){
+    const [balance, setBalance] = useState();
+    const [amount, setAmount] = useState(0);
+    let user = firebase.auth().currentUser;
+    let email = user.email;
+    
+    useEffect(() => {
+        fetch("http://192.168.1.3:8080/api/v1/account/get?email="+email,{
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Cookie': props.cookie // used to identify user session
+        },
+       })
+       .then(response=>response.json())
+       .then(data=>{
+           setBalance(data.balance);
+       });
+    }, []);
+    return(
+        <Text style={styles.circleText}>
+          {
+            (balance == undefined)?balance:(balance - amount.amount <= 0)?("$0.00"): ((isNaN(balance - amount.amount))? "$"+String(balance/100.0): "$"+String((balance-amount.amount)/100.0))
+          }
+        </Text>
+    );
+}
+
+function Balance2(props){
+    const [balance, setBalance] = useState();
+    const [amount, setAmount] = useState(0);
+    let user = firebase.auth().currentUser;
+    let email = user.email;
+    
+    useEffect(() => {
+        fetch("http://192.168.1.3:8080/api/v1/account/get?email="+email,{
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Cookie': props.cookie // used to identify user session
+        },
+       })
+       .then(response=>response.json())
+       .then(data=>{
+           setBalance(data.balance);
+       });
+    }, []);
+    return(
+        <Text style={styles.sideMenuText}>
+          {
+            (balance == undefined)?balance:(balance - amount.amount <= 0)?("$0.00"): ((isNaN(balance - amount.amount))? "$"+String(balance/100.0): "$"+String((balance-amount.amount)/100.0))
+          }
+        </Text>
+    );
+}
+
+function Menu(props){
+    function navToTransfer(){
+      props.navigation.navigate("Transfer_To_Bank", {
+        session_cookie: props.cookie
+      });
+    }
     return(
         <View style={styles.sideBack}>
             <View style={{marginTop: 25}}/>
@@ -129,11 +193,9 @@ function Menu(){
                 </Text>
             </View>
             <View style={styles.sideMenuFields}>
-                <Text style={styles.sideMenuText}>
-                    $23.78
-                </Text>
+                <Balance2 cookie={props.cookie}/>
             </View>
-            <TouchableOpacity style={styles.sendButton}>
+            <TouchableOpacity style={styles.sendButton} onPress={()=>{navToTransfer()}}>
                 <Text style={styles.sendText}>
                     Transfer
                 </Text>
@@ -150,13 +212,13 @@ function Menu(){
 
 const Drawer = createDrawerNavigator();
 export default function User_Dash({route, navigation}) {
-    const {session_cookie} = route.params;
+  const {session_cookie} = route.params;
 
   //const navigation = useNavigation();
   // loginUser wrapper class placeholder
   // firebase auth
   
   return (
-    <Outer/>
+    <Outer cookie={session_cookie} navigation = {navigation}/>
   );
 }
