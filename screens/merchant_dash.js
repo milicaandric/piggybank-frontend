@@ -39,7 +39,7 @@ import {
 
 const styles = require('../styles/global');
 
-function MainScreen(props) {
+  function MainScreen(props) {
     function navToSettings(){
       props.navigation.navigate("Settings_Merchant", {
         session_cookie: props.cookie
