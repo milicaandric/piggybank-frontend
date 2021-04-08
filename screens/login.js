@@ -52,16 +52,17 @@
    // @param email, password
    function loginUserWithToken(email, password) {
      if(email != "" && email != undefined && password != "" && email != undefined){
+       email = email.toLowerCase();
        firebase.auth().signInWithEmailAndPassword(email, password).then(function(user) {
          user.user.getIdToken(true).then(token => {
            // gets the IdToken which is used for sessionID generation in backend
-           fetch("http://192.168.1.3:8080/api/v1/account/log-in?token="+token+"&email="+email+"&password="+password, {
+           fetch("http://172.22.30.61:8080/api/v1/account/log-in?token="+token+"&email="+email+"&password="+password, {
              method: 'POST'
            })
            .then(response=>{
              var session_cookie = response.headers.map['set-cookie'];
              // gets the user email for login
-             fetch("http://192.168.1.3:8080/api/v1/account/get?email="+email,{
+             fetch("http://172.22.30.61:8080/api/v1/account/get?email="+email,{
                method: 'GET',
                headers: {
                  'Content-Type': 'application/json',
@@ -78,7 +79,7 @@
                }
                // if the user is a customer, navigate to customer dashboard
                else if(data.type == "CUSTOMER"){
-                 navigation.navigate("User_Dash", {
+                 navigation.navigate("Settings_Customer", {
                   session_cookie: session_cookie
               });
                }

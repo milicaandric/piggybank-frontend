@@ -57,6 +57,7 @@ export default function signUpMerchant({navigation}) {
         //first checks if the user filled out every field
         if(email != undefined && email != "" && password != undefined && password != "" && verifyPassword != undefined && verifyPassword != "" && routingNumber != undefined 
         && routingNumber != "" && username != undefined && username != "" && accountNumber != undefined && accountNumber != "" && nameOnAccount != undefined && nameOnAccount != ""){
+            email = email.toLowerCase(); //set to lower case for database purposes
             //checks if the password is at least 6 characters
             if(password.length >= 6){
                 //checks if the password is verified
