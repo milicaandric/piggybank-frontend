@@ -109,7 +109,7 @@ export default function transferToBank({ route, navigation }) {
         });
     }, []);
     return(
-        <KeyboardAvoidingView style={styles.container} behavior="padding">
+        <View style={styles.container} behavior="padding">
             <TouchableOpacity onPress={() => navToMenu()}>
                 <Image style={styles.backButtonTransferToBank} source={require("../assets/backArrow.png")} />
             </TouchableOpacity>
@@ -143,6 +143,6 @@ export default function transferToBank({ route, navigation }) {
                     </Button>
                 </View>
             </View>
-        </KeyboardAvoidingView>
+        </View>
     );
 }
