@@ -72,13 +72,13 @@
              .then(data=>{
                // if the user is a merchant, navigate to merchant dashboard
                if(data.type == "MERCHANT"){
-                navigation.navigate("Remove_Bank", {
+                navigation.navigate("Add_Bank", {
                   session_cookie: session_cookie
                 });
                }
                // if the user is a customer, navigate to customer dashboard
                else if(data.type == "CUSTOMER"){
-                 navigation.navigate("Transfer_To_Bank", {
+                 navigation.navigate("Swap_Bank", {
                   session_cookie: session_cookie
               });
                }
