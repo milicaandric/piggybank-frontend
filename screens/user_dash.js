@@ -1,12 +1,16 @@
+/**
+ * CS 506
+ * PiggyBank team: Callan Patel, Brian O'Loughlin, Calvin Armstrong, Jacob Biewer, Milica Andric, Quentin Ford
+ * Lecture 001
+ * file: user_dash.js. This screen is for checking balance, navigating to other menus via the side menu or setting button,
+ * and transfering money to other users.
+ */
+
 import React, { useState, useEffect, Component } from 'react';
 import 'react-native-gesture-handler';
-import { useNavigation } from '@react-navigation/native';
 import * as firebase from 'firebase';
-import { Button, Block, Text, Input, theme } from 'galio-framework';
-import { createDrawerNavigator, DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
-import { NavigationContainer } from '@react-navigation/native';
-import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
-import { DrawerNavigator } from 'react-navigation';
+import { Text, Input } from 'galio-framework';
+import { createDrawerNavigator} from '@react-navigation/drawer';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import SideMenu from 'react-native-side-menu-updated'
 
@@ -24,11 +28,8 @@ else {
 }
 import {
   View,
-  Image,
   TouchableOpacity,
   KeyboardAvoidingView,
-  AppRegistry,
-  Dimensions
 } from "react-native";
 
 const styles = require('../styles/global');
@@ -210,7 +211,6 @@ function Menu(props){
     );
 }
 
-const Drawer = createDrawerNavigator();
 export default function User_Dash({route, navigation}) {
   const {session_cookie} = route.params;
 

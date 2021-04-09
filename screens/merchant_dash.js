@@ -4,13 +4,11 @@
  * Lecture 001
  * file: merchant_dash.js. This screen allows a merchant to send change from a transaction to users.
  */
-import React, { useState, Component } from 'react';
+import React from 'react';
 import 'react-native-gesture-handler';
-import { useNavigation } from '@react-navigation/native';
 import * as firebase from 'firebase';
-import { Button, Block, Text, Input, theme } from 'galio-framework';
+import { Text, Input } from 'galio-framework';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import SideMenu from 'react-native-side-menu-updated'
 
 const firebaseConfig = {
   apiKey: "AIzaSyAg-KUJ--2nDiMDJnzSt_sNYO8y_eZI5Bo",

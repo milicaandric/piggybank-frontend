@@ -227,4 +227,10 @@ module.exports = StyleSheet.create({
     backgroundColor: "#93E9BE",
     flex: 1
   },
+  settingsBox: {
+    backgroundColor:"#FFF",
+    width:"100%",
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
+  }
 });

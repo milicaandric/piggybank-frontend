@@ -132,74 +132,76 @@
             <Image style={styles.backButtonSettings} source={require("../assets/backArrow.png")} />
         </TouchableOpacity>
         <Text style={styles.settingsHeader}>Settings</Text>
-        <View style={styles.allSettingsContentButtons}>
-            <View style={{
-                marginLeft: -20,
-                borderBottomColor: 'black',
-                borderBottomWidth: 1,
-                alignSelf: 'stretch',
-            }}
-            />
-            <TouchableOpacity style={styles.settingsContentButtons} onPress={() => navToEditAccount()}>
-                <Text style={styles.settingsContentButtonsText}>Edit Account</Text>
-            </TouchableOpacity>
-            <View style={{
-                marginLeft: -20,
-                borderBottomColor: 'black',
-                borderBottomWidth: 1,
-                alignSelf: 'stretch',
-            }}
-            />
-            <TouchableOpacity style={styles.settingsContentButtons} onPress={() => navToPrivacy()}>
-                <Text style={styles.settingsContentButtonsText}>Privacy</Text>
-            </TouchableOpacity>
-            <View style={{
-                marginLeft: -20,
-                borderBottomColor: 'black',
-                borderBottomWidth: 1,
-                alignSelf: 'stretch',
-            }}
-            />
-            <TouchableOpacity style={styles.settingsContentButtons} onPress={() => navToAddBank()}>
-                <Text style={styles.settingsContentButtonsText}>Add Bank</Text>
-            </TouchableOpacity>
-            <View style={{
-                marginLeft: -20,
-                borderBottomColor: 'black',
-                borderBottomWidth: 1,
-                alignSelf: 'stretch',
-            }}
-            />
-            <TouchableOpacity style={styles.settingsContentButtons} onPress={() => navToRemoveBank()}>
-                <Text style={styles.settingsContentButtonsText}>Remove Bank</Text>
-            </TouchableOpacity>
-            <View style={{
-                marginLeft: -20,
-                borderBottomColor: 'black',
-                borderBottomWidth: 1,
-                alignSelf: 'stretch',
-            }}
-            />
-            <TouchableOpacity style={styles.settingsContentButtons} onPress={() => navToAbout()}>
-                <Text style={styles.settingsContentButtonsText}>About</Text>
-            </TouchableOpacity>
-            <View style={{
-                marginLeft: -20,
-                borderBottomColor: 'black',
-                borderBottomWidth: 1,
-                alignSelf: 'stretch',
-            }}
-            />
-            <TouchableOpacity style={styles.settingsContentButtons} onPress={() => navToLogout()}>
-                <Text style={styles.settingsContentButtonsText}>Logout</Text>
-            </TouchableOpacity>
-            <View style={{
-                marginLeft: -20,
-                borderBottomColor: 'black',
-                borderBottomWidth: 1,
-                alignSelf: 'stretch',
-            }}
-            />
+        <View>
+            <View style={styles.allSettingsContentButtons}>
+                <View style={{
+                    marginLeft: -20,
+                    borderBottomColor: 'black',
+                    borderBottomWidth: 1,
+                    alignSelf: 'stretch',
+                }}
+                />
+                <TouchableOpacity style={styles.settingsContentButtons} onPress={() => navToEditAccount()}>
+                    <Text style={styles.settingsContentButtonsText}>Edit Account</Text>
+                </TouchableOpacity>
+                <View style={{
+                    marginLeft: -20,
+                    borderBottomColor: 'black',
+                    borderBottomWidth: 1,
+                    alignSelf: 'stretch',
+                }}
+                />
+                <TouchableOpacity style={styles.settingsContentButtons} onPress={() => navToPrivacy()}>
+                    <Text style={styles.settingsContentButtonsText}>Privacy</Text>
+                </TouchableOpacity>
+                <View style={{
+                    marginLeft: -20,
+                    borderBottomColor: 'black',
+                    borderBottomWidth: 1,
+                    alignSelf: 'stretch',
+                }}
+                />
+                <TouchableOpacity style={styles.settingsContentButtons} onPress={() => navToAddBank()}>
+                    <Text style={styles.settingsContentButtonsText}>Add Bank</Text>
+                </TouchableOpacity>
+                <View style={{
+                    marginLeft: -20,
+                    borderBottomColor: 'black',
+                    borderBottomWidth: 1,
+                    alignSelf: 'stretch',
+                }}
+                />
+                <TouchableOpacity style={styles.settingsContentButtons} onPress={() => navToRemoveBank()}>
+                    <Text style={styles.settingsContentButtonsText}>Remove Bank</Text>
+                </TouchableOpacity>
+                <View style={{
+                    marginLeft: -20,
+                    borderBottomColor: 'black',
+                    borderBottomWidth: 1,
+                    alignSelf: 'stretch',
+                }}
+                />
+                <TouchableOpacity style={styles.settingsContentButtons} onPress={() => navToAbout()}>
+                    <Text style={styles.settingsContentButtonsText}>About</Text>
+                </TouchableOpacity>
+                <View style={{
+                    marginLeft: -20,
+                    borderBottomColor: 'black',
+                    borderBottomWidth: 1,
+                    alignSelf: 'stretch',
+                }}
+                />
+                <TouchableOpacity style={styles.settingsContentButtons} onPress={() => navToLogout()}>
+                    <Text style={styles.settingsContentButtonsText}>Logout</Text>
+                </TouchableOpacity>
+                <View style={{
+                    marginLeft: -20,
+                    borderBottomColor: 'black',
+                    borderBottomWidth: 1,
+                    alignSelf: 'stretch',
+                }}
+                />
+            </View>
         </View>
     </View>
    )

@@ -1,3 +1,9 @@
+/**
+ * CS 506
+ * PiggyBank team: Callan Patel, Brian O'Loughlin, Calvin Armstrong, Jacob Biewer, Milica Andric, Quentin Ford
+ * Lecture 001
+ * file: transfer_to_ban.js. This screen is for tranfering money to a users bank from the app
+ */
 import React, { useState, useEffect, Component } from 'react';
 import 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
