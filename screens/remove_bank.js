@@ -2,7 +2,8 @@
  * CS 506
  * PiggyBank team: Callan Patel, Brian O'Loughlin, Calvin Armstrong, Jacob Biewer, Milica Andric, Quentin Ford
  * Lecture 001
- * file: remove_bank.js. This screen allows a customer to remove a bank from their account.
+ * file: add_bank.js. This screen is for removing a bank account to the customer account. Restricted access
+ *                    if the customer doesn't have a bank to remove.
  */
 import React from 'react';
 import 'react-native-gesture-handler';
@@ -28,12 +29,12 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
    Image,
    TouchableOpacity,
    KeyboardAvoidingView,
-   ScrollView,
  } from "react-native";
  
  const styles = require('../styles/global');
  const Drawer = createDrawerNavigator();
 
+ //This is the main funciton, which takes route and navigation. Allows the past screen to send session cookie
 export default function removeBank({ route, navigation }) {
   
   const {session_cookie} = route.params;
@@ -44,13 +45,13 @@ export default function removeBank({ route, navigation }) {
     });
   }
 
-  // this function is called when the user presses "remove"
+  // this function is called when the user presses submit
   function removeBankAccount() {
     let user = firebase.auth().currentUser; // retrieves current user 
     let email = user.email; // sets email var to user's email for 'update' api call
     console.log(email);
-      // updates specific user information in firestore
-      fetch("http://192.168.99.173:8080/api/v1/bank/remove?email=" + email + "&sessionCookieId=" + session_cookie, {
+      // removes bank via http request to bankend
+      fetch("http://192.168.99.173:8080/api/v1/bank/remove?email=" + email, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -59,6 +60,7 @@ export default function removeBank({ route, navigation }) {
       })
       .then(response => {
         if(response.ok == true){
+          //success, nav back to settings
           navigation.navigate("Settings_Customer", {
             session_cookie: session_cookie
           });
@@ -72,6 +74,7 @@ export default function removeBank({ route, navigation }) {
       });
   }
 
+  //UI
     return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
       <StatusBar style="auto" />

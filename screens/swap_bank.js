@@ -2,7 +2,8 @@
  * CS 506
  * PiggyBank team: Callan Patel, Brian O'Loughlin, Calvin Armstrong, Jacob Biewer, Milica Andric, Quentin Ford
  * Lecture 001
- * file: swap_bank: Allows merchant account to swap a bank account out
+ * file: swap_bank: Allows merchant account to swap a bank account out. Basically add/remove at the same time
+ *                  since the merchant must have an account linked at all times
  */
 import React, { useState } from 'react';
 import 'react-native-gesture-handler';
@@ -35,8 +36,7 @@ import {
 const styles = require('../styles/global');
 const Drawer = createDrawerNavigator();
 
-// TODO: 
-// 1.) eventually add nav to new screen upon successful addiiton of bank
+ //This is the main funciton, which takes route and navigation. Allows the past screen to send session cookie
 export default function SwapBank({ route, navigation }) {
   const [routingNumber, setRountingNumber] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
@@ -50,6 +50,8 @@ export default function SwapBank({ route, navigation }) {
     });
   }
 
+  //function is entered when the user presses submit
+  //@param routingNumber, accountNumber, nameOnAccount
   function swapBankAccount(routingNumber, accountNumber, nameOnAccount) {
     // first check that user has filled out all neccessary fields
     if (routingNumber != undefined && routingNumber != "" && accountNumber != undefined && accountNumber != "" && nameOnAccount != undefined && nameOnAccount != "") {
@@ -62,6 +64,7 @@ export default function SwapBank({ route, navigation }) {
         accountNumber: accountNumber,
         routingNumber: routingNumber
       };
+      //backend HTTP request to update the bank account
       fetch("http://192.168.99.173:8080/api/v1/bank/update?email="+email, {
         method: 'PUT',
         headers: {
@@ -71,6 +74,7 @@ export default function SwapBank({ route, navigation }) {
         body: JSON.stringify(data),
       }).then(response=>{
         if(response.ok == true){
+          //success, send merchant to settings
           navigation.navigate("Settings_Merchant", {
             session_cookie: session_cookie
           });
@@ -88,7 +92,7 @@ export default function SwapBank({ route, navigation }) {
     }
   }
 
-  // user interface
+  //UI
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
       <StatusBar style="auto" />

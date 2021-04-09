@@ -2,7 +2,8 @@
  * CS 506
  * PiggyBank team: Callan Patel, Brian O'Loughlin, Calvin Armstrong, Jacob Biewer, Milica Andric, Quentin Ford
  * Lecture 001
- * file: add_bank: this file is used by the customer when they want to add a bank account.
+ * file: add_bank.js. This screen is for adding a bank account to the customer account. Restricted access
+ *                    if the customer already has a bank added. Asks for routing number, account number, and name
  */
  import React, { useState } from 'react';
  import 'react-native-gesture-handler';
@@ -35,6 +36,7 @@
  const styles = require('../styles/global');
  const Drawer = createDrawerNavigator();
  
+ //This is the main funciton, which takes route and navigation. Allows the past screen to send session cookie
  export default function addBank({ route, navigation }) {
    const [routingNumber, setRountingNumber] = useState("");
    const [accountNumber, setAccountNumber] = useState("");
@@ -48,6 +50,8 @@
       });
    }
  
+   //This function is entered when the user presses the submit button
+   //@param routingNumber, accountNumber, nameOnAccount
    function addBankAccount(routingNumber, accountNumber, nameOnAccount) {
      // first check that user has filled out all neccessary fields
      if (routingNumber != undefined && routingNumber != "" && accountNumber != undefined && accountNumber != "" && nameOnAccount != undefined && nameOnAccount != "") {
@@ -60,6 +64,7 @@
         accountNumber: accountNumber,
         routingNumber: routingNumber
        };
+       //backend HTTP request for creating a bank account
        fetch("http://192.168.99.173:8080/api/v1/bank/update?email="+email, {
          method: 'PUT',
          headers: {
@@ -69,10 +74,12 @@
          body: JSON.stringify(data),
        }).then(response=>{
          if(response.ok == true){
+           //success, sends user back to settings page
            navigation.navigate("Settings_Customer", {
              session_cookie: session_cookie
            });
          }
+         //authentication was unsuccessful
          else{
            throw Error("Authentication for adding the bank account is invalid");
          }
@@ -85,6 +92,7 @@
        alert("Please fill out all fields.");
      }
    }
+   //UI
     return (
         <KeyboardAvoidingView style={styles.container} behavior="padding">
           <StatusBar style="auto" />

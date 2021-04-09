@@ -2,19 +2,12 @@
  * CS 506
  * PiggyBank team: Callan Patel, Brian O'Loughlin, Calvin Armstrong, Jacob Biewer, Milica Andric, Quentin Ford
  * Lecture 001
- * file: transfer_to_ban.js. This screen is for tranfering money to a users bank from the app
+ * file: transfer_to_bank.js. This screen is for tranfering money to a users bank from the app
  */
-import React, { useState, useEffect, Component } from 'react';
+import React, { useState, useEffect} from 'react';
 import 'react-native-gesture-handler';
-import { useNavigation } from '@react-navigation/native';
 import * as firebase from 'firebase';
-import { Button, Block, Text, Input, theme } from 'galio-framework';
-import { createDrawerNavigator, DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
-import { NavigationContainer } from '@react-navigation/native';
-import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
-import { DrawerNavigator } from 'react-navigation';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import SideMenu from 'react-native-side-menu-updated'
+import { Button,Text} from 'galio-framework';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAg-KUJ--2nDiMDJnzSt_sNYO8y_eZI5Bo",
@@ -32,13 +25,8 @@ import {
   View,
   Image,
   TouchableOpacity,
-  KeyboardAvoidingView,
-  AppRegistry,
-  Dimensions,
-  TextInput,
-  StatusBar
+  TextInput
 } from "react-native";
-import { render } from 'react-dom';
 
 const styles = require('../styles/global');
 
