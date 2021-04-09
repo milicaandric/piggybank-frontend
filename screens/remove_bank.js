@@ -34,15 +34,9 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
  const styles = require('../styles/global');
  const Drawer = createDrawerNavigator();
 
-// TODO: 
-// 1.) eventually add nav to new screen upon successful addiiton of bank
 export default function removeBank({ route, navigation }) {
   
-  // session cookie constant retrieval
-  // TODO:
-  // 1.) undefined is not an object -> evaluating route.params.session_cookie
   const {session_cookie} = route.params;
-  console.log(session_cookie);
   
   function navToSettings(){
     navigation.navigate("Settings_Customer", {
@@ -56,7 +50,7 @@ export default function removeBank({ route, navigation }) {
     let email = user.email; // sets email var to user's email for 'update' api call
     console.log(email);
       // updates specific user information in firestore
-      fetch("http://192.168.1.3:8080/api/v1/bank/remove?email=" + email + "&sessionCookieId=" + session_cookie, {
+      fetch("http://192.168.99.173:8080/api/v1/bank/remove?email=" + email + "&sessionCookieId=" + session_cookie, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

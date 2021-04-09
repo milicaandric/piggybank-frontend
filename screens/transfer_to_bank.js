@@ -52,22 +52,17 @@ export default function transferToBank({ route, navigation }) {
     let user = firebase.auth().currentUser; // retrieves current user 
     let email = user.email; // sets email var to user's email for 'update' api call
 
-    //https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript?page=1&tab=votes#tab-top
-    function makeid(length) {
-        var result           = [];
-        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        var charactersLength = characters.length;
-        for ( var i = 0; i < length; i++ ) {
-            result.push(characters.charAt(Math.floor(Math.random() * 
-            charactersLength)));
-       }
-       return result.join('');
-    }
-
     function navToMenu(){
         navigation.navigate("User_Dash", {
             session_cookie: session_cookie
         });
+    }
+
+    //https://stackoverflow.com/questions/17369098/simplest-way-of-getting-the-number-of-decimals-in-a-number-in-javascript
+    function countDecimals(number) {
+        if(number == undefined) return 0;
+        if(Math.floor(Number(number)) === Number(number)) return 0;
+        return String(number).split(".")[1].length || 0; 
     }
 
     function transfer(amount, balance){
@@ -75,35 +70,38 @@ export default function transferToBank({ route, navigation }) {
             amount = 0;
         }
         if(Number(amount) > 0 && (balance - Number(amount)) >= 0){
-            let data = {
+            if(countDecimals(amount) <= 2){
+                let data = {
                     transactorEmail: email,
                     recipientEmail: null,
-                    amount: Number(amount),
+                    amount: Number(amount) * 100.00,
                     type: 'BANK'
-            };
-            fetch("http:/192.168.1.3:8080/api/v1/bank/get?email=",{
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Cookie': session_cookie // used to identify user session
-            },
-            body: JSON.stringify(data)
-            })
-            .then(response=>{
-                if(response.ok == true){
-                    navigation.navigate("User_Dash", {
-                        session_cookie: session_cookie
-                    });
-                }
-            })
-            .catch((error) =>{
-                console.log(error.toString());
-            });
+                };
+                fetch("http:/192.168.99.173:8080/api/v1/transaction/bank",{
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Cookie': session_cookie // used to identify user session
+                },
+                body: JSON.stringify(data)
+                })
+                .then(response=>{
+                    if(response.ok == true){
+                        navigation.navigate("User_Dash", {
+                            session_cookie: session_cookie,
+                            new_balance: (Number(balance)-Number(amount))*100
+                        });
+                    }
+                })
+                .catch((error) =>{
+                    console.log(error.toString());
+                });
+            }
         }
     }
 
      useEffect(() => {
-         fetch("http://192.168.1.3:8080/api/v1/account/get?email="+email,{
+         fetch("http://192.168.99.173:8080/api/v1/account/get?email="+email,{
          method: 'GET',
          headers: {
            'Content-Type': 'application/json',
@@ -112,7 +110,7 @@ export default function transferToBank({ route, navigation }) {
         })
         .then(response=>response.json())
         .then(data=>{
-            setBalance(data.balance);
+            setBalance(data.balance / 100.00);
         });
     }, []);
     return(
@@ -124,7 +122,7 @@ export default function transferToBank({ route, navigation }) {
                 <View style={styles.mainCircle}>
                     <Text style={styles.circleText}>
                         {
-                            (balance == undefined)?balance:(balance - amount.amount <= 0)?("$0.00"): ((isNaN(balance - amount.amount))? "$"+String(balance): "$"+String(balance-amount.amount))
+                            (balance == undefined)?balance: (balance == 0)?"$0.00":(countDecimals(amount.amount) > 2)?"$"+String(balance): (balance - amount.amount <= 0)?("$0.00"): ((isNaN(balance - amount.amount))? "$"+String((Math.round((balance)*100)/100).toFixed(2)): "$"+String((Math.round((balance-amount.amount)*100)/100).toFixed(2)))
                         }
                     </Text>
                 </View>
@@ -140,7 +138,7 @@ export default function transferToBank({ route, navigation }) {
                             onChangeText={(amount) => setAmount({ amount })}
                         />
                         {
-                        (amount.amount > balance)?<Text style={{color: 'red'}}>You have exceeded your balance</Text>: ((isNaN(amount.amount) && amount != 0)?<Text style={{color: 'red'}}>Invalid Amount</Text>:null)
+                            (amount.amount > balance)?<Text style={{color: 'red'}}>You have exceeded your balance</Text>: ((isNaN(amount.amount) && amount != 0) || ( countDecimals(amount.amount) > 2))?<Text style={{color: 'red'}}>Invalid Amount</Text>:null
                         }
                     </View>
                     <Button color="#23cc8c" onPress={() => transfer(amount.amount, balance)}>

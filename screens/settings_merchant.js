@@ -48,10 +48,6 @@
         });
    }
 
-   function navToAbout(){
-
-   }
-
    function navToSwapBank(){
         navigation.navigate("Swap_Bank", {
             session_cookie: session_cookie
@@ -64,13 +60,14 @@
         });
    }
 
-   function navToEditAccount(){
-
+   function navToUpdateEmail(){
+        navigation.navigate("Update_Email",{
+            session_cookie: session_cookie
+        });
    }
 
    function navToLogout(){
-    console.log(session_cookie);
-    fetch("http://192.168.1.3:8080/api/v1/account/log-out",{
+    fetch("http://192.168.99.173:8080/api/v1/account/log-out",{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -106,8 +103,8 @@
                 alignSelf: 'stretch',
             }}
             />
-            <TouchableOpacity style={styles.settingsContentButtons} onPress={() => navToEditAccount()}>
-                <Text style={styles.settingsContentButtonsText}>Edit Account</Text>
+            <TouchableOpacity style={styles.settingsContentButtons} onPress={() => navToUpdateEmail()}>
+                <Text style={styles.settingsContentButtonsText}>Update Email</Text>
             </TouchableOpacity>
             <View style={{
                 marginLeft: -20,
@@ -128,16 +125,6 @@
             />
             <TouchableOpacity style={styles.settingsContentButtons} onPress={() => navToSwapBank()}>
                 <Text style={styles.settingsContentButtonsText}>Swap Bank</Text>
-            </TouchableOpacity>
-            <View style={{
-                marginLeft: -20,
-                borderBottomColor: 'black',
-                borderBottomWidth: 1,
-                alignSelf: 'stretch',
-            }}
-            />
-            <TouchableOpacity style={styles.settingsContentButtons} onPress={() => navToAbout()}>
-                <Text style={styles.settingsContentButtonsText}>About</Text>
             </TouchableOpacity>
             <View style={{
                 marginLeft: -20,

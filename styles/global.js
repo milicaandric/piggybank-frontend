@@ -7,7 +7,7 @@ module.exports = StyleSheet.create({
     backgroundColor: '#93E9BE',
     height: heightPercentageToDP('75%'),
     position: 'absolute',
-    top: 0,
+    top: 82,
     zIndex: 0
   },
   hold: {
@@ -154,7 +154,7 @@ module.exports = StyleSheet.create({
   },
   topLeft:{
     marginLeft: 75,
-    marginTop: 25
+    marginTop: 50
   },
   sideBack:{
     backgroundColor: "#166e46",

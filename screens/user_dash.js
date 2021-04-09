@@ -69,7 +69,7 @@ export class Outer extends Component{
     }
 
     render(){
-        const menu = <Menu onItemSelected={this.onMenuItemSelected} cookie={this.props.cookie} navigation={this.props.navigation}/>
+        const menu = <Menu onItemSelected={this.onMenuItemSelected} balance={this.props.balance} cookie={this.props.cookie} navigation={this.props.navigation}/>
         return(
             <SideMenu menu={menu}
             isOpen={this.state.isOpen}
@@ -80,7 +80,7 @@ export class Outer extends Component{
                                 <FontAwesomeIcon icon="bars" size={32}/>
                         </TouchableOpacity>
                         <View style={styles.mainCircle}>
-                            <Balance cookie={this.props.cookie}/>
+                            <Balance balance= {this.props.balance} cookie={this.props.cookie}/>
                         </View>
                         <Text style={styles.dashText}>
                             Current Balance
@@ -99,12 +99,6 @@ export class Outer extends Component{
                                     Send
                                 </Text>
                             </TouchableOpacity>
-                            <View style={styles.lineBreak}/>
-                            <TouchableOpacity style={styles.sendButton} onPress={() => {this.toggle()}}>
-                                <Text style={styles.sendText}>
-                                    Transactions
-                                </Text>
-                            </TouchableOpacity>
                             <TouchableOpacity onPress={() => {this.navToSettings(this.props)}}>
                                 <View style={styles.bottomRight}>
                                     <FontAwesomeIcon icon="cog" size={32}/>
@@ -117,72 +111,68 @@ export class Outer extends Component{
         );
     }
 }
-  
+
 function Balance(props){
-    const [balance, setBalance] = useState();
     const [amount, setAmount] = useState(0);
-    let user = firebase.auth().currentUser;
-    let email = user.email;
-    
-    useEffect(() => {
-        fetch("http://192.168.1.3:8080/api/v1/account/get?email="+email,{
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Cookie': props.cookie // used to identify user session
-        },
-       })
-       .then(response=>response.json())
-       .then(data=>{
-           setBalance(data.balance);
-       });
-    }, []);
     return(
         <Text style={styles.circleText}>
           {
-            (balance == undefined)?balance:(balance - amount.amount <= 0)?("$0.00"): ((isNaN(balance - amount.amount))? "$"+String(balance/100.0): "$"+String((balance-amount.amount)/100.0))
+            (props.balance == undefined)?props.balance: (props.balance == 0)?"$0.00":(props.balance - amount.amount <= 0)?("$0.00"): ((isNaN(props.balance - amount.amount))? "$"+String((Math.round((props.balance)*100)/100).toFixed(2)): "$"+String((Math.round((props.balance-amount.amount)*100)/100).toFixed(2)))
           }
         </Text>
     );
 }
 
 function Balance2(props){
-    const [balance, setBalance] = useState();
     const [amount, setAmount] = useState(0);
-    let user = firebase.auth().currentUser;
-    let email = user.email;
-    
-    useEffect(() => {
-        fetch("http://192.168.1.3:8080/api/v1/account/get?email="+email,{
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Cookie': props.cookie // used to identify user session
-        },
-       })
-       .then(response=>response.json())
-       .then(data=>{
-           setBalance(data.balance);
-       });
-    }, []);
     return(
         <Text style={styles.sideMenuText}>
           {
-            (balance == undefined)?balance:(balance - amount.amount <= 0)?("$0.00"): ((isNaN(balance - amount.amount))? "$"+String(balance/100.0): "$"+String((balance-amount.amount)/100.0))
+            (props.balance == undefined)?props.balance: (props.balance == 0)?"$0.00":(props.balance - amount.amount <= 0)?("$0.00"): ((isNaN(props.balance - amount.amount))? "$"+String((Math.round((props.balance)*100)/100).toFixed(2)): "$"+String((Math.round((props.balance-amount.amount)*100)/100).toFixed(2)))
           }
         </Text>
     );
 }
 
 function Menu(props){
+    let user = firebase.auth().currentUser; // retrieves current user 
+    let email = user.email; // sets email var to user's email for 'update' api call
+    const [username, setUsername] = useState("");
     function navToTransfer(){
-      props.navigation.navigate("Transfer_To_Bank", {
-        session_cookie: props.cookie
+      fetch("http://192.168.99.173:8080/api/v1/bank/get?email="+email,{
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Cookie': props.cookie // used to identify user session
+      },
+      })
+      .then(response=>response.json())
+      .then(data=>{
+        props.navigation.navigate("Transfer_To_Bank", {
+          session_cookie: props.cookie
+        });
+      })
+      .catch((error) =>{
+          //no bank found. Do not proceed
+          alert("You do not have a bank to transfer to");
       });
     }
+    useEffect(() => {
+      fetch("http://192.168.99.173:8080/api/v1/account/get?email="+email,{
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Cookie': props.cookie // used to identify user session
+      },
+     })
+     .then(response=>response.json())
+     .then(data=>{
+         setUsername(data.username);
+     });
+    }, []);
     return(
         <View style={styles.sideBack}>
-            <View style={{marginTop: 25}}/>
+            <View style={{marginTop: 40}}/>
             <View style={styles.mainCircle}>
                 <Text style={styles.circleText}>
                     Profile Pic
@@ -190,11 +180,11 @@ function Menu(props){
             </View>
             <View style={styles.sideMenuFields}>
                 <Text style={styles.sideMenuText}>
-                    Username
+                    {username}
                 </Text>
             </View>
             <View style={styles.sideMenuFields}>
-                <Balance2 cookie={props.cookie}/>
+                <Balance2 balance={props.balance} cookie={props.cookie}/>
             </View>
             <TouchableOpacity style={styles.sendButton} onPress={()=>{navToTransfer()}}>
                 <Text style={styles.sendText}>
@@ -212,13 +202,29 @@ function Menu(props){
 }
 
 export default function User_Dash({route, navigation}) {
-  const {session_cookie} = route.params;
+  const {session_cookie, new_balance} = route.params;
+  const [balance, setBalance] = useState();
+  let user = firebase.auth().currentUser;
+  let email = user.email;
+  useEffect(() => {
+      fetch("http://192.168.99.173:8080/api/v1/account/get?email="+email,{
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Cookie': session_cookie // used to identify user session
+      },
+     })
+     .then(response=>response.json())
+     .then(data=>{
+        setBalance(data.balance/100);
+     });
+  }, []);
 
   //const navigation = useNavigation();
   // loginUser wrapper class placeholder
   // firebase auth
   
   return (
-    <Outer cookie={session_cookie} navigation = {navigation}/>
+    <Outer cookie={session_cookie} balance={(new_balance != undefined)?new_balance/100: balance} navigation = {navigation}/>
   );
 }

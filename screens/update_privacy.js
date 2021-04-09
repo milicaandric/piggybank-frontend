@@ -2,22 +2,14 @@
  * CS 506
  * PiggyBank team: Callan Patel, Brian O'Loughlin, Calvin Armstrong, Jacob Biewer, Milica Andric, Quentin Ford
  * Lecture 001
- * file: update_privacy.js. This screen is for changing the password for an account. Fields to enter are email,
- * password, verify password. Email is checked to ensure entered email is the current user, and passwords are checked
- * to make sure they match.
+ * file: update_privacy.js. This screen is for changing the password for an account. User inputs password & verify password. 
+ * both passwords are checked to make sure that they match before updating the account's password
+ * upon successfull change, the user is logged out and prompted to log in with their new password
  */
 import React, { useState, useEffect, Component } from 'react';
 import 'react-native-gesture-handler';
-import { useNavigation } from '@react-navigation/native';
 import * as firebase from 'firebase';
-import { Button, Block, Text, Input, theme } from 'galio-framework';
-import { createDrawerNavigator, DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
-import { NavigationContainer } from '@react-navigation/native';
-import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
-import { DrawerNavigator } from 'react-navigation';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import SideMenu from 'react-native-side-menu-updated'
-import SafeAreaView from 'react-native-safe-area-view';
+import { Button, Text, Input} from 'galio-framework';
 import { StatusBar } from "expo-status-bar";
 
 const firebaseConfig = {
@@ -50,15 +42,15 @@ export default function updatePassword({route, navigation}) {
     const { session_cookie } = route.params;
     var currentUser = firebase.auth().currentUser;
     var emailVar = currentUser.email;
-    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirm, setConfirm] = useState("");
 
     /*
-    
+    function used to navigate back to the settings page
+    using the type of account to determine if customer or merchant settings page
     */
     function navToMenu() {
-        fetch("http://172.22.30.61:8080/api/v1/account/get?email="+emailVar,{
+        fetch("http://192.168.99.173:8080/api/v1/account/get?email="+emailVar,{
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -80,77 +72,43 @@ export default function updatePassword({route, navigation}) {
         .catch((error) => console.log(error));
     }
 
-    useEffect(() => {
-        fetch("http://172.22.30.61:8080/api/v1/account/get?email="+emailVar,{
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Cookie': session_cookie // used to identify user session
-        },
-       })
-       .then(response=>response.json()) 
-   });
-
-   function update(email, password, confirm) {
-    var dataSent = {
-    };
-    //builds the body for the API call to update
-    if(email != undefined && email != "" && email != null){
-        dataSent.email = email;
-    }
-    if(password != undefined && password != "" && password != null){
-        dataSent.password = password;
-    }
-    
-    if (dataSent.email == undefined || dataSent.password == undefined || confirm == undefined) {
-        alert("Please fill in all text fields");
-    }
-    else if (dataSent.password == confirm) {
-        currentUser.updatePassword(password); //might want to add the PUT to the firestore before we log out
-        fetch("http://172.22.30.61:8080/api/v1/account/log-out",{
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Cookie': session_cookie // used to identify user session
-            },
-        })
-        .then(response=>{
-            if(response.ok == true){
-                alert("Success: Log in with new passsword")
-                navigation.navigate("Login");
-            }
-            else{
-                alert("logout failed")
-            }
-        })
-        .catch((error) =>{
-            console.log(error.toString());
-        });
-        //navToMenu();
-        /*.then(function(){
-            //make sure this fetch is the right way to call it
-            fetch("http://172.22.30.61:8080/api/v1/account/customer/update?username=Pwork", {//+name, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(dataSent),
-            })
-            .then(response => response.json())
-            .then(data=>{
-                alert("Password successfully updated!");
-                navToMenu();
-            })
-            .catch((error) =>{
-                console.log("Error: ", error);
-            });
-        }).catch(function(error){
-            alert("password must be at least 6 characters");
-        });    */
-    } 
-    else 
+   function update(password, confirm) {
+    if(password != undefined && password != "" && confirm != undefined && confirm != ""){
+      if(password == confirm){
+        if(password.length >= 6){
+          currentUser.updatePassword(password); //changes user password in firebase auth
+          fetch("http://192.168.99.173:8080/api/v1/account/log-out",{ //logout user after changing password
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+                  'Cookie': session_cookie // used to identify user session
+              },
+          })
+          .then(response=>{
+              if(response.ok == true){
+                  alert("Success: Log in with new passsword")
+                  navigation.navigate("Login");
+              }
+              else{
+                  alert("logout failed")
+              }
+          })
+          .catch((error) =>{
+              console.log(error.toString());
+          });
+        }
+        else{
+          alert("Password must be at least 6 characters");
+        }
+      }
+      else{
         alert("Passwords do not match");
+      }
     }
+    else{
+      alert("Fill out all fields")
+    }
+  }
 
     return (
         <KeyboardAvoidingView style={styles.container} behavior="padding">
@@ -162,12 +120,6 @@ export default function updatePassword({route, navigation}) {
             <Text style={styles.signupHeader}>Change Password</Text>
           </View>
           <ScrollView>
-            <View style={{ paddingBottom: 25 }}>
-              <Input style={{ borderRadius: 30, height: 50, padding: 10 }}
-                placeholder="Email"
-                onChangeText={(email) => setEmail({ email })}
-              />
-            </View>
             <View style={{ paddingBottom: 25 }}>
               <Input style={{ borderRadius: 30, height: 50, padding: 10 }}
                 placeholder="New Password"
@@ -184,7 +136,7 @@ export default function updatePassword({route, navigation}) {
             </View>
           </ScrollView>
           <Button style={{marginBottom: 30}} color ="#23cc8c" 
-            onPress={() => update(email.email, password.password, confirm.confirm)}>
+            onPress={() => update(password.password, confirm.confirm)}>
             <Text>Change Password</Text>
           </Button>
         </KeyboardAvoidingView>
