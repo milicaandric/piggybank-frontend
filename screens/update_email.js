@@ -6,18 +6,20 @@
  * password, verify password. Email is checked to ensure entered email is the current user, and passwords are checked
  * to make sure they match.
  */
-import React, { useState, useEffect, Component } from 'react';
-import 'react-native-gesture-handler';
-import { useNavigation } from '@react-navigation/native';
-import * as firebase from 'firebase';
-import { Button, Block, Text, Input, theme } from 'galio-framework';
-import { createDrawerNavigator, DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
-import { NavigationContainer } from '@react-navigation/native';
-import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
-import { DrawerNavigator } from 'react-navigation';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import SideMenu from 'react-native-side-menu-updated'
-import SafeAreaView from 'react-native-safe-area-view';
+ import React, { useState } from 'react';
+ import { StatusBar } from "expo-status-bar";
+ import 'react-native-gesture-handler';
+ import * as firebase from 'firebase';   
+ import { Button, Text, Input} from 'galio-framework';
+ import { LinearGradient } from 'expo-linear-gradient';
+ 
+ import {
+   View,
+   Image,
+   TouchableOpacity,
+   KeyboardAvoidingView,
+   ScrollView
+ } from "react-native";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAg-KUJ--2nDiMDJnzSt_sNYO8y_eZI5Bo",
@@ -33,195 +35,189 @@ else {
   firebase.app();
 }
 
-import {
-  View,
-  Image,
-  TouchableOpacity,
-  TextInput,
-  KeyboardAvoidingView,
-  ScrollView, Alert
-} from "react-native";
-
 const styles = require('../styles/global');
 
-export default function updatePassword({route, navigation}) {
+export default function updateEmail({route, navigation}) {
     //states here
     const { session_cookie } = route.params;
     var currentUser = firebase.auth().currentUser;
     var emailVar = currentUser.email;
     const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
     const [confirm, setConfirm] = useState("");
 
     /*
     Working on how to fix this
     */
-    function navToMenu() {
-            fetch("http://172.22.30.61:8080/api/v1/account/get?email="+emailVar,{
-               method: 'GET',
-               headers: {
-                 'Content-Type': 'application/json',
-                 'Cookie': session_cookie // used to identify user session
-               },
-             })
-             .then(response=>response.json())
-             .then(data=>{
-               // if the user is a merchant, navigate to merchant settings
-               if(data.type == "MERCHANT"){
-                navigation.navigate("Settings_Merchant", {
-                  session_cookie: session_cookie
-                });
-               }
-               // if the user is a customer, navigate to customer settings
-               else if(data.type == "CUSTOMER"){
-                 navigation.navigate("Settings_Customer", {
-                    session_cookie: session_cookie
-                    });
-                }
-             })
-             .catch((error)=>{
-               // authentication failed to get data type user
-               alert("Error: Account type not found. Customer default");
-               navigation.navigate("Settings_Customer", {
-                    session_cookie: session_cookie
-                    });
-             });
-    }
-
-    useEffect(() => {
-        fetch("http://172.22.30.61:8080/api/v1/account/get?email="+emailVar,{
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Cookie': session_cookie // used to identify user session
-        },
-       })
-       .then(response=>response.json()) //possibly set dataType in here for navigation purposes
-   });
-
-   function update(email, password, confirm) { //NEED TO CONFIRM THAT PASSWORD IS CORRECT BEFORE CHANGING EMAIL
-    var dataSent = {
-    };
-    //builds the body for the API call to update
-    if(email != undefined && email != "" && email != null){
-        dataSent.email = email;
-    }
-    if(password != undefined && password != "" && password != null){
-        dataSent.password = password;
-    }
-    
-    if (dataSent.email == undefined || dataSent.password == undefined || confirm == undefined) {
-        alert("Please fill in all text fields");
-    }
-    else if (dataSent.email == confirm) {
-        dataSent.type = "CUSTOMER";
-        currentUser.updateEmail(email).then(function(){ //need to confirm password is correct
-            //make sure this fetch is the right way to call it
-            fetch("http://172.22.30.61:8080/api/v1/account/customer/update?username="+emailVar, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(dataSent),
+    function navToSettings() {
+        fetch("http://192.168.99.173:8080/api/v1/account/get?email="+emailVar,{
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Cookie': session_cookie // used to identify user session
+            },
             })
-            .then(response => response.json())
+            .then(response=>response.json())
             .then(data=>{
-                //THINK I NEED TO GET HERE SO I CAN GET DATA TYPE
-                alert("Email successfully updated!");
-                navToMenu();
-                /*  if (data.type == "CUSTOMER") {
-                    navigation.navigate("Settings_Customer", {
-                        session_cookie: session_cookie
-                    });
-                } else if (data.type == "MERCHANT") {
-                    navigation.navigate("Settings_Merchant", {
-                        session_cookie: session_cookie
-                    });
-                } else {
-                    alert("no type");
-                }
-            */})
-            .catch((error) =>{
-                console.log("Error: ", error);
+            // if the user is a merchant, navigate to merchant settings
+            if(data.type == "MERCHANT"){
+            navigation.navigate("Settings_Merchant", {
+                session_cookie: session_cookie
             });
-        }).catch(function(error){
-            alert("Invalid email");
-        });    
-    } 
-    else 
-        alert("Emails do not match");
+            }
+            // if the user is a customer, navigate to customer settings
+            else if(data.type == "CUSTOMER"){
+                navigation.navigate("Settings_Customer", {
+                session_cookie: session_cookie
+                });
+            }
+            })
+            .catch((error)=>{
+            // authentication failed to get data type user
+            alert("Error: Account type not found. Customer default");
+            navigation.navigate("Settings_Customer", {
+                session_cookie: session_cookie
+                });
+            });
+    }
+
+    function update(email, confirm) { //NEED TO CONFIRM THAT PASSWORD IS CORRECT BEFORE CHANGING EMAIL
+        if (email != undefined && email != "" && confirm != undefined && confirm != "") {
+            if(email == confirm){
+                currentUser.updateEmail(email).then(function(){ //need to confirm password is correct
+                    //make sure this fetch is the right way to call it
+                    fetch("http://192.168.99.173:8080/api/v1/account/log-out",{
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Cookie': session_cookie // used to identify user session
+                        },
+                    })
+                    .then(response=>{
+                        if(response.ok == true){
+                            alert("Success: Log in with new email")
+                            navigation.navigate("Login");
+                        }
+                        else{
+                            alert("logout failed")
+                        }
+                    })
+                    .catch((error) =>{
+                        console.log(error.toString());
+                    });
+                }).catch(function(error){
+                    alert("Invalid email or email already exists");
+                }); 
+            } 
+            else{
+                alert("Emails don't match")
+            }
+        } 
+        else {
+            alert("Fill out all fields");
+        }
     }
 
    return(
-    <View style={styles.settings}>
-        <TouchableOpacity onPress={() => navToMenu()}>
-            <Image style={styles.backButtonSettings} source={require("../assets/backArrow.png")} />
+        <KeyboardAvoidingView style={styles.container} behavior="padding">
+        <LinearGradient
+        // baackground linear gradient
+        colors={['transparent', 'rgba(0, 0, 0, 0.1)', '#93E9BE']}
+        style={styles.background}
+        />
+        <StatusBar style="auto"/>
+        <TouchableOpacity onPress={() => navToSettings()}>
+            <Image style={styles.backButton} source={require("../assets/backArrow.png")}/>
         </TouchableOpacity>
-        <Text style={styles.settingsHeader}>Update Email</Text>
-        <View style={styles.allSettingsContentButtons}>
-            <View style={{
-                marginLeft: -20,
-                borderBottomColor: 'black',
-                borderBottomWidth: 1,
-                alignSelf: 'stretch',
-            }}
-            />
-            <Text style={styles.circleText}>Enter new email</Text>
-            <View style={styles.greyFields}>
-                <TextInput
-                    style={styles.baseText}
-                    placeholder= "Enter email"
-                    placeholderTextColor="#003f5c"
-                    onChangeText={(email) => setEmail({email})}
-                />
-            </View>
-            <View style={{
-                marginLeft: -20,
-                borderBottomColor: 'black',
-                borderBottomWidth: 1,
-                alignSelf: 'stretch',
-            }}
-            />
-            <Text style={styles.circleText}>Confirm new email</Text>
-            <View style={styles.greyFields}>
-                <TextInput
-                    style={styles.baseText}
-                    placeholder= "Confirm email"
-                    placeholderTextColor="#003f5c"
-                    onChangeText={(confirm) => setConfirm({confirm})}
-                />
-            </View>
-            <View style={{
-                marginLeft: -20,
-                borderBottomColor: 'black',
-                borderBottomWidth: 1,
-                alignSelf: 'stretch',
-            }}
-            />
-            <Text style={styles.circleText}>Password</Text>
-            <View style={styles.greyFields}>
-                <TextInput
-                    style={styles.baseText}
-                    placeholder= "Password"
-                    placeholderTextColor="#003f5c"
-                    secureTextEntry={true}
-                    onChangeText={(password) => setPassword({password})}
-                />
-            </View>
-            <View style={{
-                marginLeft: -20,
-                borderBottomColor: 'black',
-                borderBottomWidth: 1,
-                alignSelf: 'stretch',
-            }}
-            />
-            <Button color="#23cc8c" onPress={() => update(email.email, password.password, confirm.confirm)}>
-                <Text>
-                    Update Email
-                </Text>
-            </Button>
+        <View>
+            <Text style={styles.signupHeader}>Update Email</Text>
         </View>
+        <ScrollView>
+        <View style={{paddingBottom: 25}}>
+        <Input style={{borderRadius: 30, height:50, padding: 10}}
+            placeholder="Email"
+            onChangeText={(email) => setEmail({email})}
+        />
         </View>
+        <View style={{paddingBottom: 25}}>
+        <Input style={{borderRadius: 30, height:50, padding: 10}}
+            placeholder="Confirm Email"
+            onChangeText={(confirm) => setConfirm({confirm})}
+        />
+        </View>
+        </ScrollView>
+        <Button style={{marginBottom: 30}} color ="#23cc8c" 
+        onPress={() => update(email.email, confirm.confirm)}>
+        <Text>Update</Text>
+        </Button>
+        </KeyboardAvoidingView>
+    // <View style={styles.settings}>
+    //     <TouchableOpacity onPress={() => navToMenu()}>
+    //         <Image style={styles.backButtonSettings} source={require("../assets/backArrow.png")} />
+    //     </TouchableOpacity>
+    //     <Text style={styles.settingsHeader}>Update Email</Text>
+    //     <View style={styles.allSettingsContentButtons}>
+    //         <View style={{
+    //             marginLeft: -20,
+    //             borderBottomColor: 'black',
+    //             borderBottomWidth: 1,
+    //             alignSelf: 'stretch',
+    //         }}
+    //         />
+    //         <Text style={styles.circleText}>Enter new email</Text>
+    //         <View style={styles.greyFields}>
+    //             <TextInput
+    //                 style={styles.baseText}
+    //                 placeholder= "Enter email"
+    //                 placeholderTextColor="#003f5c"
+    //                 onChangeText={(email) => setEmail({email})}
+    //             />
+    //         </View>
+    //         <View style={{
+    //             marginLeft: -20,
+    //             borderBottomColor: 'black',
+    //             borderBottomWidth: 1,
+    //             alignSelf: 'stretch',
+    //         }}
+    //         />
+    //         <Text style={styles.circleText}>Confirm new email</Text>
+    //         <View style={styles.greyFields}>
+    //             <TextInput
+    //                 style={styles.baseText}
+    //                 placeholder= "Confirm email"
+    //                 placeholderTextColor="#003f5c"
+    //                 onChangeText={(confirm) => setConfirm({confirm})}
+    //             />
+    //         </View>
+    //         <View style={{
+    //             marginLeft: -20,
+    //             borderBottomColor: 'black',
+    //             borderBottomWidth: 1,
+    //             alignSelf: 'stretch',
+    //         }}
+    //         />
+    //         <Text style={styles.circleText}>Password</Text>
+    //         <View style={styles.greyFields}>
+    //             <TextInput
+    //                 style={styles.baseText}
+    //                 placeholder= "Password"
+    //                 placeholderTextColor="#003f5c"
+    //                 secureTextEntry={true}
+    //                 onChangeText={(password) => setPassword({password})}
+    //             />
+    //         </View>
+    //         <View style={{
+    //             marginLeft: -20,
+    //             borderBottomColor: 'black',
+    //             borderBottomWidth: 1,
+    //             alignSelf: 'stretch',
+    //         }}
+    //         />
+    //         <Button color="#23cc8c" onPress={() => update(email.email, password.password, confirm.confirm)}>
+    //             <Text>
+    //                 Update Email
+    //             </Text>
+    //         </Button>
+    //     </View>
+    //     </View>
     );
-
 }

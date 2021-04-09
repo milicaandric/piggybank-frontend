@@ -42,8 +42,8 @@
    let email = user.email; // sets email var to user's email for 'update' api call
  
    //function called when the user presses the backarrow. Takes user back to login
-   function navToSettings() {
-        navigation.navigate("Settings_Customer", {
+   function navToMenu() {
+        navigation.navigate("User_Dash", {
             session_cookie: session_cookie
         });
    }
@@ -98,13 +98,15 @@
     });
    }
 
-   function navToEditAccount(){
-
+   function navToUpdateEmail(){
+    navigation.navigate("Update_Email", {
+        session_cookie: session_cookie
+    });
    }
 
    function navToLogout(){
     console.log(session_cookie);
-    fetch("http://192.168.1.3:8080/api/v1/account/log-out",{
+    fetch("http://192.168.99.173:8080/api/v1/account/log-out",{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -128,7 +130,7 @@
    // user interface
    return (
      <View style={styles.settings}>
-        <TouchableOpacity onPress={() => navToSettings()}>
+        <TouchableOpacity onPress={() => navToMenu()}>
             <Image style={styles.backButtonSettings} source={require("../assets/backArrow.png")} />
         </TouchableOpacity>
         <Text style={styles.settingsHeader}>Settings</Text>
@@ -140,8 +142,8 @@
                 alignSelf: 'stretch',
             }}
             />
-            <TouchableOpacity style={styles.settingsContentButtons} onPress={() => navToEditAccount()}>
-                <Text style={styles.settingsContentButtonsText}>Edit Account</Text>
+            <TouchableOpacity style={styles.settingsContentButtons} onPress={() => navToUpdateEmail()}>
+                <Text style={styles.settingsContentButtonsText}>Update Email</Text>
             </TouchableOpacity>
             <View style={{
                 marginLeft: -20,

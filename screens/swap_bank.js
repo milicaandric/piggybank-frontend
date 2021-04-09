@@ -62,7 +62,7 @@ export default function SwapBank({ route, navigation }) {
         accountNumber: accountNumber,
         routingNumber: routingNumber
       };
-      fetch("http:/192.168.1.3:8080/api/v1/bank/update?email="+email, {
+      fetch("http://192.168.99.173:8080/api/v1/bank/update?email="+email, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
