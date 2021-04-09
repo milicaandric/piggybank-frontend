@@ -73,7 +73,6 @@
     function update(username) {
      //builds the body for the API call to update
         if(username != undefined && username != ""){
-           currentUser.updatePassword(password); //might want to add the PUT to the firestore before we log out
            fetch("http://192.168.99.173:8080/api/v1/account/usernameExists?username="+username)
            .then((res)=>res.json())
            .then((dataUsernameExists)=>{
@@ -84,7 +83,7 @@
                 var data = {
                     username: username
                 };
-                fetch("http://192.168.99.173:8080/api/v1/bank/update?email="+email, {
+                fetch("http://192.168.99.173:8080/api/v1/bank/update?email="+emailVar, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -108,6 +107,7 @@
            })
            //username exists already
            .catch((error)=>{
+               console.log(error.toString());
                alert("Username already exists");
            });
         }
@@ -132,7 +132,7 @@
              </View>
            </ScrollView>
            <Button style={{marginBottom: 30}} color ="#23cc8c" 
-             onPress={() => update(username)}>
+             onPress={() => update(username.username)}>
              <Text>Change Password</Text>
            </Button>
          </KeyboardAvoidingView>

@@ -166,7 +166,7 @@ function Balance2(props){
     return(
         <Text style={styles.sideMenuText}>
           {
-            (balance == undefined)?balance:(balance - amount.amount <= 0)?("$0.00"): ((isNaN(balance - amount.amount))? "$"+String(balance/100.0): "$"+String((balance-amount.amount)/100.0))
+            (balance == undefined)?balance: (balance == 0)?"$0.00":(balance - amount.amount <= 0)?("$0.00"): ((isNaN(balance - amount.amount))? "$"+String(balance/100.0): "$"+String((balance-amount.amount)/100.0))
           }
         </Text>
     );
@@ -185,6 +185,7 @@ function Menu(props){
       })
       .then(response=>response.json())
       .then(data=>{
+        console.log(JSON.stringify(data));
         props.navigation.navigate("Transfer_To_Bank", {
           session_cookie: props.cookie
         });

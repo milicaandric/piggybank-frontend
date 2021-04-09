@@ -93,7 +93,8 @@ export default function updateEmail({route, navigation}) {
                     var data = {
                         email: email
                     };
-                    fetch("http://192.168.99.173:8080/api/v1/account/update?email="+emailVar, {
+                    //check if email exists already
+                    fetch("http://192.168.99.173:8080/api/v1/account/update?email="+email, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json',
@@ -102,18 +103,35 @@ export default function updateEmail({route, navigation}) {
                         body: JSON.stringify(data),
                     })
                     .then(response => {
-                        if(response.ok == true){
-                            //check if email is already in firestore
-                            currentUser.updateEmail(email).then(function(){
-                                alert("Success: Log in with new email");
-                                navigation.navigate("Login");
-                            }).catch(function(error){
-                                alert("Invalid email or email already exists");
-                                console.log(error.toString());
-                            }); 
+                        if(response.status == 400){
+                            var realData = {
+                                email: email
+                            }
+                            fetch("http://192.168.99.173:8080/api/v1/account/update?email="+emailVar, {
+                                method: 'PUT',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    Cookie: session_cookie
+                                },
+                                body: JSON.stringify(realData),
+                            })
+                            .then(res=>{
+                                if(res.ok == true){
+                                    currentUser.updateEmail(email).then(function(){
+                                        alert("Success: Log in with new email");
+                                        navigation.navigate("Login");
+                                    }).catch(function(error){
+                                        alert("Invalid email or email already exists");
+                                        console.log(error.toString());
+                                    }); 
+                                }
+                                else{
+                                    alert("Authorization to update email was unsuccessful");
+                                }
+                            })
                         }
                         else{
-                            alert("Authentication to update email was unsuccessful"); 
+                            alert("Email is already in use"); 
                         }
                     })
                     .catch((error) =>{
