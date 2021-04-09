@@ -133,7 +133,7 @@
            </ScrollView>
            <Button style={{marginBottom: 30}} color ="#23cc8c" 
              onPress={() => update(username.username)}>
-             <Text>Change Password</Text>
+             <Text>Update</Text>
            </Button>
          </KeyboardAvoidingView>
      );

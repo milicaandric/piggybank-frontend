@@ -34,15 +34,9 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
  const styles = require('../styles/global');
  const Drawer = createDrawerNavigator();
 
-// TODO: 
-// 1.) eventually add nav to new screen upon successful addiiton of bank
 export default function removeBank({ route, navigation }) {
   
-  // session cookie constant retrieval
-  // TODO:
-  // 1.) undefined is not an object -> evaluating route.params.session_cookie
   const {session_cookie} = route.params;
-  console.log(session_cookie);
   
   function navToSettings(){
     navigation.navigate("Settings_Customer", {
