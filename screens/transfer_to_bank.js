@@ -116,7 +116,7 @@ export default function transferToBank({ route, navigation }) {
                 <View style={styles.mainCircle}>
                     <Text style={styles.circleText}>
                         {
-                            (balance == undefined)?balance: (balance == 0)?"$0.00":(countDecimals(amount.amount) > 2)?balance: (balance - amount.amount <= 0)?("$0.00"): ((isNaN(balance - amount.amount))? "$"+String((Math.round((balance)*100)/100).toFixed(2)): "$"+String((Math.round((balance-amount.amount)*100)/100).toFixed(2)))
+                            (balance == undefined)?balance: (balance == 0)?"$0.00":(countDecimals(amount.amount) > 2)?"$"+String(balance): (balance - amount.amount <= 0)?("$0.00"): ((isNaN(balance - amount.amount))? "$"+String((Math.round((balance)*100)/100).toFixed(2)): "$"+String((Math.round((balance-amount.amount)*100)/100).toFixed(2)))
                         }
                     </Text>
                 </View>
