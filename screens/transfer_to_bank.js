@@ -46,18 +46,6 @@ export default function transferToBank({ route, navigation }) {
     let user = firebase.auth().currentUser; // retrieves current user 
     let email = user.email; // sets email var to user's email for 'update' api call
 
-    //https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript?page=1&tab=votes#tab-top
-    function makeid(length) {
-        var result           = [];
-        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        var charactersLength = characters.length;
-        for ( var i = 0; i < length; i++ ) {
-            result.push(characters.charAt(Math.floor(Math.random() * 
-            charactersLength)));
-       }
-       return result.join('');
-    }
-
     function navToMenu(){
         navigation.navigate("User_Dash", {
             session_cookie: session_cookie
@@ -118,7 +106,7 @@ export default function transferToBank({ route, navigation }) {
                 <View style={styles.mainCircle}>
                     <Text style={styles.circleText}>
                         {
-                            (balance == undefined)?balance: (balance == 0)?"$0.00":(balance - amount.amount <= 0)?("$0.00"): ((isNaN(balance - amount.amount))? "$"+String(balance): "$"+String(balance-amount.amount))
+                            (balance == undefined)?balance: (balance == 0)?"$0.00":(balance - amount.amount <= 0)?("$0.00"): ((isNaN(balance - amount.amount))? "$"+String((Math.round((balance)*100)/100).toFixed(2)): "$"+String((Math.round((balance-amount.amount)*100)/100).toFixed(2)))
                         }
                     </Text>
                 </View>

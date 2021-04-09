@@ -48,10 +48,6 @@
         });
    }
 
-   function navToAbout(){
-
-   }
-
    function navToAddBank(){
         fetch("http://192.168.99.173:8080/api/v1/bank/get?email="+email,{
             method: 'GET',
@@ -189,16 +185,6 @@
             />
             <TouchableOpacity style={styles.settingsContentButtons} onPress={() => navToRemoveBank()}>
                 <Text style={styles.settingsContentButtonsText}>Remove Bank</Text>
-            </TouchableOpacity>
-            <View style={{
-                marginLeft: -20,
-                borderBottomColor: 'black',
-                borderBottomWidth: 1,
-                alignSelf: 'stretch',
-            }}
-            />
-            <TouchableOpacity style={styles.settingsContentButtons} onPress={() => navToAbout()}>
-                <Text style={styles.settingsContentButtonsText}>About</Text>
             </TouchableOpacity>
             <View style={{
                 marginLeft: -20,

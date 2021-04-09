@@ -7,7 +7,7 @@ module.exports = StyleSheet.create({
     backgroundColor: '#93E9BE',
     height: heightPercentageToDP('75%'),
     position: 'absolute',
-    top: 80,
+    top: 82,
     zIndex: 0
   },
   hold: {

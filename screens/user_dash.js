@@ -126,13 +126,13 @@ function Balance(props){
        })
        .then(response=>response.json())
        .then(data=>{
-           setBalance(data.balance);
+           setBalance(data.balance/100);
        });
     }, []);
     return(
         <Text style={styles.circleText}>
           {
-            (balance == undefined)?balance: (balance == 0)?"$0.00":(balance - amount.amount <= 0)?("$0.00"): ((isNaN(balance - amount.amount))? "$"+String(balance/100.0): "$"+String((balance-amount.amount)/100.0))
+            (balance == undefined)?balance: (balance == 0)?"$0.00":(balance - amount.amount <= 0)?("$0.00"): ((isNaN(balance - amount.amount))? "$"+String((Math.round((balance)*100)/100).toFixed(2)): "$"+String((Math.round((balance-amount.amount)*100)/100).toFixed(2)))
           }
         </Text>
     );
@@ -154,13 +154,13 @@ function Balance2(props){
        })
        .then(response=>response.json())
        .then(data=>{
-           setBalance(data.balance);
+           setBalance(data.balance / 100.00);
        });
     }, []);
     return(
         <Text style={styles.sideMenuText}>
           {
-            (balance == undefined)?balance: (balance == 0)?"$0.00":(balance - amount.amount <= 0)?("$0.00"): ((isNaN(balance - amount.amount))? "$"+String(balance/100.0): "$"+String((balance-amount.amount)/100.0))
+            (balance == undefined)?balance: (balance == 0)?"$0.00":(balance - amount.amount <= 0)?("$0.00"): ((isNaN(balance - amount.amount))? "$"+String((Math.round((balance)*100)/100).toFixed(2)): "$"+String((Math.round((balance-amount.amount)*100)/100).toFixed(2)))
           }
         </Text>
     );

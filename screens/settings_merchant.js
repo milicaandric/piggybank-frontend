@@ -48,10 +48,6 @@
         });
    }
 
-   function navToAbout(){
-
-   }
-
    function navToSwapBank(){
         navigation.navigate("Swap_Bank", {
             session_cookie: session_cookie
@@ -129,16 +125,6 @@
             />
             <TouchableOpacity style={styles.settingsContentButtons} onPress={() => navToSwapBank()}>
                 <Text style={styles.settingsContentButtonsText}>Swap Bank</Text>
-            </TouchableOpacity>
-            <View style={{
-                marginLeft: -20,
-                borderBottomColor: 'black',
-                borderBottomWidth: 1,
-                alignSelf: 'stretch',
-            }}
-            />
-            <TouchableOpacity style={styles.settingsContentButtons} onPress={() => navToAbout()}>
-                <Text style={styles.settingsContentButtonsText}>About</Text>
             </TouchableOpacity>
             <View style={{
                 marginLeft: -20,
