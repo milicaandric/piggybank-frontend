@@ -56,18 +56,6 @@ export default function updatePassword({route, navigation}) {
          navigation.navigate("updateAccount");
      }
 
-
-    useEffect(() => {
-        fetch("http://172.22.30.61:8080/api/v1/account/get?email="+emailVar,{
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Cookie': session_cookie // used to identify user session
-        },
-       })
-       .then(response=>response.json()) 
-   });
-
    function update(email, password, confirm) {
     var dataSent = {
     };

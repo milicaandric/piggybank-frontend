@@ -103,6 +103,11 @@
         session_cookie: session_cookie
     });
    }
+   function navToUpdateUsername(){
+    navigation.navigate("Update_Username", {
+        session_cookie: session_cookie
+    });
+   }
 
    function navToLogout(){
     console.log(session_cookie);
@@ -144,6 +149,16 @@
             />
             <TouchableOpacity style={styles.settingsContentButtons} onPress={() => navToUpdateEmail()}>
                 <Text style={styles.settingsContentButtonsText}>Update Email</Text>
+            </TouchableOpacity>
+            <View style={{
+                marginLeft: -20,
+                borderBottomColor: 'black',
+                borderBottomWidth: 1,
+                alignSelf: 'stretch',
+            }}
+            />
+            <TouchableOpacity style={styles.settingsContentButtons} onPress={() => navToUpdateUsername()}>
+                <Text style={styles.settingsContentButtonsText}>Update Username</Text>
             </TouchableOpacity>
             <View style={{
                 marginLeft: -20,

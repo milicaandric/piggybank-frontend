@@ -71,17 +71,6 @@ export default function updatePassword({route, navigation}) {
         .catch((error) => console.log(error));
     }
 
-    useEffect(() => {
-        fetch("http://192.168.99.173:8080/api/v1/account/get?email="+emailVar,{
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Cookie': session_cookie // used to identify user session
-        },
-       })
-       .then(response=>response.json()) 
-   });
-
    function update(password, confirm) {
     //builds the body for the API call to update
     if(password != undefined && password != "" && confirm != undefined && confirm != ""){

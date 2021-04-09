@@ -64,8 +64,10 @@
         });
    }
 
-   function navToEditAccount(){
-
+   function navToUpdateEmail(){
+        navigation.navigate("Update_Email",{
+            session_cookie: session_cookie
+        });
    }
 
    function navToLogout(){
@@ -105,8 +107,8 @@
                 alignSelf: 'stretch',
             }}
             />
-            <TouchableOpacity style={styles.settingsContentButtons} onPress={() => navToEditAccount()}>
-                <Text style={styles.settingsContentButtonsText}>Edit Account</Text>
+            <TouchableOpacity style={styles.settingsContentButtons} onPress={() => navToUpdateEmail()}>
+                <Text style={styles.settingsContentButtonsText}>Update Email</Text>
             </TouchableOpacity>
             <View style={{
                 marginLeft: -20,

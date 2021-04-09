@@ -80,33 +80,47 @@ export default function updateEmail({route, navigation}) {
             });
     }
 
+    //https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript
+    function validateEmail(email) {
+        const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(email);
+      }
+
     function update(email, confirm) { //NEED TO CONFIRM THAT PASSWORD IS CORRECT BEFORE CHANGING EMAIL
         if (email != undefined && email != "" && confirm != undefined && confirm != "") {
             if(email == confirm){
-                currentUser.updateEmail(email).then(function(){ //need to confirm password is correct
-                    //make sure this fetch is the right way to call it
-                    fetch("http://192.168.99.173:8080/api/v1/account/log-out",{
-                        method: 'POST',
+                if(validateEmail(email)){
+                    var data = {
+                        email: email
+                    };
+                    fetch("http://192.168.99.173:8080/api/v1/account/update?email="+emailVar, {
+                        method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json',
-                            'Cookie': session_cookie // used to identify user session
+                            Cookie: session_cookie
                         },
+                        body: JSON.stringify(data),
                     })
-                    .then(response=>{
+                    .then(response => {
                         if(response.ok == true){
-                            alert("Success: Log in with new email")
-                            navigation.navigate("Login");
+                            //check if email is already in firestore
+                            currentUser.updateEmail(email).then(function(){
+                                alert("Success: Log in with new email");
+                                navigation.navigate("Login");
+                            }).catch(function(error){
+                                alert("Invalid email or email already exists");
+                                console.log(error.toString());
+                            }); 
                         }
                         else{
-                            alert("logout failed")
+                            alert("Authentication to update email was unsuccessful"); 
                         }
                     })
                     .catch((error) =>{
+                        alert("Authentication to update email was unsuccessful");
                         console.log(error.toString());
                     });
-                }).catch(function(error){
-                    alert("Invalid email or email already exists");
-                }); 
+                }
             } 
             else{
                 alert("Emails don't match")

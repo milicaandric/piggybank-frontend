@@ -14,6 +14,7 @@ import Remove_Bank from '../screens/remove_bank';
 import updateAccount from '../screens/updateAccount';
 import Update_Email from '../screens/update_email';
 import Update_Privacy from '../screens/update_privacy';
+import Update_Username from '../screens/update_username';
 import Settings_Customer from '../screens/settings_customer';
 import Settings_Merchant from '../screens/settings_merchant';
 
@@ -41,6 +42,7 @@ export default function Navigator(){
         <AppStack.Screen name="Update_Privacy" component={Update_Privacy}/>
         <AppStack.Screen name="Settings_Customer" component={Settings_Customer}/>
         <AppStack.Screen name="Settings_Merchant" component={Settings_Merchant}/>
+        <AppStack.Screen name="Update_Username" component={Update_Username}/>
       </AppStack.Navigator>
     </NavigationContainer>
     );

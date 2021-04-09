@@ -138,7 +138,7 @@ function Balance(props){
     return(
         <Text style={styles.circleText}>
           {
-            (balance == undefined)?balance:(balance - amount.amount <= 0)?("$0.00"): ((isNaN(balance - amount.amount))? "$"+String(balance/100.0): "$"+String((balance-amount.amount)/100.0))
+            (balance == undefined)?balance: (balance == 0)?"$0.00":(balance - amount.amount <= 0)?("$0.00"): ((isNaN(balance - amount.amount))? "$"+String(balance/100.0): "$"+String((balance-amount.amount)/100.0))
           }
         </Text>
     );
@@ -173,9 +173,25 @@ function Balance2(props){
 }
 
 function Menu(props){
+    let user = firebase.auth().currentUser; // retrieves current user 
+    let email = user.email; // sets email var to user's email for 'update' api call
     function navToTransfer(){
-      props.navigation.navigate("Transfer_To_Bank", {
-        session_cookie: props.cookie
+      fetch("http://192.168.99.173:8080/api/v1/bank/get?email="+email,{
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Cookie': props.cookie // used to identify user session
+      },
+      })
+      .then(response=>response.json())
+      .then(data=>{
+        props.navigation.navigate("Transfer_To_Bank", {
+          session_cookie: props.cookie
+        });
+      })
+      .catch((error) =>{
+          //no bank found. Do not proceed
+          alert("You do not have a bank to transfer to");
       });
     }
     return(
