@@ -2,9 +2,9 @@
  * CS 506
  * PiggyBank team: Callan Patel, Brian O'Loughlin, Calvin Armstrong, Jacob Biewer, Milica Andric, Quentin Ford
  * Lecture 001
- * file: update_privacy.js. This screen is for changing the password for an account. Fields to enter are email,
- * password, verify password. Email is checked to ensure entered email is the current user, and passwords are checked
- * to make sure they match.
+ * file: update_username.js. This screen is for changing the username for an account.
+ * User enters new username into text field
+ * Checks that the username doesn't already exist
  */
  import React, { useState, useEffect, Component } from 'react';
  import 'react-native-gesture-handler';
@@ -37,7 +37,7 @@
  
  const styles = require('../styles/global');
  
- export default function updatePassword({route, navigation}) {
+ export default function updateUsername({route, navigation}) {
      //states here
      const { session_cookie } = route.params;
      var currentUser = firebase.auth().currentUser;
@@ -45,8 +45,9 @@
      const [username, setUsername] = useState("");
  
      /*
-     
-     */
+    function used to navigate back to the settings page
+    using the type of account to determine if customer or merchant settings page
+    */
      function navToMenu() {
          fetch("http://192.168.99.173:8080/api/v1/account/get?email="+emailVar,{
              method: 'GET',
@@ -71,7 +72,6 @@
      }
  
     function update(username) {
-     //builds the body for the API call to update
         if(username != undefined && username != ""){
            fetch("http://192.168.99.173:8080/api/v1/account/usernameExists?username="+username)
            .then((res)=>res.json())
@@ -89,12 +89,11 @@
                     'Content-Type': 'application/json',
                     'Cookie': session_cookie
                 },
-                body: JSON.stringify(data),
+                body: JSON.stringify(data),//updates username in firestore
                 }).then(response=>{
                 if(response.ok == true){
-                    navigation.navigate("Settings_Customer", {
-                    session_cookie: session_cookie
-                    });
+                    alert("Success: Username changed");
+                    navToMenu();
                 }
                 else{
                     throw Error("Authentication for updating username unsuccessful");

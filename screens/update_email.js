@@ -2,9 +2,9 @@
  * CS 506
  * PiggyBank team: Callan Patel, Brian O'Loughlin, Calvin Armstrong, Jacob Biewer, Milica Andric, Quentin Ford
  * Lecture 001
- * file: update_privacy.js. This screen is for changing the password for an account. Fields to enter are email,
- * password, verify password. Email is checked to ensure entered email is the current user, and passwords are checked
- * to make sure they match.
+ * file: update_email.js. This screen is for changing the password for an account. User enters new email twice.
+ * Both entered emails are checked to make sure they match
+ * Email is checked to make sure it is valid and not already in use
  */
  import React, { useState } from 'react';
  import { StatusBar } from "expo-status-bar";
@@ -46,7 +46,8 @@ export default function updateEmail({route, navigation}) {
     const [confirm, setConfirm] = useState("");
 
     /*
-    Working on how to fix this
+    Function used to navigate back to settings page
+    depending if account type is customer or merchant
     */
     function navToSettings() {
         fetch("http://192.168.99.173:8080/api/v1/account/get?email="+emailVar,{
@@ -72,11 +73,9 @@ export default function updateEmail({route, navigation}) {
             }
             })
             .catch((error)=>{
-            // authentication failed to get data type user
-            alert("Error: Account type not found. Customer default");
-            navigation.navigate("Settings_Customer", {
-                session_cookie: session_cookie
-                });
+            // authentication failed to get type of user
+            alert("Error: Account type not found.");
+            console.log("Error: ", error);
             });
     }
 
@@ -86,14 +85,14 @@ export default function updateEmail({route, navigation}) {
         return re.test(email);
       }
 
-    function update(email, confirm) { //NEED TO CONFIRM THAT PASSWORD IS CORRECT BEFORE CHANGING EMAIL
+    function update(email, confirm) { 
         if (email != undefined && email != "" && confirm != undefined && confirm != "") {
             if(email == confirm){
                 if(validateEmail(email)){
                     var data = {
                         email: email
                     };
-                    //check if email exists already
+                    //check if email is already in use
                     fetch("http://192.168.99.173:8080/api/v1/account/update?email="+email, {
                         method: 'PUT',
                         headers: {
@@ -103,7 +102,7 @@ export default function updateEmail({route, navigation}) {
                         body: JSON.stringify(data),
                     })
                     .then(response => {
-                        if(response.status == 400){
+                        if(response.status == 400){//email was not already in use
                             var realData = {
                                 email: email
                             }
@@ -119,7 +118,7 @@ export default function updateEmail({route, navigation}) {
                                 if(res.ok == true){
                                     currentUser.updateEmail(email).then(function(){
                                         alert("Success: Log in with new email");
-                                        navigation.navigate("Login");
+                                        navigation.navigate("Login"); //make user log in with new email
                                     }).catch(function(error){
                                         alert("Invalid email or email already exists");
                                         console.log(error.toString());
@@ -182,74 +181,5 @@ export default function updateEmail({route, navigation}) {
         <Text>Update</Text>
         </Button>
         </KeyboardAvoidingView>
-    // <View style={styles.settings}>
-    //     <TouchableOpacity onPress={() => navToMenu()}>
-    //         <Image style={styles.backButtonSettings} source={require("../assets/backArrow.png")} />
-    //     </TouchableOpacity>
-    //     <Text style={styles.settingsHeader}>Update Email</Text>
-    //     <View style={styles.allSettingsContentButtons}>
-    //         <View style={{
-    //             marginLeft: -20,
-    //             borderBottomColor: 'black',
-    //             borderBottomWidth: 1,
-    //             alignSelf: 'stretch',
-    //         }}
-    //         />
-    //         <Text style={styles.circleText}>Enter new email</Text>
-    //         <View style={styles.greyFields}>
-    //             <TextInput
-    //                 style={styles.baseText}
-    //                 placeholder= "Enter email"
-    //                 placeholderTextColor="#003f5c"
-    //                 onChangeText={(email) => setEmail({email})}
-    //             />
-    //         </View>
-    //         <View style={{
-    //             marginLeft: -20,
-    //             borderBottomColor: 'black',
-    //             borderBottomWidth: 1,
-    //             alignSelf: 'stretch',
-    //         }}
-    //         />
-    //         <Text style={styles.circleText}>Confirm new email</Text>
-    //         <View style={styles.greyFields}>
-    //             <TextInput
-    //                 style={styles.baseText}
-    //                 placeholder= "Confirm email"
-    //                 placeholderTextColor="#003f5c"
-    //                 onChangeText={(confirm) => setConfirm({confirm})}
-    //             />
-    //         </View>
-    //         <View style={{
-    //             marginLeft: -20,
-    //             borderBottomColor: 'black',
-    //             borderBottomWidth: 1,
-    //             alignSelf: 'stretch',
-    //         }}
-    //         />
-    //         <Text style={styles.circleText}>Password</Text>
-    //         <View style={styles.greyFields}>
-    //             <TextInput
-    //                 style={styles.baseText}
-    //                 placeholder= "Password"
-    //                 placeholderTextColor="#003f5c"
-    //                 secureTextEntry={true}
-    //                 onChangeText={(password) => setPassword({password})}
-    //             />
-    //         </View>
-    //         <View style={{
-    //             marginLeft: -20,
-    //             borderBottomColor: 'black',
-    //             borderBottomWidth: 1,
-    //             alignSelf: 'stretch',
-    //         }}
-    //         />
-    //         <Button color="#23cc8c" onPress={() => update(email.email, password.password, confirm.confirm)}>
-    //             <Text>
-    //                 Update Email
-    //             </Text>
-    //         </Button>
-    //     </View>
-    //     </View>
     );
 }

@@ -2,9 +2,9 @@
  * CS 506
  * PiggyBank team: Callan Patel, Brian O'Loughlin, Calvin Armstrong, Jacob Biewer, Milica Andric, Quentin Ford
  * Lecture 001
- * file: update_privacy.js. This screen is for changing the password for an account. Fields to enter are email,
- * password, verify password. Email is checked to ensure entered email is the current user, and passwords are checked
- * to make sure they match.
+ * file: update_privacy.js. This screen is for changing the password for an account. User inputs password & verify password. 
+ * both passwords are checked to make sure that they match before updating the account's password
+ * upon successfull change, the user is logged out and prompted to log in with their new password
  */
 import React, { useState, useEffect, Component } from 'react';
 import 'react-native-gesture-handler';
@@ -46,7 +46,8 @@ export default function updatePassword({route, navigation}) {
     const [confirm, setConfirm] = useState("");
 
     /*
-    
+    function used to navigate back to the settings page
+    using the type of account to determine if customer or merchant settings page
     */
     function navToMenu() {
         fetch("http://192.168.99.173:8080/api/v1/account/get?email="+emailVar,{
@@ -72,12 +73,11 @@ export default function updatePassword({route, navigation}) {
     }
 
    function update(password, confirm) {
-    //builds the body for the API call to update
     if(password != undefined && password != "" && confirm != undefined && confirm != ""){
       if(password == confirm){
         if(password.length >= 6){
-          currentUser.updatePassword(password); //might want to add the PUT to the firestore before we log out
-          fetch("http://192.168.99.173:8080/api/v1/account/log-out",{
+          currentUser.updatePassword(password); //changes user password in firebase auth
+          fetch("http://192.168.99.173:8080/api/v1/account/log-out",{ //logout user after changing password
               method: 'POST',
               headers: {
                   'Content-Type': 'application/json',
