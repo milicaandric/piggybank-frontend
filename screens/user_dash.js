@@ -98,12 +98,6 @@ export class Outer extends Component{
                                     Send
                                 </Text>
                             </TouchableOpacity>
-                            <View style={styles.lineBreak}/>
-                            <TouchableOpacity style={styles.sendButton} onPress={() => {this.toggle()}}>
-                                <Text style={styles.sendText}>
-                                    Transactions
-                                </Text>
-                            </TouchableOpacity>
                             <TouchableOpacity onPress={() => {this.navToSettings(this.props)}}>
                                 <View style={styles.bottomRight}>
                                     <FontAwesomeIcon icon="cog" size={32}/>
@@ -175,6 +169,7 @@ function Balance2(props){
 function Menu(props){
     let user = firebase.auth().currentUser; // retrieves current user 
     let email = user.email; // sets email var to user's email for 'update' api call
+    const [username, setUsername] = useState("");
     function navToTransfer(){
       fetch("http://192.168.99.173:8080/api/v1/bank/get?email="+email,{
         method: 'GET',
@@ -195,9 +190,23 @@ function Menu(props){
           alert("You do not have a bank to transfer to");
       });
     }
+    useEffect(() => {
+      fetch("http://192.168.99.173:8080/api/v1/account/get?email="+email,{
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Cookie': props.cookie // used to identify user session
+      },
+     })
+     .then(response=>response.json())
+     .then(data=>{
+         setUsername(data.username);
+         console.log(data.username);
+     });
+    }, []);
     return(
         <View style={styles.sideBack}>
-            <View style={{marginTop: 25}}/>
+            <View style={{marginTop: 40}}/>
             <View style={styles.mainCircle}>
                 <Text style={styles.circleText}>
                     Profile Pic
@@ -205,7 +214,7 @@ function Menu(props){
             </View>
             <View style={styles.sideMenuFields}>
                 <Text style={styles.sideMenuText}>
-                    Username
+                    {username}
                 </Text>
             </View>
             <View style={styles.sideMenuFields}>
