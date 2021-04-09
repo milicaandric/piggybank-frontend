@@ -126,7 +126,6 @@
              <View style={{ paddingBottom: 25 }}>
                <Input style={{ borderRadius: 30, height: 50, padding: 10 }}
                  placeholder="New Username"
-                 secureTextEntry={true}
                  onChangeText={(username) => setUsername({ username })}
                />
              </View>

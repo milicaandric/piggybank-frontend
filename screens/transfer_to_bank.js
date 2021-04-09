@@ -52,35 +52,45 @@ export default function transferToBank({ route, navigation }) {
         });
     }
 
+    //https://stackoverflow.com/questions/17369098/simplest-way-of-getting-the-number-of-decimals-in-a-number-in-javascript
+    function countDecimals(number) {
+        if(number == undefined) return 0;
+        if(Math.floor(Number(number)) === Number(number)) return 0;
+        return String(number).split(".")[1].length || 0; 
+    }
+
     function transfer(amount, balance){
         if(amount == '' || amount == undefined){
             amount = 0;
         }
         if(Number(amount) > 0 && (balance - Number(amount)) >= 0){
-            let data = {
+            if(countDecimals(amount) <= 2){
+                let data = {
                     transactorEmail: email,
                     recipientEmail: null,
                     amount: Number(amount) * 100.00,
                     type: 'BANK'
-            };
-            fetch("http:/192.168.99.173:8080/api/v1/transaction/bank",{
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Cookie': session_cookie // used to identify user session
-            },
-            body: JSON.stringify(data)
-            })
-            .then(response=>{
-                if(response.ok == true){
-                    navigation.navigate("User_Dash", {
-                        session_cookie: session_cookie
-                    });
-                }
-            })
-            .catch((error) =>{
-                console.log(error.toString());
-            });
+                };
+                fetch("http:/192.168.99.173:8080/api/v1/transaction/bank",{
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Cookie': session_cookie // used to identify user session
+                },
+                body: JSON.stringify(data)
+                })
+                .then(response=>{
+                    if(response.ok == true){
+                        navigation.navigate("User_Dash", {
+                            session_cookie: session_cookie,
+                            new_balance: (Number(balance)-Number(amount))*100
+                        });
+                    }
+                })
+                .catch((error) =>{
+                    console.log(error.toString());
+                });
+            }
         }
     }
 
@@ -106,7 +116,7 @@ export default function transferToBank({ route, navigation }) {
                 <View style={styles.mainCircle}>
                     <Text style={styles.circleText}>
                         {
-                            (balance == undefined)?balance: (balance == 0)?"$0.00":(balance - amount.amount <= 0)?("$0.00"): ((isNaN(balance - amount.amount))? "$"+String((Math.round((balance)*100)/100).toFixed(2)): "$"+String((Math.round((balance-amount.amount)*100)/100).toFixed(2)))
+                            (balance == undefined)?balance: (balance == 0)?"$0.00":(countDecimals(amount.amount) > 2)?balance: (balance - amount.amount <= 0)?("$0.00"): ((isNaN(balance - amount.amount))? "$"+String((Math.round((balance)*100)/100).toFixed(2)): "$"+String((Math.round((balance-amount.amount)*100)/100).toFixed(2)))
                         }
                     </Text>
                 </View>
@@ -122,7 +132,7 @@ export default function transferToBank({ route, navigation }) {
                             onChangeText={(amount) => setAmount({ amount })}
                         />
                         {
-                        (amount.amount > balance)?<Text style={{color: 'red'}}>You have exceeded your balance</Text>: ((isNaN(amount.amount) && amount != 0)?<Text style={{color: 'red'}}>Invalid Amount</Text>:null)
+                            (amount.amount > balance)?<Text style={{color: 'red'}}>You have exceeded your balance</Text>: ((isNaN(amount.amount) && amount != 0) || ( countDecimals(amount.amount) > 2))?<Text style={{color: 'red'}}>Invalid Amount</Text>:null
                         }
                     </View>
                     <Button color="#23cc8c" onPress={() => transfer(amount.amount, balance)}>
