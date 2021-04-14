@@ -66,6 +66,12 @@
         });
    }
 
+   function navToUpdateUsername(){
+        navigation.navigate("Update_Username",{
+            session_cookie: session_cookie
+        });
+   }
+
    function navToLogout(){
     fetch("http://192.168.99.173:8080/api/v1/account/log-out",{
         method: 'POST',
@@ -105,6 +111,16 @@
             />
             <TouchableOpacity style={styles.settingsContentButtons} onPress={() => navToUpdateEmail()}>
                 <Text style={styles.settingsContentButtonsText}>Update Email</Text>
+            </TouchableOpacity>
+            <View style={{
+                marginLeft: -20,
+                borderBottomColor: 'black',
+                borderBottomWidth: 1,
+                alignSelf: 'stretch',
+            }}
+            />
+            <TouchableOpacity style={styles.settingsContentButtons} onPress={() => navToUpdateUsername()}>
+                <Text style={styles.settingsContentButtonsText}>Update Username</Text>
             </TouchableOpacity>
             <View style={{
                 marginLeft: -20,
