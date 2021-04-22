@@ -25,7 +25,9 @@ import {
   View,
   Image,
   TouchableOpacity,
-  TextInput
+  TextInput,
+  Keyboard,
+  TouchableWithoutFeedback
 } from "react-native";
 
 const styles = require('../styles/global');
@@ -65,7 +67,7 @@ export default function transferToBank({ route, navigation }) {
                     amount: Number(amount) * 100.00,
                     type: 'BANK'
                 };
-                fetch("http:/192.168.99.173:8080/api/v1/transaction/bank",{
+                fetch("http://192.168.99.181:8080/api/v1/transaction/bank",{
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -89,7 +91,7 @@ export default function transferToBank({ route, navigation }) {
     }
 
      useEffect(() => {
-         fetch("http://192.168.99.173:8080/api/v1/account/get?email="+email,{
+         fetch("http://192.168.99.181:8080/api/v1/account/get?email="+email,{
          method: 'GET',
          headers: {
            'Content-Type': 'application/json',
@@ -106,11 +108,12 @@ export default function transferToBank({ route, navigation }) {
             <TouchableOpacity onPress={() => navToMenu()}>
                 <Image style={styles.backButtonTransferToBank} source={require("../assets/backArrow.png")} />
             </TouchableOpacity>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
             <View style={styles.pageBack}>
                 <View style={styles.mainCircle}>
                     <Text style={styles.circleText}>
                         {
-                            (balance == undefined)?balance: (balance == 0)?"$0.00":(countDecimals(amount.amount) > 2)?"$"+String(balance): (balance - amount.amount <= 0)?("$0.00"): ((isNaN(balance - amount.amount))? "$"+String((Math.round((balance)*100)/100).toFixed(2)): "$"+String((Math.round((balance-amount.amount)*100)/100).toFixed(2)))
+                            (balance == undefined)?balance: (balance == 0)?"$0.00":(countDecimals(amount.amount) > 2)?"$"+(Math.round((balance)*100)/100).toFixed(2): (balance - amount.amount <= 0)?("$0.00"): ((isNaN(balance - amount.amount))? "$"+String((Math.round((balance)*100)/100).toFixed(2)): "$"+String((Math.round((balance-amount.amount)*100)/100).toFixed(2)))
                         }
                     </Text>
                 </View>
@@ -136,6 +139,7 @@ export default function transferToBank({ route, navigation }) {
                     </Button>
                 </View>
             </View>
+            </TouchableWithoutFeedback>
         </View>
     );
 }

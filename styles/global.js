@@ -232,5 +232,14 @@ module.exports = StyleSheet.create({
     width:"100%",
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
-  }
+  },
+  merchantDashTransfer:{
+    paddingBottom: 10,
+    backgroundColor: "#FFF",
+    padding: 10,
+    borderRadius: 50, 
+    marginBottom: 10,
+    height:50, 
+    width: widthPercentageToDP('70%'),
+  },
 });

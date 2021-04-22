@@ -49,7 +49,7 @@
     using the type of account to determine if customer or merchant settings page
     */
      function navToMenu() {
-         fetch("http://192.168.99.173:8080/api/v1/account/get?email="+emailVar,{
+         fetch("http://192.168.99.181:8080/api/v1/account/get?email="+emailVar,{
              method: 'GET',
              headers: {
                'Content-Type': 'application/json',
@@ -73,7 +73,13 @@
  
     function update(username) {
         if(username != undefined && username != ""){
-           fetch("http://192.168.99.173:8080/api/v1/account/usernameExists?username="+username)
+           fetch("http://192.168.99.181:8080/api/v1/account/usernameExists?username="+username,{
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                'Cookie': session_cookie // used to identify user session
+              },
+           })
            .then((res)=>res.json())
            .then((dataUsernameExists)=>{
                if(dataUsernameExists == true){
@@ -83,7 +89,7 @@
                 var data = {
                     username: username
                 };
-                fetch("http://192.168.99.173:8080/api/v1/bank/update?email="+emailVar, {
+                fetch("http://192.168.99.181:8080/api/v1/bank/update?email="+emailVar, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -91,6 +97,7 @@
                 },
                 body: JSON.stringify(data),//updates username in firestore
                 }).then(response=>{
+                  console.log(JSON.stringify(response));
                 if(response.ok == true){
                     alert("Success: Username changed");
                     navToMenu();

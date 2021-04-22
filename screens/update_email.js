@@ -50,7 +50,7 @@ export default function updateEmail({route, navigation}) {
     depending if account type is customer or merchant
     */
     function navToSettings() {
-        fetch("http://192.168.99.173:8080/api/v1/account/get?email="+emailVar,{
+        fetch("http://localhost:8080/api/v1/account/get?email="+emailVar,{
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -93,7 +93,7 @@ export default function updateEmail({route, navigation}) {
                         email: email
                     };
                     //check if email is already in use
-                    fetch("http://192.168.99.173:8080/api/v1/account/update?email="+email, {
+                    fetch("http://localhost:8080/api/v1/account/update?email="+email, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json',
@@ -106,7 +106,7 @@ export default function updateEmail({route, navigation}) {
                             var realData = {
                                 email: email
                             }
-                            fetch("http://192.168.99.173:8080/api/v1/account/update?email="+emailVar, {
+                            fetch("http://localhost:8080/api/v1/account/update?email="+emailVar, {
                                 method: 'PUT',
                                 headers: {
                                     'Content-Type': 'application/json',

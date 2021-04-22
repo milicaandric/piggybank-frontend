@@ -30,6 +30,9 @@ import {
   View,
   TouchableOpacity,
   KeyboardAvoidingView,
+  TextInput,
+  Keyboard,
+  TouchableWithoutFeedback
 } from "react-native";
 
 const styles = require('../styles/global');
@@ -62,11 +65,6 @@ export class Outer extends Component{
       selectedItem: item,
     });
     
-    navToSettings(props){
-      props.navigation.navigate("Settings_Customer", {
-          session_cookie: this.props.cookie
-      });
-    }
 
     render(){
         const menu = <Menu onItemSelected={this.onMenuItemSelected} balance={this.props.balance} cookie={this.props.cookie} navigation={this.props.navigation}/>
@@ -79,20 +77,25 @@ export class Outer extends Component{
                         <TouchableOpacity style={styles.topLeft} onPress={() => {this.toggle()}}>
                                 <FontAwesomeIcon icon="bars" size={32}/>
                         </TouchableOpacity>
-                        <View style={styles.mainCircle}>
-                            <Balance balance= {this.props.balance} cookie={this.props.cookie}/>
-                        </View>
-                        <Text style={styles.dashText}>
+                        <Balance balance= {this.props.balance} cookie={this.props.cookie} navigation={this.props.navigation}/>
+                        {/* <Text style={styles.dashText}>
                             Current Balance
                         </Text>
                         <View style={styles.lowerHold}>
                             <View>
-                                <Input style={styles.genInput}
-                                    placeholder="Recipient"
-                                />
-                                <Input style={styles.genInput}
-                                    placeholder="Amount"
-                                />
+                            <TextInput style={styles.merchantDashTransfer}
+                              placeholder="Recipient Email"
+                              // onChangeText={(recip) => setRecip({recip})}
+                            />
+                            <TextInput style={styles.merchantDashTransfer}
+                                numeric
+                                keyboardType={'numeric'}
+                                placeholder="Amount"
+                                onChangeText={(amount) => setAmount({ amount })}
+                            />
+                            {
+                                (amount.amount * 100 >= 100)?<Text style={{color: 'red'}}>You can only trasfer less than a dollar</Text>: ((isNaN(amount.amount) && amount != 0) || ( countDecimals(amount.amount) > 2))?<Text style={{color: 'red'}}>Invalid Amount</Text>:null
+                            }
                             </View>
                             <TouchableOpacity style={styles.sendButton}>
                                 <Text style={styles.sendText}>
@@ -104,7 +107,7 @@ export class Outer extends Component{
                                     <FontAwesomeIcon icon="cog" size={32}/>
                                 </View>
                             </TouchableOpacity>
-                        </View>
+                        </View> */}
                     </View>
                 </KeyboardAvoidingView>
             </SideMenu>
@@ -112,14 +115,109 @@ export class Outer extends Component{
     }
 }
 
+function navToSettings(props){
+  props.navigation.navigate("Settings_Customer", {
+      session_cookie: props.cookie
+  });
+}
+
+function sendToCustomer(recip, amount, session_cookie, balance, navigation){
+  let user = firebase.auth().currentUser; // retrieves current user 
+  let email = user.email; // sets email var to user's email for 'update' api call
+  if(amount == 0 || recip == '' || amount == undefined){
+    alert("please fill out recipient and amount");
+  }
+  else{
+    if(Number(amount) > 0 && amount <= balance){
+      if(countDecimals(amount) <= 2){
+          let data = {
+              transactorEmail: email,
+              recipientEmail: recip,
+              amount: Number(amount) * 100.00,
+              type: 'PEER_TO_PEER'
+          };
+          console.log(JSON.stringify(data));
+          fetch("http://192.168.99.181:8080/api/v1/transaction/peer",{
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+                  'Cookie': session_cookie // used to identify user session
+          },
+          body: JSON.stringify(data)
+          })
+          .then(response=>{
+              if(response.ok == true){
+                alert("Transaction Successful");
+                navigation.navigate("User_Dash", {
+                  session_cookie: session_cookie,
+                  new_balance: (Number(balance)-Number(amount))*100
+              });
+              }
+              else if(response.status == 400){
+                alert("No email was found for the recipient");
+              }
+          })
+          .catch((error) =>{
+              console.log(error.toString());
+          });
+      }
+  }
+  }
+}
+
+//https://stackoverflow.com/questions/17369098/simplest-way-of-getting-the-number-of-decimals-in-a-number-in-javascript
+function countDecimals(number) {
+    if(number == undefined) return 0;
+    if(Math.floor(Number(number)) === Number(number)) return 0;
+    return String(number).split(".")[1].length || 0; 
+}
 function Balance(props){
     const [amount, setAmount] = useState(0);
+    const [recip, setRecip] = useState("");
     return(
-        <Text style={styles.circleText}>
+      <View>
+        <View style={styles.mainCircle}>
+          <Text style={styles.circleText}>
           {
-            (props.balance == undefined)?props.balance: (props.balance == 0)?"$0.00":(props.balance - amount.amount <= 0)?("$0.00"): ((isNaN(props.balance - amount.amount))? "$"+String((Math.round((props.balance)*100)/100).toFixed(2)): "$"+String((Math.round((props.balance-amount.amount)*100)/100).toFixed(2)))
+            (props.balance == undefined)?props.balance: (props.balance == 0)?"$0.00":(countDecimals(amount.amount) > 2)?"$"+(Math.round((props.balance)*100)/100).toFixed(2): (props.balance - amount.amount <= 0)?("$0.00"): ((isNaN(props.balance - amount.amount))? "$"+String((Math.round((props.balance)*100)/100).toFixed(2)): "$"+String((Math.round((props.balance-amount.amount)*100)/100).toFixed(2)))
           }
-        </Text>
+          </Text>
+        </View>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <View>
+          <Text style={styles.dashText}>
+              Current Balance
+          </Text>
+          <View style={styles.lowerHold}>
+              <View>
+              <TextInput style={styles.merchantDashTransfer}
+                placeholder="Recipient Email"
+                onChangeText={(recip) => setRecip({recip})}
+              />
+              <TextInput style={styles.merchantDashTransfer}
+                  numeric
+                  keyboardType={'numeric'}
+                  placeholder="Amount"
+                  onChangeText={(amount) => setAmount({ amount })}
+              />
+              {
+                  (amount.amount > props.balance)?<Text style={{color: 'red'}}>You have exceeded your balance</Text>: ((isNaN(amount.amount) && amount != 0) || ( countDecimals(amount.amount) > 2))?<Text style={{color: 'red'}}>Invalid Amount</Text>:null
+              }
+              </View>
+              <TouchableOpacity style={styles.sendButton} onPress={() => sendToCustomer(recip.recip, amount.amount, props.cookie, props.balance, props.navigation)}>
+                  <Text style={styles.sendText}>
+                      Send
+                  </Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => navToSettings(props)}>
+                  <View style={styles.bottomRight}>
+                      <FontAwesomeIcon icon="cog" size={32}/>
+                  </View>
+              </TouchableOpacity>
+          </View>
+        </View>
+        </TouchableWithoutFeedback>
+      </View>
     );
 }
 
@@ -139,7 +237,7 @@ function Menu(props){
     let email = user.email; // sets email var to user's email for 'update' api call
     const [username, setUsername] = useState("");
     function navToTransfer(){
-      fetch("http://192.168.99.173:8080/api/v1/bank/get?email="+email,{
+      fetch("http://192.168.99.181:8080/api/v1/bank/get?email="+email,{
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -158,7 +256,7 @@ function Menu(props){
       });
     }
     useEffect(() => {
-      fetch("http://192.168.99.173:8080/api/v1/account/get?email="+email,{
+      fetch("http://192.168.99.181:8080/api/v1/account/get?email="+email,{
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -173,11 +271,6 @@ function Menu(props){
     return(
         <View style={styles.sideBack}>
             <View style={{marginTop: 40}}/>
-            <View style={styles.mainCircle}>
-                <Text style={styles.circleText}>
-                    Profile Pic
-                </Text>
-            </View>
             <View style={styles.sideMenuFields}>
                 <Text style={styles.sideMenuText}>
                     {username}
@@ -207,7 +300,7 @@ export default function User_Dash({route, navigation}) {
   let user = firebase.auth().currentUser;
   let email = user.email;
   useEffect(() => {
-      fetch("http://192.168.99.173:8080/api/v1/account/get?email="+email,{
+      fetch("http://192.168.99.181:8080/api/v1/account/get?email="+email,{
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

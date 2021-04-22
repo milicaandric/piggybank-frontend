@@ -27,20 +27,20 @@ export default function Navigator(){
     <NavigationContainer>
       <AppStack.Navigator screenOptions={{ headerShown: false}} >
         <AppStack.Screen name="Login" component={Login}/>
-        <AppStack.Screen name="User_Dash" component={User_Dash}/>
-        <AppStack.Screen name="Merchant_Dash" component={Merchant_Dash}/>
-        <AppStack.Screen name='Signup_Merchant' component={Signup_Merchant}/>
-        <AppStack.Screen name='Signup_Customer' component={Signup_Customer}/>
-        <AppStack.Screen name="Password" component={Password}/>
-        <AppStack.Screen name="Remove_Bank" component={Remove_Bank}/>
-        <AppStack.Screen name="Swap_Bank" component={Swap_Bank}/>
-        <AppStack.Screen name="Add_Bank" component={Add_Bank}/>
-        <AppStack.Screen name="Transfer_To_Bank" component={Transfer_To_Bank}/>
-        <AppStack.Screen name="Update_Email" component={Update_Email}/>
-        <AppStack.Screen name="Update_Privacy" component={Update_Privacy}/>
-        <AppStack.Screen name="Settings_Customer" component={Settings_Customer}/>
-        <AppStack.Screen name="Settings_Merchant" component={Settings_Merchant}/>
-        <AppStack.Screen name="Update_Username" component={Update_Username}/>
+        <AppStack.Screen name="User_Dash" component={User_Dash} options={{gestureEnabled: false}}/>
+        <AppStack.Screen name="Merchant_Dash" component={Merchant_Dash} options={{gestureEnabled: false}}/>
+        <AppStack.Screen name='Signup_Merchant' component={Signup_Merchant} options={{gestureEnabled: false}}/>
+        <AppStack.Screen name='Signup_Customer' component={Signup_Customer} options={{gestureEnabled: false}}/>
+        <AppStack.Screen name="Password" component={Password} options={{gestureEnabled: false}}/>
+        <AppStack.Screen name="Remove_Bank" component={Remove_Bank} options={{gestureEnabled: false}}/>
+        <AppStack.Screen name="Swap_Bank" component={Swap_Bank} options={{gestureEnabled: false}}/>
+        <AppStack.Screen name="Add_Bank" component={Add_Bank} options={{gestureEnabled: false}}/>
+        <AppStack.Screen name="Transfer_To_Bank" component={Transfer_To_Bank} options={{gestureEnabled: false}}/>
+        <AppStack.Screen name="Update_Email" component={Update_Email} options={{gestureEnabled: false}}/>
+        <AppStack.Screen name="Update_Privacy" component={Update_Privacy} options={{gestureEnabled: false}}/>
+        <AppStack.Screen name="Settings_Customer" component={Settings_Customer} options={{gestureEnabled: false}}/>
+        <AppStack.Screen name="Settings_Merchant" component={Settings_Merchant} options={{gestureEnabled: false}}/>
+        <AppStack.Screen name="Update_Username" component={Update_Username} options={{gestureEnabled: false}}/>
       </AppStack.Navigator>
     </NavigationContainer>
     );

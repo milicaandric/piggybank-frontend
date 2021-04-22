@@ -49,7 +49,7 @@
    }
 
    function navToAddBank(){
-        fetch("http://192.168.99.173:8080/api/v1/bank/get?email="+email,{
+        fetch("http://localhost:8080/api/v1/bank/get?email="+email,{
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -69,7 +69,7 @@
     }
 
    function navToRemoveBank(){
-        fetch("http://192.168.99.173:8080/api/v1/bank/get?email="+email,{
+        fetch("http://localhost:8080/api/v1/bank/get?email="+email,{
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -106,7 +106,7 @@
    }
 
    function navToLogout(){
-    fetch("http://192.168.99.173:8080/api/v1/account/log-out",{
+    fetch("http://localhost:8080/api/v1/account/log-out",{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

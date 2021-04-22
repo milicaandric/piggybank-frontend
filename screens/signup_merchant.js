@@ -62,9 +62,10 @@ export default function signUpMerchant({navigation}) {
             if(password.length >= 6){
                 //checks if the password is verified
                 if(verifyPassword == password){
-                    fetch("http://192.168.99.173:8080/api/v1/account/usernameExists?username="+username)
+                    fetch("http://192.168.99.181:8080/api/v1/account/usernameExists?username="+username)
                     .then((res)=>res.json())
                     .then((dataUsernameExists)=>{
+                        console.log("exists: "+dataUsernameExists);
                         if(dataUsernameExists == true){
                             //throws error. username is already taken
                             throw Error("Username already exists");
@@ -85,7 +86,7 @@ export default function signUpMerchant({navigation}) {
                                     type: "MERCHANT"
                                 };
                                 //creates user in firestore with backend request with token
-                                fetch("http://192.168.99.173:8080/api/v1/account/create?token="+token, {
+                                fetch("http://192.168.99.181:8080/api/v1/account/create?token="+token, {
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': 'application/json'
