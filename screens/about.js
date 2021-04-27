@@ -104,7 +104,7 @@
        </View>
        <ScrollView>
          <View style={{ paddingBottom: 25 }}>
-             <Text style={styles.aboutText}>PiggyBank is an application that transforms the use of physical coins in retail transactions from merchant to customer. Customers will have the choice after a cash payment to either take the physical coins in change (if any), or get this balance added to their PiggyBank. There, the user may take action in peer-to-peer transactions, or transfer their balance to their optional linked bank account. The merchant will have the role of strictly making change transactions to the customer from their required linked bank account.</Text>
+             <Text style={styles.aboutText}>PiggyBank is an application that transforms the use of physical coins in retail transactions from merchant to customer. Customers will have the choice after a cash payment to either take the physical coins in change (if any), or get this balance added to their PiggyBank. There, the user may take action in peer-to-peer transactions, or transfer their balance to their optional linked bank account. The merchant will have the role of strictly making change transactions to the customer from their required linked bank account</Text>
          </View>
          <View style={{ paddingBottom: 25 }}>
          </View>
