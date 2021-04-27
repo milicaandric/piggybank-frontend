@@ -47,37 +47,31 @@
             session_cookie: session_cookie
         });
    }
-
+   function navToAbout(){
+    navigation.navigate("About", {
+        session_cookie: session_cookie
+    });
+}
    function navToSwapBank(){
         navigation.navigate("Swap_Bank", {
             session_cookie: session_cookie
         });
     }
-
-    function navToAbout(){
-        navigation.navigate("About", {
-            session_cookie: session_cookie
-        });
-    }
-
    function navToPrivacy(){
         navigation.navigate("Update_Privacy", {
             session_cookie: session_cookie
         });
    }
-
    function navToUpdateEmail(){
         navigation.navigate("Update_Email",{
             session_cookie: session_cookie
         });
    }
-
    function navToUpdateUsername(){
         navigation.navigate("Update_Username",{
             session_cookie: session_cookie
         });
    }
-
    function navToLogout(){
     fetch("http://192.168.1.95:8080/api/v1/account/log-out",{
         method: 'POST',
@@ -99,7 +93,6 @@
     });
    }
  
-   
    // user interface
    return (
      <View style={styles.settings}>

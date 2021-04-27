@@ -93,7 +93,11 @@
         session_cookie: session_cookie
     });
    }
-
+   function navToAbout(){
+    navigation.navigate("About", {
+        session_cookie: session_cookie
+    });
+}
    function navToUpdateEmail(){
     navigation.navigate("Update_Email", {
         session_cookie: session_cookie
@@ -143,6 +147,16 @@
                     alignSelf: 'stretch',
                 }}
                 />
+                <TouchableOpacity style={styles.settingsContentButtons} onPress={() => navToAbout()}>
+                    <Text style={styles.settingsContentButtonsText}>About</Text>
+                </TouchableOpacity>
+                <View style={{
+                    marginLeft: -20,
+                    borderBottomColor: 'black',
+                    borderBottomWidth: 1,
+                    alignSelf: 'stretch',
+                }}
+                />
                 <TouchableOpacity style={styles.settingsContentButtons} onPress={() => navToUpdateEmail()}>
                     <Text style={styles.settingsContentButtonsText}>Update Email</Text>
                 </TouchableOpacity>
@@ -185,16 +199,6 @@
                 />
                 <TouchableOpacity style={styles.settingsContentButtons} onPress={() => navToRemoveBank()}>
                     <Text style={styles.settingsContentButtonsText}>Remove Bank</Text>
-                </TouchableOpacity>
-                <View style={{
-                    marginLeft: -20,
-                    borderBottomColor: 'black',
-                    borderBottomWidth: 1,
-                    alignSelf: 'stretch',
-                }}
-                />
-                <TouchableOpacity style={styles.settingsContentButtons} onPress={() => navToAbout()}>
-                    <Text style={styles.settingsContentButtonsText}>About</Text>
                 </TouchableOpacity>
                 <View style={{
                     marginLeft: -20,
