@@ -142,6 +142,12 @@ module.exports = StyleSheet.create({
     fontSize: 20,
     marginTop: 8,
   },
+  aboutText:{
+    fontSize: 20,
+    marginTop: 8,
+    marginLeft: widthPercentageToDP('10%'),
+    marginRight: widthPercentageToDP('10%'),
+  },
   lineBreak: {
     marginTop: 10,
     borderTopWidth: 1, 
