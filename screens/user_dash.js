@@ -97,6 +97,9 @@
    if(amount == 0 || recip == '' || amount == undefined){
      alert("please fill out recipient and amount");
    }
+   else if(recip == email){
+     alert("You cannot send money to yourself");
+   }
    else{
      if(Number(amount) > 0 && amount <= balance){
        if(countDecimals(amount) <= 2){
@@ -131,7 +134,7 @@
                console.log(error.toString());
            });
        }
-   }
+    }
    }
  }
  
@@ -231,20 +234,6 @@
         session_cookie: props.cookie
       });
     }
-
-     useEffect(() => {
-       fetch("http://192.168.99.181:8080/api/v1/account/get?email="+email,{
-       method: 'GET',
-       headers: {
-         'Content-Type': 'application/json',
-         'Cookie': props.cookie // used to identify user session
-       },
-      })
-      .then(response=>response.json())
-      .then(data=>{
-          setUsername(data.username);
-      });
-     }, []);
      return(
          <View style={styles.sideBack}>
              <View style={{marginTop: 40}}/>

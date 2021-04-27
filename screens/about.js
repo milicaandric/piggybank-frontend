@@ -38,58 +38,39 @@
  
   //This is the main funciton, which takes route and navigation. Allows the past screen to send session cookie
  export default function SwapBank({ route, navigation }) {
-   const [routingNumber, setRountingNumber] = useState("");
-   const [accountNumber, setAccountNumber] = useState("");
-   const [nameOnAccount, setNameOnAccount] = useState("");
  
    const { session_cookie } = route.params;
  
    function navToSettings(){
-     navigation.navigate("Settings_Merchant", {
-       session_cookie: session_cookie
-     });
-   }
- 
-   //function is entered when the user presses submit
-   //@param routingNumber, accountNumber, nameOnAccount
-   function swapBankAccount(routingNumber, accountNumber, nameOnAccount) {
-     // first check that user has filled out all neccessary fields
-     if (routingNumber != undefined && routingNumber != "" && accountNumber != undefined && accountNumber != "" && nameOnAccount != undefined && nameOnAccount != "") {
-       routingNumber = Number(routingNumber);
-       accountNumber = Number(accountNumber);
-       let user = firebase.auth().currentUser; // retrieves current user 
-       let email = user.email; // sets email var to user's email
-       let data = {
-         nameOnAccount: nameOnAccount,
-         accountNumber: accountNumber,
-         routingNumber: routingNumber
-       };
-       //backend HTTP request to update the bank account
-       fetch("http://192.168.99.181:8080/api/v1/bank/update?email="+email, {
-         method: 'PUT',
-         headers: {
-           'Content-Type': 'application/json',
-           'Cookie': session_cookie
-         },
-         body: JSON.stringify(data),
-       }).then(response=>{
-         if(response.ok == true){
-           //success, send merchant to settings
-           navigation.navigate("Settings_Merchant", {
-             session_cookie: session_cookie
-           });
-         }
-         else{
-           throw Error("Authentication for adding the bank account is invalid");
-         }
-       })
-       .catch((error)=>{
-         console.log(error.toString());
-       });
-     }
-     else {
-       alert("Please fill out all fields.");
-     }
+    let user = firebase.auth().currentUser; // retrieves current user 
+    let email = user.email; // sets email var to user's email for 'update' api call
+    fetch("http://192.168.99.181:8080/api/v1/account/get?email="+email,{
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Cookie': session_cookie // used to identify user session
+        },
+        })
+        .then(response=>response.json())
+        .then(data=>{
+        // if the user is a merchant, navigate to merchant settings
+        if(data.type == "MERCHANT"){
+        navigation.navigate("Settings_Merchant", {
+            session_cookie: session_cookie
+        });
+        }
+        // if the user is a customer, navigate to customer settings
+        else if(data.type == "CUSTOMER"){
+            navigation.navigate("Settings_Customer", {
+            session_cookie: session_cookie
+            });
+        }
+        })
+        .catch((error)=>{
+        // authentication failed to get type of user
+        alert("Error: Account type not found.");
+        console.log("Error: ", error);
+      });
    }
  
    //UI
