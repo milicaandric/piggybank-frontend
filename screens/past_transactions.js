@@ -95,6 +95,19 @@ export default function pastTransactions({route, navigation}) {
           <View>
             <Text style={styles.signupHeader}>Past Transactions</Text>
           </View>
+          <ScrollView>
+            <View style={{ paddingBottom: 25 }}>
+                <Text style={styles.aboutText}>
+                tester $20
+                </Text>
+                <Text style={styles.aboutText}>
+                tester $5
+                </Text>
+                <Text style={styles.aboutText}>
+                testCustomer $1
+                </Text>
+            </View>
+          </ScrollView>
         </KeyboardAvoidingView>
     );
 
