@@ -137,7 +137,7 @@ function sendToCustomer(recip, amount, session_cookie, balance, navigation){
               type: 'PEER_TO_PEER'
           };
           console.log(JSON.stringify(data));
-          fetch("http://192.168.1.95:8080/api/v1/transaction/peer",{
+          fetch("http://172.22.30.61:8080/api/v1/transaction/peer",{
               method: 'POST',
               headers: {
                   'Content-Type': 'application/json',
@@ -237,7 +237,7 @@ function Menu(props){
     let email = user.email; // sets email var to user's email for 'update' api call
     const [username, setUsername] = useState("");
     function navToTransfer(){
-      fetch("http://192.168.1.95:8080/api/v1/bank/get?email="+email,{
+      fetch("http://172.22.30.61:8080/api/v1/bank/get?email="+email,{
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -255,8 +255,15 @@ function Menu(props){
           alert("You do not have a bank to transfer to");
       });
     }
+
+    function navToTransactions() {
+      props.navigation.navigate("Past_Transactions", {
+        session_cookie: props.cookie
+      });
+    }
+
     useEffect(() => {
-      fetch("http://192.168.1.95:8080/api/v1/account/get?email="+email,{
+      fetch("http://172.22.30.61:8080/api/v1/account/get?email="+email,{
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -285,7 +292,7 @@ function Menu(props){
                 </Text>
             </TouchableOpacity>
             <View style={styles.lineBreak}/>
-            <TouchableOpacity style={styles.sendButton}>
+            <TouchableOpacity style={styles.sendButton} onPress={()=>{navToTransactions()}}>
                 <Text style={styles.sendText}>
                     Transactions
                 </Text>
@@ -300,7 +307,7 @@ export default function User_Dash({route, navigation}) {
   let user = firebase.auth().currentUser;
   let email = user.email;
   useEffect(() => {
-      fetch("http://192.168.1.95:8080/api/v1/account/get?email="+email,{
+      fetch("http://172.22.30.61:8080/api/v1/account/get?email="+email,{
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

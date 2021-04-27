@@ -17,6 +17,7 @@ import Update_Privacy from '../screens/update_privacy';
 import Update_Username from '../screens/update_username';
 import Settings_Customer from '../screens/settings_customer';
 import Settings_Merchant from '../screens/settings_merchant';
+import Past_Transactions from '../screens/past_transactions';
 
 import { AppRegistry } from 'react-native';
 import {name as appName} from '../app.json';
@@ -43,6 +44,7 @@ export default function Navigator(){
         <AppStack.Screen name="Settings_Customer" component={Settings_Customer} options={{gestureEnabled: false}}/>
         <AppStack.Screen name="Settings_Merchant" component={Settings_Merchant} options={{gestureEnabled: false}}/>
         <AppStack.Screen name="Update_Username" component={Update_Username} options={{gestureEnabled: false}}/>
+        <AppStack.Screen name="Past_Transactions" component={Past_Transactions} options={{gestureEnabled: false}}/>
       </AppStack.Navigator>
     </NavigationContainer>
     );
