@@ -70,55 +70,22 @@ export default function pastTransactions({route, navigation}) {
         })
         .catch((error) => console.log(error));
     }
-/*
-   function update(username) {
-       if(username != undefined && username != ""){
-          fetch("http://172.22.30.61:8080/api/v1/account/usernameExists?username="+username,{
-             method: 'GET',
-             headers: {
-               'Content-Type': 'application/json',
-               'Cookie': session_cookie // used to identify user session
-             },
-          })
-          .then((res)=>res.json())
-          .then((dataUsernameExists)=>{
-              if(dataUsernameExists == true){
-                  //throws error. username is already taken
-                  throw Error("Username already exists");
-               }
-               var data = {
-                   username: username
-               };
-               fetch("http://172.22.30.61:8080/api/v1/bank/update?email="+emailVar, {
-               method: 'PUT',
-               headers: {
-                   'Content-Type': 'application/json',
-                   'Cookie': session_cookie
-               },
-               body: JSON.stringify(data),//updates username in firestore
-               }).then(response=>{
-                 console.log(JSON.stringify(response));
-               if(response.ok == true){
-                   alert("Success: Username changed");
-                   navToMenu();
-               }
-               else{
-                   throw Error("Authentication for updating username unsuccessful");
-               }
-               })
-               .catch((error)=>{
-                   alert("Update username failed");
-                   console.log(error.toString());
-               });
-          })
-          //username exists already
-          .catch((error)=>{
-              console.log(error.toString());
-              alert("Username already exists");
-          });
-       }
-  }
-*/
+
+    function getPastTransactions() {
+        fetch("http://172.22.30.61:8080/api/v1/transaction/getAllFromUser?email="+emailVar, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+              'Cookie': session_cookie // used to identify user session
+            },
+        })
+        .then(response=>response.json())
+        .then(data=>{
+                //need to access past transactions in here
+        })
+        .catch((error) => console.log(error));
+    }
+
     return (
         <KeyboardAvoidingView style={styles.container} behavior="padding">
           <StatusBar style="auto" />
