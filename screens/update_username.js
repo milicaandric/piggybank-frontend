@@ -48,8 +48,8 @@
     function used to navigate back to the settings page
     using the type of account to determine if customer or merchant settings page
     */
-     function navToMenu() {
-         fetch("http://192.168.1.95:8080/api/v1/account/get?email="+emailVar,{
+     function navToMenuButton() {
+         fetch("http://192.168.99.181:8080/api/v1/account/get?email="+emailVar,{
              method: 'GET',
              headers: {
                'Content-Type': 'application/json',
@@ -70,10 +70,34 @@
          })
          .catch((error) => console.log(error));
      }
+
+     function navToMenu(username) {
+      fetch("http://192.168.99.181:8080/api/v1/account/get?email="+emailVar,{
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Cookie': session_cookie // used to identify user session
+          },
+      })
+      .then(response=>response.json())
+      .then(data=>{ 
+          if (data.type == "CUSTOMER") {
+              navigation.navigate("User_Dash", {
+              session_cookie: session_cookie,
+              newUsername: username
+              });
+          } else if (data.type == "MERCHANT") {
+              navigation.navigate("Merchant_Dash", {
+              session_cookie: session_cookie
+              });
+          }
+      })
+      .catch((error) => console.log(error));
+    }
  
     function update(username) {
         if(username != undefined && username != ""){
-           fetch("http://192.168.1.95:8080/api/v1/account/usernameExists?username="+username,{
+           fetch("http://192.168.99.181:8080/api/v1/account/usernameExists?username="+username,{
               method: 'GET',
               headers: {
                 'Content-Type': 'application/json',
@@ -87,9 +111,10 @@
                    throw Error("Username already exists");
                 }
                 var data = {
-                    username: username
+                    username: username,
+                    balance: -1
                 };
-                fetch("http://192.168.1.95:8080/api/v1/bank/update?email="+emailVar, {
+                fetch("http://192.168.99.181:8080/api/v1/account/update?email="+emailVar, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -97,10 +122,9 @@
                 },
                 body: JSON.stringify(data),//updates username in firestore
                 }).then(response=>{
-                  console.log(JSON.stringify(response));
                 if(response.ok == true){
                     alert("Success: Username changed");
-                    navToMenu();
+                    navToMenu(username);
                 }
                 else{
                     throw Error("Authentication for updating username unsuccessful");
@@ -122,7 +146,7 @@
      return (
          <KeyboardAvoidingView style={styles.container} behavior="padding">
            <StatusBar style="auto" />
-           <TouchableOpacity onPress={() => navToMenu()}>
+           <TouchableOpacity onPress={() => navToMenuButton()}>
              <Image style={styles.backButton} source={require("../assets/backArrow.png")} />
            </TouchableOpacity>
            <View>
