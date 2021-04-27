@@ -28,7 +28,6 @@ export default function Navigator(){
     <NavigationContainer>
       <AppStack.Navigator screenOptions={{ headerShown: false}} >
         <AppStack.Screen name="Login" component={Login}/>
-        
         <AppStack.Screen name="User_Dash" component={User_Dash} options={{gestureEnabled: false}}/>
         <AppStack.Screen name="Merchant_Dash" component={Merchant_Dash} options={{gestureEnabled: false}}/>
         <AppStack.Screen name='Signup_Merchant' component={Signup_Merchant} options={{gestureEnabled: false}}/>
