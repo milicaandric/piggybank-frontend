@@ -54,6 +54,12 @@
         });
     }
 
+    function navToAbout(){
+        navigation.navigate("About", {
+            session_cookie: session_cookie
+        });
+    }
+
    function navToPrivacy(){
         navigation.navigate("Update_Privacy", {
             session_cookie: session_cookie
@@ -73,7 +79,7 @@
    }
 
    function navToLogout(){
-    fetch("http://localhost:8080/api/v1/account/log-out",{
+    fetch("http://192.168.1.95:8080/api/v1/account/log-out",{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -102,6 +108,16 @@
         </TouchableOpacity>
         <Text style={styles.settingsHeader}>Settings</Text>
         <View style={styles.allSettingsContentButtons}>
+            <View style={{
+                marginLeft: -20,
+                borderBottomColor: 'black',
+                borderBottomWidth: 1,
+                alignSelf: 'stretch',
+            }}
+            />
+            <TouchableOpacity style={styles.settingsContentButtons} onPress={() => navToAbout()}>
+                <Text style={styles.settingsContentButtonsText}>About</Text>
+            </TouchableOpacity>
             <View style={{
                 marginLeft: -20,
                 borderBottomColor: 'black',

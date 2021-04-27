@@ -67,7 +67,7 @@ export default function transferToBank({ route, navigation }) {
                     amount: Number(amount) * 100.00,
                     type: 'BANK'
                 };
-                fetch("http://192.168.99.181:8080/api/v1/transaction/bank",{
+                fetch("http://192.168.1.95:8080/api/v1/transaction/bank",{
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -91,7 +91,7 @@ export default function transferToBank({ route, navigation }) {
     }
 
      useEffect(() => {
-         fetch("http://192.168.99.181:8080/api/v1/account/get?email="+email,{
+         fetch("http://192.168.1.95:8080/api/v1/account/get?email="+email,{
          method: 'GET',
          headers: {
            'Content-Type': 'application/json',

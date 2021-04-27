@@ -50,7 +50,7 @@ export default function updatePassword({route, navigation}) {
     using the type of account to determine if customer or merchant settings page
     */
     function navToMenu() {
-        fetch("http://localhost:8080/api/v1/account/get?email="+emailVar,{
+        fetch("http://192.168.1.95:8080/api/v1/account/get?email="+emailVar,{
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -77,7 +77,7 @@ export default function updatePassword({route, navigation}) {
       if(password == confirm){
         if(password.length >= 6){
           currentUser.updatePassword(password); //changes user password in firebase auth
-          fetch("http://localhost:8080/api/v1/account/log-out",{ //logout user after changing password
+          fetch("http://192.168.1.95:8080/api/v1/account/log-out",{ //logout user after changing password
               method: 'POST',
               headers: {
                   'Content-Type': 'application/json',
