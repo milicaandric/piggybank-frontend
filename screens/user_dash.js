@@ -97,42 +97,61 @@
    if(amount == 0 || recip == '' || amount == undefined){
      alert("please fill out recipient and amount");
    }
-   else if(recip == email){
+   else if(recip.toLowerCase() == email){
      alert("You cannot send money to yourself");
    }
    else{
+     recip = recip.toLowerCase();
      if(Number(amount) > 0 && amount <= balance){
        if(countDecimals(amount) <= 2){
-           let data = {
-               transactorEmail: email,
-               recipientEmail: recip,
-               amount: Number(amount) * 100.00,
-               type: 'PEER_TO_PEER'
-           };
-           console.log(JSON.stringify(data));
-           fetch("http://192.168.99.181:8080/api/v1/transaction/peer",{
-               method: 'POST',
-               headers: {
-                   'Content-Type': 'application/json',
-                   'Cookie': session_cookie // used to identify user session
-           },
-           body: JSON.stringify(data)
-           })
-           .then(response=>{
-               if(response.ok == true){
-                 alert("Transaction Successful");
-                 navigation.navigate("User_Dash", {
-                   session_cookie: session_cookie,
-                   new_balance: (Number(balance)-Number(amount))*100
-               });
-               }
-               else if(response.status == 400){
-                 alert("No email was found for the recipient");
-               }
-           })
-           .catch((error) =>{
-               console.log(error.toString());
-           });
+          fetch("http://192.168.99.181:8080/api/v1/account/get?email="+recip,{
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Cookie': session_cookie // used to identify user session
+            },
+          })
+          .then(res=>res.json())
+          .then(data=>{
+            if(data.type == 'MERCHANT'){
+              alert("You cannot send money to a merchant account");
+            }
+            else{
+              let data = {
+                  transactorEmail: email,
+                  recipientEmail: recip,
+                  amount: Number(amount) * 100.00,
+                  type: 'PEER_TO_PEER'
+              };
+              fetch("http://192.168.99.181:8080/api/v1/transaction/peer",{
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json',
+                      'Cookie': session_cookie // used to identify user session
+              },
+              body: JSON.stringify(data)
+              })
+              .then(response=>{
+                  if(response.ok == true){
+                    alert("Transaction Successful");
+                    navigation.navigate("User_Dash", {
+                      session_cookie: session_cookie,
+                      new_balance: (Number(balance)-Number(amount))*100
+                  });
+                  }
+                  else if(response.status == 400){
+                    alert("No email was found for the recipient");
+                  }
+              })
+              .catch((error) =>{
+                  console.log(error.toString());
+              });
+            }
+          })
+          .catch((error)=>{
+            alert("No account found with email specified")
+            console.log(error.toString());
+          });
        }
     }
    }

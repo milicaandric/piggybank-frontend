@@ -58,33 +58,55 @@ export default function Merchant_dash({route, navigation}) {
     if(amount == 0 || recip == '' || amount == undefined){
       alert("please fill out recipient and amount");
     }
+    else if(recip.toLowerCase() == email){
+      alert("You can not send money to yourself");
+    }
     else{
       if(Number(amount) > 0){
         if(countDecimals(amount) <= 2){
-            let data = {
-                transactorEmail: email,
-                recipientEmail: recip,
-                amount: Number(amount) * 100.00,
-                type: 'PEER_TO_PEER'
-            };
-            console.log(JSON.stringify(data));
-            fetch("http://192.168.99.181:8080/api/v1/transaction/peer",{
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Cookie': session_cookie // used to identify user session
-            },
-            body: JSON.stringify(data)
+            recip = recip.toLowerCase();
+            fetch("http://192.168.99.181:8080/api/v1/account/get?email="+recip,{
+              method: 'GET',
+              headers: {
+                  'Content-Type': 'application/json',
+                  'Cookie': session_cookie // used to identify user session
+              },
             })
-            .then(response=>{
-              console.log(session_cookie);
-                console.log(JSON.stringify(response))
-                if(response.ok == true){
-                  alert("transaction successful");
-                }
+            .then(res=>res.json())
+            .then(data=>{
+              if(data.type == 'MERCHANT'){
+                alert("You cannot send money to merchant accounts");
+              }
+              else{
+                let data = {
+                  transactorEmail: email,
+                  recipientEmail: recip,
+                  amount: Number(amount) * 100.00,
+                  type: 'PEER_TO_PEER'
+              };
+              console.log(JSON.stringify(data));
+              fetch("http://192.168.99.181:8080/api/v1/transaction/peer",{
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json',
+                      'Cookie': session_cookie // used to identify user session
+              },
+              body: JSON.stringify(data)
+              })
+              .then(response=>{
+                console.log(session_cookie);
+                  console.log(JSON.stringify(response))
+                  if(response.ok == true){
+                    alert("transaction successful");
+                  }
+              })
+              .catch((error) =>{
+                  console.log(error.toString());
+              });
+              }
             })
-            .catch((error) =>{
-                console.log(error.toString());
+            .catch((error)=>{
+              alert("No account found with email specified");
             });
         }
     }
