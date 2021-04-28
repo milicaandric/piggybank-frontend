@@ -123,7 +123,6 @@
                 body: JSON.stringify(data),//updates username in firestore
                 }).then(response=>{
                 if(response.ok == true){
-                    alert("Success: Username changed");
                     navToMenu(username);
                 }
                 else{

@@ -88,18 +88,15 @@ export default function updateEmail({route, navigation}) {
     function update(email, confirm) { 
         if (email != undefined && email != "" && confirm != undefined && confirm != "") {
             if(email == confirm){
+                email = email.toLowerCase();
                 if(validateEmail(email)){
-                    var data = {
-                        email: email
-                    };
                     //check if email is already in use
-                    fetch("http://192.168.99.181:8080/api/v1/account/update?email="+email, {
-                        method: 'PUT',
+                    fetch("http://192.168.99.181:8080/api/v1/account/get?email="+email, {
+                        method: 'GET',
                         headers: {
                             'Content-Type': 'application/json',
                             Cookie: session_cookie
                         },
-                        body: JSON.stringify(data),
                     })
                     .then(response => {
                         if(response.status == 400){//email was not already in use
@@ -125,8 +122,11 @@ export default function updateEmail({route, navigation}) {
                                         console.log(error.toString());
                                     }); 
                                 }
+                                else if(res.status == 400){
+                                    alert("Email is already in use");
+                                }
                                 else{
-                                    alert("Authorization to update email was unsuccessful");
+                                    alert("Authorization unsuccessful");
                                 }
                             })
                         }

@@ -101,7 +101,7 @@ export default function pastTransactions({route, navigation}) {
                         t.recipient = "BANK"
                     }
                     setTransactionList(transactionList => 
-                        [...transactionList, <Transaction transactor={t.transactor} recipient={t.recipient} amount={t.amount} key={t.id}/>])
+                        [...transactionList, <Transaction transactor={t.transactor} recipient={t.recipient} amount={t.amount/100} key={t.id}/>])
                  }
         })
         .catch((error) => console.log(error));
