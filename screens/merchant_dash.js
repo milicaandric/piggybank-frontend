@@ -68,7 +68,7 @@ export default function Merchant_dash({route, navigation}) {
                 type: 'PEER_TO_PEER'
             };
             console.log(JSON.stringify(data));
-            fetch("http://192.168.1.95:8080/api/v1/transaction/peer",{
+            fetch("http://192.168.99.181:8080/api/v1/transaction/peer",{
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
