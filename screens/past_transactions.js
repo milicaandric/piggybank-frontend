@@ -58,7 +58,7 @@ export default function pastTransactions({route, navigation}) {
    using the type of account to determine if customer or merchant settings page
    */
     function navToMenu() {
-        fetch("http://172.22.30.61:8080/api/v1/account/get?email="+emailVar,{
+        fetch("http://192.168.99.181:8080/api/v1/account/get?email="+emailVar,{
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -81,7 +81,7 @@ export default function pastTransactions({route, navigation}) {
     }
 
     function getPastTransactions() {
-        fetch("http://172.22.30.61:8080/api/v1/transaction/getAllFromUser?email="+emailVar, {
+        fetch("http://192.168.99.181:8080/api/v1/transaction/getAllFromUser?email="+emailVar, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
