@@ -37,11 +37,20 @@ import {
 
 const styles = require('../styles/global');
 
+export function Transaction(props) {
+    return (
+        <View style={styles.aboutText}>
+            <Text>{props.transactor} {props.recipient} ${props.amount}</Text>
+        </View>
+    )
+}
+
 export default function pastTransactions({route, navigation}) {
     //states here
     const { session_cookie } = route.params;
     var currentUser = firebase.auth().currentUser;
     var emailVar = currentUser.email;
+    const [transactionList, setTransactionList] = useState([]);
     //const [username, setUsername] = useState("");
 
     /*
@@ -81,10 +90,24 @@ export default function pastTransactions({route, navigation}) {
         })
         .then(response=>response.json())
         .then(data=>{
-                //need to access past transactions in here
+                 for (var transaction in data){
+                    var t = {
+                        amount: data[transaction].amount,
+                        recipient: data[transaction].recipientEmail,
+                        transactor: data[transaction].transactorEmail,
+                        id: data[transaction].id
+                    };
+                    if (t.recipient == null) {
+                        t.recipient = "BANK"
+                    }
+                    setTransactionList(transactionList => 
+                        [...transactionList, <Transaction transactor={t.transactor} recipient={t.recipient} amount={t.amount} key={t.id}/>])
+                 }
         })
         .catch((error) => console.log(error));
     }
+
+    useEffect(() => {getPastTransactions()}, []);
 
     return (
         <KeyboardAvoidingView style={styles.container} behavior="padding">
@@ -94,19 +117,10 @@ export default function pastTransactions({route, navigation}) {
           </TouchableOpacity>
           <View>
             <Text style={styles.signupHeader}>Past Transactions</Text>
+            <Text style={styles.aboutText}>User     Recipient   Amount</Text>
           </View>
           <ScrollView>
-            <View style={{ paddingBottom: 25 }}>
-                <Text style={styles.aboutText}>
-                tester $20
-                </Text>
-                <Text style={styles.aboutText}>
-                tester $5
-                </Text>
-                <Text style={styles.aboutText}>
-                testCustomer $1
-                </Text>
-            </View>
+            {transactionList}
           </ScrollView>
         </KeyboardAvoidingView>
     );
