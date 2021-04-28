@@ -58,67 +58,64 @@ export default function signUpCustomer({navigation}) {
         if(password.length >= 6){
             //checks if the password is verified
             if(verifyPassword == password){
-                //backend request to see if the username is taken
-                fetch("http://192.168.99.181:8080/api/v1/account/usernameExists?username="+username)
-                .then((res)=>res.json())
-                .then((dataUsernameExists)=>{
-                    if(dataUsernameExists == true){
-                        //throws error. username is already taken
-                        throw Error("Username already exists");
-                    }
-                    //username isn't taken, creates user in firebase auth
-                    firebase.auth().createUserWithEmailAndPassword(email, password).then(function(user){
-                        //gets the IdToken which is used for sessionID generation in backend
-                        user.user.getIdToken(true).then(token =>{
-                            var data = {
-                                email: email,
-                                username: username,
-                                password: password,
-                                type: "CUSTOMER"
-                            };
-                            //creates user in firestore with backend request with token
-                            fetch("http://192.168.99.181:8080/api/v1/account/create?token="+token, {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify(data),
-                            })
-                            .then((response)=>{
-                                //checks if the request was successful
-                                if(response.ok == true){
-                                    //gets sessionID cookie and sends it via navigation to user_dash screen, and 
-                                    //navigates to that screen
-                                    var session = response.headers.map['set-cookie'];
-                                    navigation.navigate("User_Dash", {
-                                        session_cookie: session
-                                    });
-                                }
-                                //authentication failed to create user
-                                else{
-                                    throw Error("Authentication for creating customer was unsuccessful");
-                                }
-                            })
-                            //authentication failed to create user
-                            .catch((error)=>{
-                                alert("Authentication for creating customer was unsuccessful");
-                                console.log(error.toString());
-                            });
+                //username isn't taken, creates user in firebase auth
+                firebase.auth().createUserWithEmailAndPassword(email, password).then(function(user){
+                    //gets the IdToken which is used for sessionID generation in backend
+                    user.user.getIdToken(true).then(token =>{
+                        var data = {
+                            email: email,
+                            username: username,
+                            password: password,
+                            type: "CUSTOMER"
+                        };
+                        //creates user in firestore with backend request with token
+                        fetch("http://192.168.99.181:8080/api/v1/account/create?token="+token, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(data),
                         })
-                        //failed to acquire IdToken
-                        .catch((error) =>{
+                        .then((response)=>{
+                            console.log(JSON.stringify(response));
+                            //checks if the request was successful
+                            if(response.ok == true){
+                                //gets sessionID cookie and sends it via navigation to user_dash screen, and 
+                                //navigates to that screen
+                                var session = response.headers.map['set-cookie'];
+                                navigation.navigate("User_Dash", {
+                                    session_cookie: session
+                                });
+                            }
+                            //username already exists
+                            else if(response.status == 400){
+                                var currentUser = firebase.auth().currentUser;
+                                currentUser.delete().then(function() {
+                                    alert("Username is already taken");
+                                    }).catch((error)=>{
+                                    console.log(error.toString());
+                                });
+                            }
+                            //authentication failed
+                            else{
+                                alert("Authentication for creating customer was unsuccessful");
+                            }
+                        })
+                        //authentication failed to create user
+                        .catch((error)=>{
+                            alert("Authentication for creating customer was unsuccessful");
                             console.log(error.toString());
                         });
                     })
-                    //email was invalid, or the email already exists
+                    //failed to acquire IdToken
                     .catch((error) =>{
-                        console.log(error.toString())
-                        alert("Email is already in use or email is invalid");
+                        console.log(error.toString());
                     });
                 })
-                //username exists already
-                .catch((error)=>{
-                    alert("Username already exists");
+                //email was invalid, or the email already exists
+                .catch((error) =>{
+                    console.log(error.toString())
+                    alert("Email is already in use or email is invalid");
                 });
             }
             //verify password didn't match

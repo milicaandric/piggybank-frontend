@@ -123,6 +123,7 @@
                   amount: Number(amount) * 100.00,
                   type: 'PEER_TO_PEER'
               };
+              console.log(JSON.stringify(data));
               fetch("http://192.168.99.181:8080/api/v1/transaction/peer",{
                   method: 'POST',
                   headers: {
@@ -132,6 +133,7 @@
               body: JSON.stringify(data)
               })
               .then(response=>{
+                  console.log(session_cookie);
                   if(response.ok == true){
                     alert("Transaction Successful");
                     navigation.navigate("User_Dash", {

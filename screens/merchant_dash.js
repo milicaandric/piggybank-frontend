@@ -47,6 +47,12 @@ export default function Merchant_dash({route, navigation}) {
     });
   }
 
+  function navToTransactions() {
+    navigation.navigate("Past_Transactions", {
+      session_cookie: session_cookie
+    });
+  }
+
   //https://stackoverflow.com/questions/17369098/simplest-way-of-getting-the-number-of-decimals-in-a-number-in-javascript
   function countDecimals(number) {
     if(number == undefined) return 0;
@@ -139,6 +145,11 @@ export default function Merchant_dash({route, navigation}) {
                 <TouchableOpacity style={styles.sendButton} onPress={() => sendToCustomer(recip.recip, amount.amount)}>
                     <Text style={styles.sendText}>
                         Send
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.sendButton} onPress={() => navToTransactions()}>
+                    <Text style={styles.sendText}>
+                        Past Transactions
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => {navToSettings()}}>
