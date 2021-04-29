@@ -5,12 +5,10 @@
  * file: signup_customer.js. This screen is for signing up a new customer. Fields to enter are email,
  * username, password, verify password. Username is checked for existing username before creating account.
  */
- import React, { useState } from 'react';
- import { StatusBar } from "expo-status-bar";
+ import React from 'react';
  import 'react-native-gesture-handler';
  import * as firebase from 'firebase';   
- import { Button, Text, Input} from 'galio-framework';
- import { LinearGradient } from 'expo-linear-gradient';
+ import { Text } from 'galio-framework';
  
  const firebaseConfig = {
    apiKey: "AIzaSyAg-KUJ--2nDiMDJnzSt_sNYO8y_eZI5Bo",
@@ -29,9 +27,7 @@
  import {
    View,
    Image,
-   TouchableOpacity,
-   KeyboardAvoidingView,
-   ScrollView
+   TouchableOpacity
  } from "react-native";
  
  const styles = require('../styles/global');
@@ -49,7 +45,7 @@
    }
 
    function navToAddBank(){
-        fetch("http://192.168.99.181:8080/api/v1/bank/get?email="+email,{
+        fetch("http://localhost:8080/api/v1/bank/get?email="+email,{
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -69,7 +65,7 @@
     }
 
    function navToRemoveBank(){
-        fetch("http://192.168.99.181:8080/api/v1/bank/get?email="+email,{
+        fetch("http://localhost:8080/api/v1/bank/get?email="+email,{
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -110,7 +106,7 @@
    }
 
    function navToLogout(){
-    fetch("http://192.168.99.181:8080/api/v1/account/log-out",{
+    fetch("http://localhost:8080/api/v1/account/log-out",{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

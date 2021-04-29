@@ -6,7 +6,7 @@
  * User enters new username into text field
  * Checks that the username doesn't already exist
  */
- import React, { useState, useEffect, Component } from 'react';
+ import React, { useState } from 'react';
  import 'react-native-gesture-handler';
  import * as firebase from 'firebase';
  import { Button, Text, Input} from 'galio-framework';
@@ -49,7 +49,7 @@
     using the type of account to determine if customer or merchant settings page
     */
      function navToMenuButton() {
-         fetch("http://192.168.99.181:8080/api/v1/account/get?email="+emailVar,{
+         fetch("http://localhost:8080/api/v1/account/get?email="+emailVar,{
              method: 'GET',
              headers: {
                'Content-Type': 'application/json',
@@ -72,7 +72,7 @@
      }
 
      function navToMenu(username) {
-      fetch("http://192.168.99.181:8080/api/v1/account/get?email="+emailVar,{
+      fetch("http://localhost:8080/api/v1/account/get?email="+emailVar,{
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -97,7 +97,7 @@
  
     function update(username) {
         if(username != undefined && username != ""){
-           fetch("http://192.168.99.181:8080/api/v1/account/usernameExists?username="+username,{
+           fetch("http://localhost:8080/api/v1/account/usernameExists?username="+username,{
               method: 'GET',
               headers: {
                 'Content-Type': 'application/json',
@@ -115,7 +115,7 @@
                     username: username,
                     balance: -1
                 };
-                fetch("http://192.168.99.181:8080/api/v1/account/update?email="+emailVar, {
+                fetch("http://localhost:8080/api/v1/account/update?email="+emailVar, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

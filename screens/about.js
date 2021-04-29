@@ -5,10 +5,10 @@
  * file: swap_bank: Allows merchant account to swap a bank account out. Basically add/remove at the same time
  *                  since the merchant must have an account linked at all times
  */
- import React, { useState } from 'react';
+ import React from 'react';
  import 'react-native-gesture-handler';
  import * as firebase from 'firebase';
- import { Button, Text, Input} from 'galio-framework';
+ import { Text } from 'galio-framework';
  import { StatusBar } from "expo-status-bar";
  import { createDrawerNavigator} from '@react-navigation/drawer';
  
@@ -44,7 +44,7 @@
    function navToSettings(){
     let user = firebase.auth().currentUser; // retrieves current user 
     let email = user.email; // sets email var to user's email for 'update' api call
-    fetch("http://192.168.99.181:8080/api/v1/account/get?email="+email,{
+    fetch("http://localhost:8080/api/v1/account/get?email="+email,{
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

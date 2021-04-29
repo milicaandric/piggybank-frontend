@@ -51,7 +51,7 @@ export default function removeBank({ route, navigation }) {
     let email = user.email; // sets email var to user's email for 'update' api call
     console.log(email);
       // removes bank via http request to bankend
-      fetch("http://192.168.99.181:8080/api/v1/bank/remove?email=" + email, {
+      fetch("http://localhost:8080/api/v1/bank/remove?email=" + email, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

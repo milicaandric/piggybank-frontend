@@ -9,8 +9,7 @@
  import React, { useState, useEffect, Component } from 'react';
  import 'react-native-gesture-handler';
  import * as firebase from 'firebase';
- import { Text, Input } from 'galio-framework';
- import { createDrawerNavigator} from '@react-navigation/drawer';
+ import { Text } from 'galio-framework';
  import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
  import SideMenu from 'react-native-side-menu-updated'
  
@@ -104,7 +103,7 @@
      recip = recip.toLowerCase();
      if(Number(amount) > 0 && amount <= balance){
        if(countDecimals(amount) <= 2){
-          fetch("http://192.168.99.181:8080/api/v1/account/get?email="+recip,{
+          fetch("http://localhost:8080/api/v1/account/get?email="+recip,{
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -124,7 +123,7 @@
                   type: 'PEER_TO_PEER'
               };
               console.log(JSON.stringify(data));
-              fetch("http://192.168.99.181:8080/api/v1/transaction/peer",{
+              fetch("http://localhost:8080/api/v1/transaction/peer",{
                   method: 'POST',
                   headers: {
                       'Content-Type': 'application/json',
@@ -231,7 +230,7 @@
      let email = user.email; // sets email var to user's email for 'update' api call
      const [username, setUsername] = useState("");
      function navToTransfer(){
-       fetch("http://192.168.99.181:8080/api/v1/bank/get?email="+email,{
+       fetch("http://localhost:8080/api/v1/bank/get?email="+email,{
          method: 'GET',
          headers: {
              'Content-Type': 'application/json',
@@ -283,14 +282,12 @@
  
  export default function User_Dash({route, navigation}) {
    const {session_cookie, new_balance, newUsername} = route.params;
-   console.log("New Balance: " + new_balance);
-   console.log("New Username: "+ newUsername);
    const [balance, setBalance] = useState();
    const [username, setUsername] = useState("");
    let user = firebase.auth().currentUser;
    let email = user.email;
    useEffect(() => {
-       fetch("http://192.168.99.181:8080/api/v1/account/get?email="+email,{
+       fetch("http://localhost:8080/api/v1/account/get?email="+email,{
        method: 'GET',
        headers: {
          'Content-Type': 'application/json',

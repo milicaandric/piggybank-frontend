@@ -6,7 +6,7 @@
  * both passwords are checked to make sure that they match before updating the account's password
  * upon successfull change, the user is logged out and prompted to log in with their new password
  */
-import React, { useState, useEffect, Component } from 'react';
+import React, { useState } from 'react';
 import 'react-native-gesture-handler';
 import * as firebase from 'firebase';
 import { Button, Text, Input} from 'galio-framework';
@@ -50,7 +50,7 @@ export default function updatePassword({route, navigation}) {
     using the type of account to determine if customer or merchant settings page
     */
     function navToMenu() {
-        fetch("http://192.168.99.181:8080/api/v1/account/get?email="+emailVar,{
+        fetch("http://localhost:8080/api/v1/account/get?email="+emailVar,{
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -77,7 +77,7 @@ export default function updatePassword({route, navigation}) {
       if(password == confirm){
         if(password.length >= 6){
           currentUser.updatePassword(password); //changes user password in firebase auth
-          fetch("http://192.168.99.181:8080/api/v1/account/log-out",{ //logout user after changing password
+          fetch("http://localhost:8080/api/v1/account/log-out",{ //logout user after changing password
               method: 'POST',
               headers: {
                   'Content-Type': 'application/json',

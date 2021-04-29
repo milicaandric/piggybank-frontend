@@ -4,10 +4,10 @@
  * Lecture 001
  * file: merchant_dash.js. This screen allows a merchant to send change from a transaction to users.
  */
-import React, { useState, useEffect} from 'react';
+import React, { useState } from 'react';
 import 'react-native-gesture-handler';
 import * as firebase from 'firebase';
-import { Text, Input } from 'galio-framework';
+import { Text } from 'galio-framework';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 
 const firebaseConfig = {
@@ -71,7 +71,7 @@ export default function Merchant_dash({route, navigation}) {
       if(Number(amount) > 0){
         if(countDecimals(amount) <= 2){
             recip = recip.toLowerCase();
-            fetch("http://192.168.99.181:8080/api/v1/account/get?email="+recip,{
+            fetch("http://localhost:8080/api/v1/account/get?email="+recip,{
               method: 'GET',
               headers: {
                   'Content-Type': 'application/json',
@@ -91,7 +91,7 @@ export default function Merchant_dash({route, navigation}) {
                   type: 'PEER_TO_PEER'
               };
               console.log(JSON.stringify(data));
-              fetch("http://192.168.99.181:8080/api/v1/transaction/peer",{
+              fetch("http://localhost:8080/api/v1/transaction/peer",{
                   method: 'POST',
                   headers: {
                       'Content-Type': 'application/json',

@@ -4,10 +4,10 @@
  * Lecture 001
  * file: past_transactions.js. This screen is for displaying users past transactions
  */
-import React, { useState, useEffect, Component } from 'react';
+import React, { useState, useEffect  } from 'react';
 import 'react-native-gesture-handler';
 import * as firebase from 'firebase';
-import { Button, Text, Input} from 'galio-framework';
+import { Text } from 'galio-framework';
 import { StatusBar } from "expo-status-bar";
 
 const firebaseConfig = {
@@ -28,9 +28,8 @@ import {
   View,
   Image,
   TouchableOpacity,
-  TextInput,
   KeyboardAvoidingView,
-  ScrollView, Alert
+  ScrollView
 } from "react-native";
 
 const styles = require('../styles/global');
@@ -56,7 +55,7 @@ export default function pastTransactions({route, navigation}) {
     using the type of account to determine if customer or merchant dash
     */
     function navToMenu() {
-        fetch("http://192.168.99.181:8080/api/v1/account/get?email="+emailVar,{
+        fetch("http://localhost:8080/api/v1/account/get?email="+emailVar,{
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -79,7 +78,7 @@ export default function pastTransactions({route, navigation}) {
     }
 
     function getPastTransactions() {
-        fetch("http://192.168.99.181:8080/api/v1/transaction/getAllFromUser?email="+emailVar, {
+        fetch("http://localhost:8080/api/v1/transaction/getAllFromUser?email="+emailVar, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

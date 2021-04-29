@@ -78,7 +78,7 @@ export default function signUpMerchant({navigation}) {
                                 type: "MERCHANT"
                             };
                             //creates user in firestore with backend request with token
-                            fetch("http://192.168.99.181:8080/api/v1/account/create?token="+token, {
+                            fetch("http://localhost:8080/api/v1/account/create?token="+token, {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json'
