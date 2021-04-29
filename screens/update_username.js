@@ -106,6 +106,7 @@
            })
            .then((res)=>res.json())
            .then((dataUsernameExists)=>{
+             console.log(JSON.stringify(dataUsernameExists));
                if(dataUsernameExists == true){
                    //throws error. username is already taken
                    throw Error("Username already exists");
