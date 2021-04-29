@@ -1,6 +1,8 @@
 # piggybank-frontend
 Installation Guide: https://docs.expo.io/get-started/installation/
 
+1. Go through screens/<all js files> and do a find-replace localhost with your ip address. open your command line and run ipconfig and copy your IPv4 address. This will allow for HTTP request to our backend API
+
 1. Download the git repo
 
 2. Open in text editor of choice 
@@ -13,16 +15,7 @@ $cd piggybank-frontend
 4. Intsall libraries.
  
 ```
-$npm install firebase
-$npm install react-navigation
-$npm install react-native-safe-area-view
-$npm install react-native-elements
-$npm i --save @fortawesome/fontawesome-svg-core
-$npm install --save @fortawesome/free-solid-svg-icons
-$npm install --save @fortawesome/react-fontawesome
-$npm i react-native-keyboard-avoiding-view
-$npm install galio-framework
-$npm i expo-linear-gradient
+$npm install
 ```
 
 For next few steps, refer to https://docs.expo.io/get-started/create-a-new-app/ after ‘Starting the development server’ section…
