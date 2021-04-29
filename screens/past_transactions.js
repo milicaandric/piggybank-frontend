@@ -2,9 +2,7 @@
  * CS 506
  * PiggyBank team: Callan Patel, Brian O'Loughlin, Calvin Armstrong, Jacob Biewer, Milica Andric, Quentin Ford
  * Lecture 001
- * file: update_username.js. This screen is for changing the username for an account.
- * User enters new username into text field
- * Checks that the username doesn't already exist
+ * file: past_transactions.js. This screen is for displaying users past transactions
  */
 import React, { useState, useEffect, Component } from 'react';
 import 'react-native-gesture-handler';
@@ -37,6 +35,7 @@ import {
 
 const styles = require('../styles/global');
 
+//format of an individual transaction
 export function Transaction(props) {
     return (
         <View style={styles.aboutText}>
@@ -51,12 +50,11 @@ export default function pastTransactions({route, navigation}) {
     var currentUser = firebase.auth().currentUser;
     var emailVar = currentUser.email;
     const [transactionList, setTransactionList] = useState([]);
-    //const [username, setUsername] = useState("");
 
     /*
-   function used to navigate back to the settings page
-   using the type of account to determine if customer or merchant settings page
-   */
+    function used to navigate back to the dashboard
+    using the type of account to determine if customer or merchant dash
+    */
     function navToMenu() {
         fetch("http://192.168.99.181:8080/api/v1/account/get?email="+emailVar,{
             method: 'GET',
@@ -90,23 +88,28 @@ export default function pastTransactions({route, navigation}) {
         })
         .then(response=>response.json())
         .then(data=>{
-                 for (var transaction in data){
+                //loop through all transactions recieved from API call
+                for (var transaction in data){
+                     //store each individual transactions information
                     var t = {
                         amount: data[transaction].amount,
                         recipient: data[transaction].recipientEmail,
                         transactor: data[transaction].transactorEmail,
                         id: data[transaction].id
                     };
+                    //if no recipient email in transaction, then it was a transfer to bank
                     if (t.recipient == null) {
                         t.recipient = "BANK"
                     }
+                    //add the transaction to the transaction list
                     setTransactionList(transactionList => 
                         [...transactionList, <Transaction transactor={t.transactor} recipient={t.recipient} amount={t.amount/100} key={t.id}/>])
-                 }
+                }
         })
         .catch((error) => console.log(error));
     }
 
+    //fills the transaction list when the page is loaded
     useEffect(() => {getPastTransactions()}, []);
 
     return (
