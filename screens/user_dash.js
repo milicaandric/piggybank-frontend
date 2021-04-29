@@ -84,25 +84,34 @@
      }
  }
  
+ //function is called when the user want's to enter the customer settings page.
  function navToSettings(props){
    props.navigation.navigate("Settings_Customer", {
        session_cookie: props.cookie
    });
  }
  
+ //this function is called when the user presses "send".
+ //@param recip, amount, session_cookie, balance, navigation
  function sendToCustomer(recip, amount, session_cookie, balance, navigation){
    let user = firebase.auth().currentUser; // retrieves current user 
    let email = user.email; // sets email var to user's email for 'update' api call
+   //checks for valid inputs
    if(amount == 0 || recip == '' || amount == undefined){
      alert("please fill out recipient and amount");
    }
+   //checks if the user is trying to send money to themselves
    else if(recip.toLowerCase() == email){
      alert("You cannot send money to yourself");
    }
    else{
+     //lowercases the recip email because firebase lowercases the emails
      recip = recip.toLowerCase();
+     //makes sure the amount is not exceeding the users balance
      if(Number(amount) > 0 && amount <= balance){
+       //not valid input. Too many decimal places
        if(countDecimals(amount) <= 2){
+         //checks to make sure the email is valid
           fetch("http://localhost:8080/api/v1/account/get?email="+recip,{
             method: 'GET',
             headers: {
@@ -112,9 +121,11 @@
           })
           .then(res=>res.json())
           .then(data=>{
+            //if the user is a merchant, alert that customers cannot send money to merchant accounts
             if(data.type == 'MERCHANT'){
               alert("You cannot send money to a merchant account");
             }
+            //valid, continue with transaction
             else{
               let data = {
                   transactorEmail: email,
@@ -122,7 +133,7 @@
                   amount: Number(amount) * 100.00,
                   type: 'PEER_TO_PEER'
               };
-              console.log(JSON.stringify(data));
+              //http request to transact to the desired account
               fetch("http://localhost:8080/api/v1/transaction/peer",{
                   method: 'POST',
                   headers: {
@@ -132,7 +143,7 @@
               body: JSON.stringify(data)
               })
               .then(response=>{
-                  console.log(session_cookie);
+                //if transactionw as successful, nav to the same page to update the current balance in the UI
                   if(response.ok == true){
                     alert("Transaction Successful");
                     navigation.navigate("User_Dash", {
@@ -140,6 +151,7 @@
                       new_balance: (Number(balance)-Number(amount))*100
                   });
                   }
+                  //email was not found (should not get to this else statement)
                   else if(response.status == 400){
                     alert("No email was found for the recipient");
                   }
@@ -164,6 +176,9 @@
      if(Math.floor(Number(number)) === Number(number)) return 0;
      return String(number).split(".")[1].length || 0; 
  }
+
+ //This function shows the UI for the user_dash.
+ //Props contain the current balance, navigation, and session_cookie
  function Balance(props){
      const [amount, setAmount] = useState(0);
      const [recip, setRecip] = useState("");
@@ -214,6 +229,7 @@
      );
  }
  
+ //balance on the side menu
  function Balance2(props){
      const [amount, setAmount] = useState(0);
      return(
@@ -225,10 +241,12 @@
      );
  }
  
+ //function is called when the side menu is displayed
  function Menu(props){
      let user = firebase.auth().currentUser; // retrieves current user 
      let email = user.email; // sets email var to user's email for 'update' api call
-     const [username, setUsername] = useState("");
+     //this function is entered when the user wants to navigate to the transfer to bank page.
+     //Checks if the account has a bank added.
      function navToTransfer(){
        fetch("http://localhost:8080/api/v1/bank/get?email="+email,{
          method: 'GET',
@@ -239,21 +257,25 @@
        })
        .then(response=>response.json())
        .then(data=>{
+         //bank account exists, navigate.
          props.navigation.navigate("Transfer_To_Bank", {
            session_cookie: props.cookie
          });
        })
+       //alert to the user that they do not have a bank account added.
        .catch((error) =>{
            //no bank found. Do not proceed
            alert("You do not have a bank to transfer to");
        });
      }
 
+     //function for navigation to past transactions
      function navToTransactions() {
       props.navigation.navigate("Past_Transactions", {
         session_cookie: props.cookie
       });
     }
+    //UI for the side menu
      return(
          <View style={styles.sideBack}>
              <View style={{marginTop: 40}}/>
@@ -286,6 +308,8 @@
    const [username, setUsername] = useState("");
    let user = firebase.auth().currentUser;
    let email = user.email;
+   //get's the current balance and username from the database. Used in UI if navigation from update username, or a p2p transaction, or transfer to bank
+   //were not the actions prior to navigation to this page.
    useEffect(() => {
        fetch("http://localhost:8080/api/v1/account/get?email="+email,{
        method: 'GET',
@@ -300,11 +324,8 @@
          setUsername(data.username);
       });
    }, []);
- 
-   //const navigation = useNavigation();
-   // loginUser wrapper class placeholder
-   // firebase auth
-   
+
+   //UI wrapper, checks if new_balance, or newUsername from navigation have been sent to this page by another page, and used if so.
    return (
      <Outer cookie={session_cookie} balance={(new_balance != undefined)?new_balance/100: balance}  username={(newUsername != undefined)?newUsername: username} navigation = {navigation}/>
    );

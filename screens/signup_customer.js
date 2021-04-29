@@ -77,7 +77,6 @@ export default function signUpCustomer({navigation}) {
                             body: JSON.stringify(data),
                         })
                         .then((response)=>{
-                            console.log(JSON.stringify(response));
                             //checks if the request was successful
                             if(response.ok == true){
                                 //gets sessionID cookie and sends it via navigation to user_dash screen, and 

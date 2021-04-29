@@ -60,6 +60,7 @@ export default function Merchant_dash({route, navigation}) {
     return String(number).split(".")[1].length || 0; 
   }
 
+  //@see sendToCustomer() in user_dash.js
   function sendToCustomer(recip, amount){
     if(amount == 0 || recip == '' || amount == undefined){
       alert("please fill out recipient and amount");
@@ -90,7 +91,6 @@ export default function Merchant_dash({route, navigation}) {
                   amount: Number(amount) * 100.00,
                   type: 'PEER_TO_PEER'
               };
-              console.log(JSON.stringify(data));
               fetch("http://localhost:8080/api/v1/transaction/peer",{
                   method: 'POST',
                   headers: {
@@ -100,8 +100,6 @@ export default function Merchant_dash({route, navigation}) {
               body: JSON.stringify(data)
               })
               .then(response=>{
-                console.log(session_cookie);
-                  console.log(JSON.stringify(response))
                   if(response.ok == true){
                     alert("transaction successful");
                   }
